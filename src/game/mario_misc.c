@@ -257,7 +257,7 @@ static Gfx *make_gfx_mario_alpha(struct GraphNodeGenerated *node, Alpha alpha) {
     Gfx *gfx;
     Gfx *gfxHead = NULL;
     if (alpha == 255) {
-        node->fnNode.node.flags = ((node->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_SILHOUETTE_OPAQUE << 8));
+        node->fnNode.node.flags = ((node->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_OPAQUE << 8));
         gfxHead = alloc_display_list(2 * sizeof(*gfxHead));
         gfx     = gfxHead;
     } else {

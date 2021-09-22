@@ -783,7 +783,6 @@ void radial_camera_move(struct Camera *c) {
     Angle minAreaYaw  = DEG(-60);
     Angle rotateSpeed = 0x1000;
     Angle avoidYaw;
-    s32 avoidStatus;
     f32 areaDistX = (sMarioCamState->pos[0] - c->areaCen[0]);
     f32 areaDistZ = (sMarioCamState->pos[2] - c->areaCen[2]);
     // How much the camera's yaw changed
@@ -804,7 +803,7 @@ void radial_camera_move(struct Camera *c) {
         areaDistZ = -areaDistZ;
     }
     // Avoid obstructing walls
-    avoidStatus = rotate_camera_around_walls(c, c->pos, &avoidYaw, 0x400);
+    s32 avoidStatus = rotate_camera_around_walls(c, c->pos, &avoidYaw, 0x400);
     if (avoidStatus == 3) {
         if (avoidYaw - atan2s(areaDistZ, areaDistX) + DEG(90) < 0) avoidYaw += DEG(180);
         // We want to change sModeOffsetYaw so that the player is no longer obstructed by the wall.
@@ -889,7 +888,7 @@ void lakitu_zoom(f32 rangeDist, Angle rangePitch) {
 }
 
 void radial_camera_input_default(struct Camera *c) {
-    radial_camera_input(c, 0.0f);
+    radial_camera_input(c);
 }
 
 /**
@@ -931,7 +930,7 @@ void mode_8_directions_camera(struct Camera *c) {
 #ifdef REONU_CAM_3
     // Get the camera speed based on the user's setting
     f32 cameraSpeed = sCameraSpeeds[gCameraSpeed];
-    radial_camera_input(c, 0.0f);
+    radial_camera_input(c);
     if ((gPlayer1Controller->buttonPressed & L_CBUTTONS) && !(gPlayer1Controller->buttonDown & R_TRIG)) {
         s8DirModeBaseYaw -= DEG(45);
     } else if ((gPlayer1Controller->buttonPressed & R_CBUTTONS) && !(gPlayer1Controller->buttonDown & R_TRIG)) {
@@ -974,7 +973,7 @@ void mode_8_directions_camera(struct Camera *c) {
     c->pos[2] = pos[2];
     sAreaYawChange = sAreaYaw - oldAreaYaw;
 #else
-    radial_camera_input(c, 0.0f);
+    radial_camera_input(c);
     if (gPlayer1Controller->buttonPressed & R_CBUTTONS) { s8DirModeYawOffset += DEG(45); play_sound_cbutton_side(); }
     if (gPlayer1Controller->buttonPressed & L_CBUTTONS) { s8DirModeYawOffset -= DEG(45); play_sound_cbutton_side(); }
 #ifdef PARALLEL_LAKITU_CAM
@@ -1332,7 +1331,7 @@ void mode_boss_fight_camera(struct Camera *c) {
  * @see update_parallel_tracking_camera
  */
 void mode_parallel_tracking_camera(struct Camera *c) {
-    radial_camera_input(c, 0.0f);
+    radial_camera_input(c);
     set_fov_function(CAM_FOV_DEFAULT);
     c->nextYaw = update_parallel_tracking_camera(c, c->focus, c->pos);
 }
@@ -3216,7 +3215,7 @@ void play_sound_if_cam_switched_to_lakitu_or_mario(void) {
 /**
  * Handles input for radial, outwards radial, parallel tracking, and 8 direction mode.
  */
-s32 radial_camera_input(struct Camera *c, UNUSED f32 unused) {
+void radial_camera_input(struct Camera *c) {
     if ((gCameraMovementFlags & CAM_MOVE_ENTERED_ROTATE_SURFACE) || !(gCameraMovementFlags & CAM_MOVE_ROTATE)) {
         // If C-L or C-R are pressed, the camera is rotating
         if (gPlayer1Controller->buttonPressed & (L_CBUTTONS | R_CBUTTONS)) {
@@ -3302,7 +3301,6 @@ s32 radial_camera_input(struct Camera *c, UNUSED f32 unused) {
 #ifdef REONU_CAM_3
     stickReset = (!((gPlayer2Controller->rawStickY > 40) || (gPlayer2Controller->rawStickY < -40)));
 #endif
-    return 0;
 }
 
 /**
@@ -5208,8 +5206,8 @@ void cutscene_ending_look_up_at_castle(UNUSED struct Camera *c) {
  * Peach opens her eyes and the camera looks at the castle window again.
  */
 void cutscene_ending_peach_wakeup(struct Camera *c) {
-    cutscene_event(cutscene_ending_reset_spline,      c, 0, 0);
-    cutscene_event(cutscene_ending_look_up_at_castle, c, 0, 0);
+    cutscene_event(cutscene_ending_reset_spline,      c,   0,  0);
+    cutscene_event(cutscene_ending_look_up_at_castle, c,   0,  0);
     cutscene_event(cutscene_ending_look_up_at_castle, c, 250, -1);
     cutscene_spawn_obj(7, 300);
     cutscene_spawn_obj(9, 340);
@@ -7701,7 +7699,7 @@ void cutscene_door_follow_mario(struct Camera *c) {
  * Ends the door cutscene. Sets the camera mode to close mode unless the default is free roam.
  */
 void cutscene_door_end(struct Camera *c) {
-    c->mode        =  (c->defMode == CAMERA_MODE_FREE_ROAM ? CAMERA_MODE_FREE_ROAM : CAMERA_MODE_CLOSE);
+    c->mode        =  ((c->defMode == CAMERA_MODE_FREE_ROAM) ? CAMERA_MODE_FREE_ROAM : CAMERA_MODE_CLOSE);
     c->cutscene    =  CUTSCENE_NONE;
     gCutsceneTimer =  CUTSCENE_STOP;
     sStatusFlags  |=  CAM_FLAG_SMOOTH_MOVEMENT;

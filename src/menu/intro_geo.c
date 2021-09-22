@@ -194,11 +194,11 @@ Gfx *geo_intro_gameover_backdrop(s32 state, struct GraphNode *node, UNUSED void 
     Gfx *dl                     = NULL;
     Gfx *dlIter                 = NULL;
     s32 i, j;
-    if (state != 1) {  // reset
+    if (state != 1) { // reset
         sGameOverFrameCounter =  0;
         sGameOverTableIndex   = -2;
         for ((i = 0); (i < ARRAY_COUNT(gameOverBackgroundTable)); (++i)) gameOverBackgroundTable[i] = INTRO_BACKGROUND_GAME_OVER;
-    } else {  // draw
+    } else { // draw
         dl     = alloc_display_list(16 * sizeof(*dl));
         dlIter = dl;
         if (sGameOverTableIndex == -2) {
@@ -217,7 +217,6 @@ Gfx *geo_intro_gameover_backdrop(s32 state, struct GraphNode *node, UNUSED void 
         }
         if (sGameOverTableIndex != 11) sGameOverFrameCounter++;
         graphNode->flags = ((graphNode->flags & GRAPH_NODE_TYPES_MASK) | (LAYER_OPAQUE << 8));
-
         // draw all the tiles
         gSPDisplayList(   dlIter++, &dl_proj_mtx_fullscreen);
         gSPDisplayList(   dlIter++, &title_screen_bg_dl_start);
@@ -352,11 +351,9 @@ Gfx *geo_intro_face_easter_egg(s32 state, struct GraphNode *node, UNUSED void *c
 Gfx *geo_intro_rumble_pak_graphic(s32 state, struct GraphNode *node, UNUSED void *context) {
     struct GraphNodeGenerated *genNode = (struct GraphNodeGenerated *)node;
     Gfx *dlIter;
-    Gfx *dl;
+    Gfx *dl = NULL;
     s32 introContext;
-    s8 backgroundTileSix;
-    dl = NULL;
-    backgroundTileSix = INTRO_BACKGROUND_SUPER_MARIO;
+    s8 backgroundTileSix = INTRO_BACKGROUND_SUPER_MARIO;
     if (state != 1) {
         dl = NULL;
     } else if (state == 1) {

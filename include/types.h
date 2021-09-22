@@ -7,7 +7,6 @@
 #include "macros.h"
 #include "config.h"
 
-
 struct Config
 {
     f32 audioFrequency;

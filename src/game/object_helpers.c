@@ -94,7 +94,6 @@ Gfx *geo_update_layer_transparency(s32 callContext, struct GraphNode *node, UNUS
     return dlStart;
 }
 
-
 Gfx *geo_switch_anim_state(s32 callContext, struct GraphNode *node, UNUSED void *context) {
     struct Object *obj;
     struct GraphNodeSwitchCase *switchCase;

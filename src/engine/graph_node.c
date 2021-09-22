@@ -351,7 +351,7 @@ struct GraphNodeBone *init_graph_node_bone(struct AllocOnlyPool *pool,
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_BONE);
         vec3_copy(graphNode->translation, translation);
         vec3_copy(graphNode->rotation,       rotation);
-        graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & 0xFF));
+        graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
         graphNode->displayList = displayList;
     }
     return graphNode;
