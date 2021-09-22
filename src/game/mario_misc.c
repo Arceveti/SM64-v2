@@ -605,9 +605,9 @@ Gfx *geo_render_mirror_mario(s32 callContext, struct GraphNode *node, UNUSED Mat
                 gMirrorMario.pos[0]          = (mirroredX + MIRROR_X);
                 gMirrorMario.angle[1]        = -gMirrorMario.angle[1];
                 gMirrorMario.scale[0]       *= -1.0f;
-                ((struct GraphNode *) &gMirrorMario)->flags |=  0x1;
+                ((struct GraphNode *) &gMirrorMario)->flags |=  GRAPH_RENDER_ACTIVE;
             } else {
-                ((struct GraphNode *) &gMirrorMario)->flags &= ~0x1;
+                ((struct GraphNode *) &gMirrorMario)->flags &= ~GRAPH_RENDER_ACTIVE;
             }
             break;
     }
@@ -632,7 +632,7 @@ Gfx *geo_mirror_mario_backface_culling(s32 callContext, struct GraphNode *node, 
         }
         gSPEndDisplayList(&gfx[2]);
         //! Mirror Mario shouldn't have a silhouette, but stuff breaks if this doesn't match the regular Mario model.
-        asGenerated->fnNode.node.flags = ((asGenerated->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_SILHOUETTE_OPAQUE << 8));
+        asGenerated->fnNode.node.flags = ((asGenerated->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_OPAQUE << 8));
     }
     return gfx;
 }

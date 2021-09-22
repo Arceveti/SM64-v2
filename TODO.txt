@@ -1,8 +1,7 @@
 **TODO:**
 - General Bugs:
-    - The edges of Mario's silhouette are visible at low resolutions
-    - Puppycamera sometimes downwarps
-        - Happens on a slope in Castle Grounds and between areas in TTM slide:
+    - Mirror Mario doesn't render
+    - Lava bubbles don't appear
     - Instant warps freeze for a second
         - Most noticeable on TTM slide
         - Also downwarps camera for a split second
@@ -17,6 +16,11 @@
     - Lights don't work outside of area 1
         - Have a temp fix, but it still doesn't fix PUPPYLIGHT_NODE lights in non-area-1 areas
     - Sometimes lights just breaks globally
+- Puppycam bugs:
+    - Puppycamera sometimes downwarps
+        - Happens on a slope in Castle Grounds and between areas in TTM slide:
+    - TOTWC warp doesn't work
+    - Camera focus is too low when on a pole
 - Crashes:
     - The 6th time you enter a level in debug level select without restarting the game causes the game to whitescreen or crash, depending on the emulator being used
         - Some data in memory not being cleared?
@@ -318,16 +322,13 @@
     - Failsafe for if Mario explodes all the bombs in a bowser arena before finishing the fight
     - Make SSL pyramid and LLL volcano use gsSPFogPosition?
 - Camera:
-    - Fix TOTWC warp with Puppycam
-    - Fix camera being too low on poles
-    - Make Puppycam not scuffed in certain areas
-        - Separate (super low-poly) collision maps specifically for the camera?
+    - Separate (super low-poly) collision maps specifically for the camera?
     - When wall sliding, raycast in the direction of the wall's yaw, and if another wall is within distance and parallel, and Mario's yaw is within range of the wall's yaw, then move the camera's yaw to the nearest perpendicular angle to the wall yaw, if no other walls are in the way.
 - Files/Hacking QOL
     - Centralized place for common gdSPDefLights1 defines/colors, so the data isn't duplicated throughout every model.inc.c file
         - Default lights is (0x7F, 0x7F, 0x7F, 0xFF, 0xFF, 0xFF, 0x28, 0x28, 0x28)
     - Combine holding variants of actions with their non-holding variants, with checks for m->used/heldObj for the differences
-    - Combine/sort behavior actions, obj_behaviors, obj_behaviors_2, and object_helpers?
+    - Combine/sort behavior_actions, obj_behaviors, obj_behaviors_2, and object_helpers?
         - Should help VSC syntax issues
     - Split camera file into camera and cutscene files
     - Finish moving general-use math functions into math_util.c
