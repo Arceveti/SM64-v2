@@ -117,7 +117,7 @@ Bool32 act_holding_pole(struct MarioState *m) {
     }
     if (m->controller->stickY < -16.0f) {
         m->angleVel[1] -= (m->controller->stickY * 2);
-        if (m->angleVel[1] > 0x1000) m->angleVel[1] = 0x1000;
+        if (m->angleVel[1] > DEG(22.5)) m->angleVel[1] = DEG(22.5);
         m->faceAngle[1] += m->angleVel[1];
         marioObj->oMarioPolePos -= (m->angleVel[1] / 0x100);
         add_tree_leaf_particles(m);
@@ -155,7 +155,7 @@ Bool32 act_climbing_pole(struct MarioState *m) {
     if (m->controller->stickY < 8.0f) return set_mario_action(m, ACT_HOLDING_POLE, 0);
     marioObj->oMarioPolePos   += (m->controller->stickY / 8.0f);
     m->angleVel[1] = 0x0;
-    approach_s16_symmetric_bool(&m->faceAngle[1], cameraAngle, 0x400);
+    approach_s16_symmetric_bool(&m->faceAngle[1], cameraAngle, DEG(5.625));
     if (set_pole_position(m, 0.0f) == POLE_NONE) {
         animSpeed = ((m->controller->stickY / 4.0f) * 0x10000);
         set_mario_anim_with_accel(m, MARIO_ANIM_CLIMB_UP_POLE, animSpeed);
@@ -216,7 +216,7 @@ Bool32 act_grab_pole_fast(struct MarioState *m) {
     }
 #endif
     if (set_pole_position(m, 0.0f) == POLE_NONE) {
-        if (ABSI(m->angleVel[1]) > 0x800) {
+        if (ABSI(m->angleVel[1]) > DEG(11.25)) {
             set_mario_animation(m, MARIO_ANIM_GRAB_POLE_SWING_PART1);
         } else {
             set_mario_animation(m, MARIO_ANIM_GRAB_POLE_SWING_PART2);
@@ -284,7 +284,7 @@ MarioStep update_hang_moving(struct MarioState *m) {
 #ifdef TIGHTER_HANGING_CONTROLS
     m->faceAngle[1] = m->intendedYaw;
 #else
-    approach_s16_symmetric_bool(&m->faceAngle[1], m->intendedYaw, 0x800);
+    approach_s16_symmetric_bool(&m->faceAngle[1], m->intendedYaw, DEG(11.25));
 #endif
     m->slideYaw  =                       m->faceAngle[1];
     m->slideVelX = (m->forwardVel * sins(m->faceAngle[1]));
@@ -656,7 +656,7 @@ Bool32 act_tornado_twirling(struct MarioState *m) {
         return set_mario_action(m, ACT_TWIRLING, 1);
     }
     if (m->angleVel[1] < DEG(67.5)) m->angleVel[1] += 0x100;
-    if (marioObj->oMarioTornadoYawVel < 0x1000) marioObj->oMarioTornadoYawVel += 0x100;
+    if (marioObj->oMarioTornadoYawVel < DEG(22.5)) marioObj->oMarioTornadoYawVel += 0x100;
     m->twirlYaw += m->angleVel[1];
     sinAngleVel  = sins(marioObj->oMarioTornadoYawVel);
     cosAngleVel  = coss(marioObj->oMarioTornadoYawVel);

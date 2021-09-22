@@ -23,7 +23,7 @@ void bhv_water_air_bubble_loop(void) {
     }
     o->oPosX += ((random_float() * 4.0f) - 2.0f);
     o->oPosZ += ((random_float() * 4.0f) - 2.0f);
-    if (o->oInteractStatus & INT_STATUS_INTERACTED || o->oTimer > 200) {
+    if ((o->oInteractStatus & INT_STATUS_INTERACTED) || (o->oTimer > 200)) {
         cur_obj_play_sound_2(SOUND_GENERAL_QUIET_BUBBLE);
         obj_mark_for_deletion(o);
         for ((i = 0); (i < 30); (i++)) spawn_object(o, MODEL_BUBBLE, bhvBubbleMaybe);

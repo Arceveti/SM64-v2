@@ -23,7 +23,7 @@ ALIGNED8 static const Texture impact_smoke_seg6_texture_3[] = {
 };
 
 // 0x06062A28
-static const Vtx impact_smoke_seg6_vertex_06062A28[] = {
+static const Vtx impact_smoke_seg6_vertex[] = {
     {{{  -150,    150,      0}, 0, ST_B(     0,     32), {0x28, 0x19, 0x14, 0xff}}},
     {{{   150,    150,      0}, 0, ST_B(    64,     32), {0x28, 0x19, 0x14, 0xff}}},
     {{{   150,    300,      0}, 0, ST_B(    64,      0), {0x28, 0x19, 0x14, 0xff}}},
@@ -69,9 +69,9 @@ const Gfx impact_smoke_seg6_dl_end[] = {
 const Gfx impact_smoke_seg6_dl_0[] = {
     gsSPDisplayList(impact_smoke_seg6_dl_start),
     gsDPLoadTextureBlock(impact_smoke_seg6_texture_0, G_IM_FMT_IA, G_IM_SIZ_16b, 64, 32, 0, G_TX_CLAMP, G_TX_CLAMP, 6, 5, G_TX_NOLOD, G_TX_NOLOD),
-    gsSPVertex(impact_smoke_seg6_vertex_06062A28, 8, 0),
+    gsSPVertex(impact_smoke_seg6_vertex, 8, 0),
     gsSPDisplayList(impact_smoke_seg6_sub_dl_upper),
-    gsDPLoadTextureBlock((Texture*)impact_smoke_seg6_texture_0 + 0x1000, G_IM_FMT_IA, G_IM_SIZ_16b, 64, 32, 0, G_TX_CLAMP, G_TX_CLAMP, 6, 5, G_TX_NOLOD, G_TX_NOLOD),
+    gsDPLoadTextureBlock(((Texture*)impact_smoke_seg6_texture_0 + 0x1000), G_IM_FMT_IA, G_IM_SIZ_16b, 64, 32, 0, G_TX_CLAMP, G_TX_CLAMP, 6, 5, G_TX_NOLOD, G_TX_NOLOD),
     gsSPDisplayList(impact_smoke_seg6_sub_dl_lower),
     gsSPDisplayList(impact_smoke_seg6_dl_end),
     gsSPEndDisplayList(),
@@ -81,9 +81,9 @@ const Gfx impact_smoke_seg6_dl_0[] = {
 const Gfx impact_smoke_seg6_dl_1[] = {
     gsSPDisplayList(impact_smoke_seg6_dl_start),
     gsDPLoadTextureBlock(impact_smoke_seg6_texture_1, G_IM_FMT_IA, G_IM_SIZ_16b, 64, 32, 0, G_TX_CLAMP, G_TX_CLAMP, 6, 5, G_TX_NOLOD, G_TX_NOLOD),
-    gsSPVertex(impact_smoke_seg6_vertex_06062A28, 8, 0),
+    gsSPVertex(impact_smoke_seg6_vertex, 8, 0),
     gsSPDisplayList(impact_smoke_seg6_sub_dl_upper),
-    gsDPLoadTextureBlock((Texture*)impact_smoke_seg6_texture_1 + 0x1000, G_IM_FMT_IA, G_IM_SIZ_16b, 64, 32, 0, G_TX_CLAMP, G_TX_CLAMP, 6, 5, G_TX_NOLOD, G_TX_NOLOD),
+    gsDPLoadTextureBlock(((Texture*)impact_smoke_seg6_texture_1 + 0x1000), G_IM_FMT_IA, G_IM_SIZ_16b, 64, 32, 0, G_TX_CLAMP, G_TX_CLAMP, 6, 5, G_TX_NOLOD, G_TX_NOLOD),
     gsSPDisplayList(impact_smoke_seg6_sub_dl_lower),
     gsSPDisplayList(impact_smoke_seg6_dl_end),
     gsSPEndDisplayList(),
@@ -93,9 +93,9 @@ const Gfx impact_smoke_seg6_dl_1[] = {
 const Gfx impact_smoke_seg6_dl_2[] = {
     gsSPDisplayList(impact_smoke_seg6_dl_start),
     gsDPLoadTextureBlock(impact_smoke_seg6_texture_2, G_IM_FMT_IA, G_IM_SIZ_16b, 64, 32, 0, G_TX_CLAMP, G_TX_CLAMP, 6, 5, G_TX_NOLOD, G_TX_NOLOD),
-    gsSPVertex(impact_smoke_seg6_vertex_06062A28, 8, 0),
+    gsSPVertex(impact_smoke_seg6_vertex, 8, 0),
     gsSPDisplayList(impact_smoke_seg6_sub_dl_upper),
-    gsDPLoadTextureBlock((Texture*)impact_smoke_seg6_texture_2 + 0x1000, G_IM_FMT_IA, G_IM_SIZ_16b, 64, 32, 0, G_TX_CLAMP, G_TX_CLAMP, 6, 5, G_TX_NOLOD, G_TX_NOLOD),
+    gsDPLoadTextureBlock(((Texture*)impact_smoke_seg6_texture_2 + 0x1000), G_IM_FMT_IA, G_IM_SIZ_16b, 64, 32, 0, G_TX_CLAMP, G_TX_CLAMP, 6, 5, G_TX_NOLOD, G_TX_NOLOD),
     gsSPDisplayList(impact_smoke_seg6_sub_dl_lower),
     gsSPDisplayList(impact_smoke_seg6_dl_end),
     gsSPEndDisplayList(),
@@ -105,9 +105,9 @@ const Gfx impact_smoke_seg6_dl_2[] = {
 const Gfx impact_smoke_seg6_dl_3[] = {
     gsSPDisplayList(impact_smoke_seg6_dl_start),
     gsDPLoadTextureBlock(impact_smoke_seg6_texture_3, G_IM_FMT_IA, G_IM_SIZ_16b, 64, 32, 0, G_TX_CLAMP, G_TX_CLAMP, 6, 5, G_TX_NOLOD, G_TX_NOLOD),
-    gsSPVertex(impact_smoke_seg6_vertex_06062A28, 8, 0),
+    gsSPVertex(impact_smoke_seg6_vertex, 8, 0),
     gsSPDisplayList(impact_smoke_seg6_sub_dl_upper),
-    gsDPLoadTextureBlock((Texture*)impact_smoke_seg6_texture_3 + 0x1000, G_IM_FMT_IA, G_IM_SIZ_16b, 64, 32, 0, G_TX_CLAMP, G_TX_CLAMP, 6, 5, G_TX_NOLOD, G_TX_NOLOD),
+    gsDPLoadTextureBlock(((Texture*)impact_smoke_seg6_texture_3 + 0x1000), G_IM_FMT_IA, G_IM_SIZ_16b, 64, 32, 0, G_TX_CLAMP, G_TX_CLAMP, 6, 5, G_TX_NOLOD, G_TX_NOLOD),
     gsSPDisplayList(impact_smoke_seg6_sub_dl_lower),
     gsSPDisplayList(impact_smoke_seg6_dl_end),
     gsSPEndDisplayList(),

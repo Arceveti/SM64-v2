@@ -535,7 +535,7 @@ Gfx *geo_movtex_draw_water_regions(s32 callContext, struct GraphNode *node, UNUS
         asGenerated = (struct GraphNodeGenerated *) node;
         if (asGenerated->parameter == JRB_MOVTEX_INITIAL_MIST) {
             if (gLakituState.goalPos[1] < 1024.0f) return NULL; // if camera under water
-            if (save_file_get_star_flags((gCurrSaveFileNum - 1), (COURSE_JRB - 1)) & 0x1) return NULL; // first star in JRB complete
+            if (save_file_get_star_flags((gCurrSaveFileNum - 1), (COURSE_JRB - 1)) & STAR_FLAG_ACT_1) return NULL; // first star in JRB complete
         } else if (asGenerated->parameter == HMC_MOVTEX_TOXIC_MAZE_MIST) {
             gMovtexVtxColor = MOVTEX_VTX_COLOR_YELLOW;
         } else if (asGenerated->parameter == SSL_MOVTEX_TOXBOX_QUICKSAND_MIST) {

@@ -100,7 +100,7 @@ static void camera_lakitu_intro_act_show_dialog(void) {
     }
     o->oCameraLakituPitchVel = approach_s16_symmetric(o->oCameraLakituPitchVel, 0x7D0, 0x190);
     cur_obj_move_pitch_approach(targetMovePitch, o->oCameraLakituPitchVel);
-    o->oCameraLakituYawVel   = approach_s16_symmetric(o->oCameraLakituYawVel, 0x7D0, 0x64);
+    o->oCameraLakituYawVel   = approach_s16_symmetric(o->oCameraLakituYawVel,   0x7D0, 0x64);
     cur_obj_rotate_yaw_toward(targetMoveYaw, o->oCameraLakituYawVel);
     // vel y is explicitly computed, so gravity doesn't apply
     cur_obj_compute_vel_from_move_pitch(o->oCameraLakituSpeed);
@@ -120,8 +120,8 @@ void bhv_camera_lakitu_update(void) {
                 case CAMERA_LAKITU_INTRO_ACT_SHOW_DIALOG:      camera_lakitu_intro_act_show_dialog();      break;
             }
         } else {
-            f32 val0C = (((f32) 0x875C3D / 0x800) - gLakituState.curPos[0]); //! name?
-            if ((gLakituState.curPos[0] < 1700.0f) || (val0C < 0.0f)) {
+            f32 mirroredX = (CASTLE_MIRROR_X - gLakituState.curPos[0]);
+            if ((gLakituState.curPos[0] < 1700.0f) || (mirroredX < 0.0f)) {
                 cur_obj_hide();
             } else {
                 cur_obj_unhide();
@@ -130,7 +130,7 @@ void bhv_camera_lakitu_update(void) {
                 o->oHomeZ          = gLakituState.curFocus[2];
                 o->oFaceAngleYaw   = -cur_obj_angle_to_home();
                 o->oFaceAnglePitch = atan2s(cur_obj_lateral_dist_to_home(), (o->oPosY - gLakituState.curFocus[1]));
-                o->oPosX           = (((f32) 0x875C3D / 0x800) + val0C);
+                o->oPosX           = (CASTLE_MIRROR_X + mirroredX);
             }
         }
     }

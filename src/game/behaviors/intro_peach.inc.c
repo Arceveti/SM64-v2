@@ -20,7 +20,7 @@ void bhv_intro_peach_loop(void) {
     switch (o->oAction) {
         case PEACH_ACT_INIT:
             o->oAction                       = PEACH_ACT_FADE_1;
-            vec3_set(&o->oFaceAngleVec, 0x400, 0x7500, -0x3700);
+            vec3_set(&o->oFaceAngleVec, DEG(5.625), 0x7500, -0x3700);
             o->oIntroPeachDistToCamera       =   186.0f;
             o->oIntroPeachPitchFromFocus     = -9984.0f;
             o->oIntroPeachYawFromFocus       =  -768.0f;

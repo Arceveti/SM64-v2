@@ -88,7 +88,7 @@ static s32 bhv_cmd_billboard(void) {
 }
 
 // Command 0x1B: Sets the current model ID of the object.
-// Usage: SET_MODEL(ModelID modelID)
+// Usage: SET_MODEL(ModelID16 modelID)
 static s32 bhv_cmd_set_model(void) {
     o->header.gfx.sharedChild = gLoadedGraphNodes[BHV_CMD_GET_2ND_S16(0)];
     gCurBhvCommand++;

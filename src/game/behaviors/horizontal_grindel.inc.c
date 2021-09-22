@@ -13,7 +13,7 @@ void bhv_horizontal_grindel_update(void) {
             o->oForwardVel = 0.0f;
             o->oTimer      = 0;
         }
-        if (cur_obj_rotate_yaw_toward(o->oHorizontalGrindelTargetYaw, 0x400)) {
+        if (cur_obj_rotate_yaw_toward(o->oHorizontalGrindelTargetYaw, DEG(5.625))) {
             if (o->oTimer > 60) {
                 if (o->oHorizontalGrindelDistToHome > 300.0f) {
                     o->oHorizontalGrindelTargetYaw += DEG(180);

@@ -63,7 +63,7 @@ void bhv_koopa_shell_loop(void) {
             cur_obj_update_floor_and_walls();
             cur_obj_if_hit_wall_bounce_away();
             if (o->oInteractStatus & INT_STATUS_INTERACTED) o->oAction = KOOPA_SHELL_ACT_MARIO_RIDING;
-            o->oFaceAngleYaw += 0x1000;
+            o->oFaceAngleYaw += DEG(22.5);
             cur_obj_move_standard(-20);
             koopa_shell_spawn_sparkles(10.0f);
 #ifdef KOOPA_SHELL_BOXES_RESPAWN

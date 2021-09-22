@@ -85,7 +85,7 @@ static void skeeter_act_walk(void) {
         cur_obj_init_animation_with_accel_and_sound(SKEETER_ANIM_WALK, accel);
         cur_obj_play_sound_at_anim_range(3, 13, SOUND_OBJ_SKEETER_WALK);
         if (o->oSkeeterTurningAwayFromWall) {
-            o->oSkeeterTurningAwayFromWall = cur_obj_resolve_collisions_and_turn(o->oSkeeterTargetAngle, 0x400);
+            o->oSkeeterTurningAwayFromWall = cur_obj_resolve_collisions_and_turn(o->oSkeeterTargetAngle, DEG(5.625));
         } else {
             if (o->oDistanceToMario >= 25000.0f) {
                 o->oSkeeterTargetAngle = o->oAngleToMario;
@@ -100,7 +100,7 @@ static void skeeter_act_walk(void) {
                     if (o->oSkeeterWaitTime != 0) {
                         o->oSkeeterWaitTime--;
                     } else if (cur_obj_check_if_near_animation_end()) {
-                        if (random_u16() & 0x0003) {
+                        if (random_u16() & 0x3) {
                             o->oSkeeterTargetAngle = cur_obj_random_fixed_turn(DEG(45));
                             o->oSkeeterWaitTime    = random_linear_offset(100, 100);
                         } else {
@@ -111,7 +111,7 @@ static void skeeter_act_walk(void) {
                 }
             }
         }
-        cur_obj_rotate_yaw_toward(o->oSkeeterTargetAngle, 0x400);
+        cur_obj_rotate_yaw_toward(o->oSkeeterTargetAngle, DEG(5.625));
     }
 }
 

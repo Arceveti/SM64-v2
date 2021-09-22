@@ -19,7 +19,7 @@ static void fire_spitter_act_spit_fire(void) {
             o->oAction = FIRE_SPITTER_ACT_IDLE;
         } else {
             cur_obj_play_sound_2(SOUND_OBJ_FLAME_BLOWN);
-            cur_obj_spit_fire(0, 0, 0, 5.0f, MODEL_RED_FLAME_SHADOW, 20.0f, 15.0f, 0x1000);
+            cur_obj_spit_fire(0, 0, 0, 5.0f, MODEL_RED_FLAME_SHADOW, 20.0f, 15.0f, DEG(22.5));
         }
     }
 }

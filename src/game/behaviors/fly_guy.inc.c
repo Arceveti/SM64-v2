@@ -52,7 +52,7 @@ static void fly_guy_act_approach_mario(void) {
     if ((o->oDistanceToMario >= 25000.0f) || (o->oDistanceToMario < 2000.0f)) {
         cur_obj_forward_vel_approach(10.0f, 0.5f);
         // Turn toward home or Mario
-        cur_obj_face_yaw_approach(    o->oAngleToMario, 0x400);
+        cur_obj_face_yaw_approach(    o->oAngleToMario, DEG(5.625));
         cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x200);
         // If facing toward Mario and we are either near Mario laterally or
         // far above him
@@ -84,10 +84,10 @@ static void fly_guy_act_lunge(void) {
     if (o->oVelY < 0.0f) {
         // Lunge downward
         o->oVelY += o->oFlyGuyLungeYDecel;
-        cur_obj_rotate_yaw_toward(o->oFaceAngleYaw,           0x800);
-        cur_obj_face_pitch_approach(  o->oFlyGuyLungeTargetPitch, 0x400);
+        cur_obj_rotate_yaw_toward(  o->oFaceAngleYaw,           DEG(11.25));
+        cur_obj_face_pitch_approach(o->oFlyGuyLungeTargetPitch, DEG(5.625));
         // Possible values: {-0x1000, 0x0000, 0x1000}
-        o->oFlyGuyTargetRoll = ((0x1000 * (Angle)(random_float() * 3.0f)) - 0x1000);
+        o->oFlyGuyTargetRoll = ((DEG(22.5) * (Angle)(random_float() * 3.0f)) - DEG(22.5));
         o->oTimer            = 0;
     } else {
         // Twirl back upward
@@ -95,7 +95,7 @@ static void fly_guy_act_lunge(void) {
         cur_obj_face_roll_approach( o->oFlyGuyTargetRoll, 0x12C);
         // Twirl in a spiral with curvature proportional to oFaceAngleRoll
         o->oMoveAngleYaw -= (o->oFaceAngleRoll / 4);
-        cur_obj_face_yaw_approach(o->oMoveAngleYaw, 0x800);
+        cur_obj_face_yaw_approach(o->oMoveAngleYaw, DEG(11.25));
         // Continue moving upward until at least 200 units above Mario
         if (o->oPosY < (gMarioObject->oPosY + 200.0f)) {
             cur_obj_y_vel_approach(20.0f, 0.5f);
@@ -113,7 +113,7 @@ static void fly_guy_act_lunge(void) {
 static void fly_guy_act_shoot_fire(void) {
     s32 scaleStatus;
     o->oForwardVel = 0.0f;
-    if (cur_obj_face_yaw_approach(o->oAngleToMario, 0x800)) {
+    if (cur_obj_face_yaw_approach(o->oAngleToMario, DEG(11.25))) {
         o->oMoveAngleYaw = o->oFaceAngleYaw;
         // Increase scale by 0.06, 0.05, ..., -0.03. Then wait ~8 frames, then
         // starting moving scale by 0.05 each frame toward 1.1. The first time
@@ -127,7 +127,7 @@ static void fly_guy_act_shoot_fire(void) {
                 // We have reached below scale 1.2 in the shrinking portion
                 Angle fireMovePitch = cur_obj_turn_pitch_toward_mario(0.0f, 0x0);
                 cur_obj_play_sound_2(SOUND_OBJ_FLAME_BLOWN);
-                clamp_s16(&fireMovePitch, 0x800, 0x3000);
+                clamp_s16(&fireMovePitch, DEG(11.25), 0x3000);
                 cur_obj_spit_fire(
                     /*relativePos*/ 0, 38, 20,
                     /*scale      */  2.5f,

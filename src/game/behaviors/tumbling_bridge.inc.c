@@ -9,7 +9,7 @@ struct TumblingBridgeType {
     s16 numBridgeSections;
     s16 bridgeRelativeStartingXorZ;
     s16 platformWidth;
-    ModelID model;
+    ModelID16 model;
     const void *segAddr;
 };
 
@@ -36,8 +36,8 @@ void bhv_tumbling_bridge_platform_loop(void) {
             }
             break;
         case TUMBLING_BRIDGE_PLATFORM_ACT_FALL:
-            if (o->oAngleVelPitch <  0x400) o->oAngleVelPitch += 0x80;
-            if (o->oAngleVelRoll  > -0x400 && o->oAngleVelRoll < 0x400) o->oAngleVelRoll += o->oTumblingBridgeRollAccel; // acceleration?
+            if (o->oAngleVelPitch <  DEG(5.625)) o->oAngleVelPitch += 0x80;
+            if (o->oAngleVelRoll  > -DEG(5.625) && o->oAngleVelRoll < DEG(5.625)) o->oAngleVelRoll += o->oTumblingBridgeRollAccel; // acceleration?
             o->oGravity = -3.0f;
             cur_obj_rotate_face_angle_using_vel();
             cur_obj_move_using_fvel_and_gravity();

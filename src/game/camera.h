@@ -13,6 +13,10 @@
 
 #include "level_table.h"
 
+// X position of the mirror
+// 0x875C3D = 8870973, 0x800 = 2048, 8870973 / 2048 = ~4331.52978515625
+#define CASTLE_MIRROR_X ((f32)0x875C3D / 0x800)
+
 /**
  * @file camera.h
  * Constants, defines, and structs used by the camera system.
@@ -81,115 +85,115 @@
 #define AREA_BOWSER_3           LEVEL_AREA_INDEX(LEVEL_BOWSER_3,         1)
 #define AREA_TTM_OUTSIDE        LEVEL_AREA_INDEX(LEVEL_TTM,              1)
 
-#define CAM_MODE_MARIO_ACTIVE           0x01
-#define CAM_MODE_LAKITU_WAS_ZOOMED_OUT  0x02
-#define CAM_MODE_MARIO_SELECTED         0x04
+#define CAM_MODE_MARIO_ACTIVE               (1 << 0) // 0x01
+#define CAM_MODE_LAKITU_WAS_ZOOMED_OUT      (1 << 1) // 0x02
+#define CAM_MODE_MARIO_SELECTED             (1 << 2) // 0x04
 
-#define CAM_SELECTION_MARIO             0x01
-#define CAM_SELECTION_FIXED             0x02
+#define CAM_SELECTION_MARIO                 (1 << 0) // 0x01
+#define CAM_SELECTION_FIXED                 (1 << 1) // 0x02
 
-#define CAM_ANGLE_MARIO                 0x01
-#define CAM_ANGLE_LAKITU                0x02
+#define CAM_ANGLE_MARIO                     (1 << 0) // 0x01
+#define CAM_ANGLE_LAKITU                    (1 << 1) // 0x02
 
-#define CAMERA_MODE_NONE                0x00
-#define CAMERA_MODE_RADIAL              0x01
-#define CAMERA_MODE_OUTWARD_RADIAL      0x02
-#define CAMERA_MODE_BEHIND_MARIO        0x03
-#define CAMERA_MODE_CLOSE               0x04 // Inside Castle / Big Boo's Haunt
-#define CAMERA_MODE_C_UP                0x06
-#define CAMERA_MODE_WATER_SURFACE       0x08
-#define CAMERA_MODE_SLIDE_HOOT          0x09
-#define CAMERA_MODE_INSIDE_CANNON       0x0A
-#define CAMERA_MODE_BOSS_FIGHT          0x0B
-#define CAMERA_MODE_PARALLEL_TRACKING   0x0C
-#define CAMERA_MODE_FIXED               0x0D
-#define CAMERA_MODE_8_DIRECTIONS        0x0E // AKA Parallel Camera, Bowser Courses & Rainbow Ride
-#define CAMERA_MODE_FREE_ROAM           0x10
-#define CAMERA_MODE_SPIRAL_STAIRS       0x11
+#define CAMERA_MODE_NONE                    0x00
+#define CAMERA_MODE_RADIAL                  0x01
+#define CAMERA_MODE_OUTWARD_RADIAL          0x02
+#define CAMERA_MODE_BEHIND_MARIO            0x03
+#define CAMERA_MODE_CLOSE                   0x04 // Inside Castle / Big Boo's Haunt
+#define CAMERA_MODE_C_UP                    0x06
+#define CAMERA_MODE_WATER_SURFACE           0x08
+#define CAMERA_MODE_SLIDE_HOOT              0x09
+#define CAMERA_MODE_INSIDE_CANNON           0x0A
+#define CAMERA_MODE_BOSS_FIGHT              0x0B
+#define CAMERA_MODE_PARALLEL_TRACKING       0x0C
+#define CAMERA_MODE_FIXED                   0x0D
+#define CAMERA_MODE_8_DIRECTIONS            0x0E // AKA Parallel Camera, Bowser Courses & Rainbow Ride
+#define CAMERA_MODE_FREE_ROAM               0x10
+#define CAMERA_MODE_SPIRAL_STAIRS           0x11
 
-#define CAM_MOVE_RETURN_TO_MIDDLE       0x0001
-#define CAM_MOVE_ZOOMED_OUT             0x0002
-#define CAM_MOVE_ROTATE_RIGHT           0x0004
-#define CAM_MOVE_ROTATE_LEFT            0x0008
-#define CAM_MOVE_ENTERED_ROTATE_SURFACE 0x0010
-#define CAM_MOVE_METAL_BELOW_WATER      0x0020
-#define CAM_MOVE_FIX_IN_PLACE           0x0040
-#define CAM_MOVE_UNKNOWN_8              0x0080
-#define CAM_MOVING_INTO_MODE            0x0100
-#define CAM_MOVE_STARTED_EXITING_C_UP   0x0200
-#define CAM_MOVE_UNKNOWN_11             0x0400
-#define CAM_MOVE_INIT_CAMERA            0x0800
-#define CAM_MOVE_ALREADY_ZOOMED_OUT     0x1000
-#define CAM_MOVE_C_UP_MODE              0x2000
-#define CAM_MOVE_SUBMERGED              0x4000
-#define CAM_MOVE_PAUSE_SCREEN           0x8000
+#define CAM_MOVE_RETURN_TO_MIDDLE           (1 <<  0) // 0x0001
+#define CAM_MOVE_ZOOMED_OUT                 (1 <<  1) // 0x0002
+#define CAM_MOVE_ROTATE_RIGHT               (1 <<  2) // 0x0004
+#define CAM_MOVE_ROTATE_LEFT                (1 <<  3) // 0x0008
+#define CAM_MOVE_ENTERED_ROTATE_SURFACE     (1 <<  4) // 0x0010
+#define CAM_MOVE_METAL_BELOW_WATER          (1 <<  5) // 0x0020
+#define CAM_MOVE_FIX_IN_PLACE               (1 <<  6) // 0x0040
+#define CAM_MOVE_UNKNOWN_8                  (1 <<  7) // 0x0080
+#define CAM_MOVING_INTO_MODE                (1 <<  8) // 0x0100
+#define CAM_MOVE_STARTED_EXITING_C_UP       (1 <<  9) // 0x0200
+#define CAM_MOVE_UNKNOWN_11                 (1 << 10) // 0x0400
+#define CAM_MOVE_INIT_CAMERA                (1 << 11) // 0x0800
+#define CAM_MOVE_ALREADY_ZOOMED_OUT         (1 << 12) // 0x1000
+#define CAM_MOVE_C_UP_MODE                  (1 << 13) // 0x2000
+#define CAM_MOVE_SUBMERGED                  (1 << 14) // 0x4000
+#define CAM_MOVE_PAUSE_SCREEN               (1 << 15) // 0x8000
 
 #define CAM_MOVE_ROTATE /**/ (CAM_MOVE_ROTATE_RIGHT | CAM_MOVE_ROTATE_LEFT | CAM_MOVE_RETURN_TO_MIDDLE)
 /// These flags force the camera to move a certain way
 #define CAM_MOVE_RESTRICT /**/ (CAM_MOVE_ENTERED_ROTATE_SURFACE | CAM_MOVE_METAL_BELOW_WATER | CAM_MOVE_FIX_IN_PLACE | CAM_MOVE_UNKNOWN_8)
 
-#define CAM_SOUND_C_UP_PLAYED            0x01
-#define CAM_SOUND_MARIO_ACTIVE           0x02
-#define CAM_SOUND_NORMAL_ACTIVE          0x04
-#define CAM_SOUND_UNUSED_SELECT_MARIO    0x08
-#define CAM_SOUND_UNUSED_SELECT_FIXED    0x10
-#define CAM_SOUND_FIXED_ACTIVE           0x20
+#define CAM_SOUND_C_UP_PLAYED               (1 <<  0) // 0x0001
+#define CAM_SOUND_MARIO_ACTIVE              (1 <<  1) // 0x0002
+#define CAM_SOUND_NORMAL_ACTIVE             (1 <<  2) // 0x0004
+#define CAM_SOUND_UNUSED_SELECT_MARIO       (1 <<  3) // 0x0008
+#define CAM_SOUND_UNUSED_SELECT_FIXED       (1 <<  4) // 0x0010
+#define CAM_SOUND_FIXED_ACTIVE              (1 <<  5) // 0x0020
 
-#define CAM_FLAG_SMOOTH_MOVEMENT         0x0001
-#define CAM_FLAG_BLOCK_SMOOTH_MOVEMENT   0x0002
-#define CAM_FLAG_FRAME_AFTER_CAM_INIT    0x0004
-#define CAM_FLAG_CHANGED_PARTRACK_INDEX  0x0008
-#define CAM_FLAG_CCM_SLIDE_SHORTCUT      0x0010
-#define CAM_FLAG_CAM_NEAR_WALL           0x0020
-#define CAM_FLAG_SLEEPING                0x0040
-#define CAM_FLAG_UNUSED_7                0x0080
-#define CAM_FLAG_UNUSED_8                0x0100
-#define CAM_FLAG_COLLIDED_WITH_WALL      0x0200
-#define CAM_FLAG_START_TRANSITION        0x0400
-#define CAM_FLAG_TRANSITION_OUT_OF_C_UP  0x0800
-#define CAM_FLAG_BLOCK_AREA_PROCESSING   0x1000
-#define CAM_FLAG_UNUSED_13               0x2000
-#define CAM_FLAG_UNUSED_CUTSCENE_ACTIVE  0x4000
-#define CAM_FLAG_BEHIND_MARIO_POST_DOOR  0x8000
+#define CAM_FLAG_SMOOTH_MOVEMENT            (1 <<  0) // 0x0001
+#define CAM_FLAG_BLOCK_SMOOTH_MOVEMENT      (1 <<  1) // 0x0002
+#define CAM_FLAG_FRAME_AFTER_CAM_INIT       (1 <<  2) // 0x0004
+#define CAM_FLAG_CHANGED_PARTRACK_INDEX     (1 <<  3) // 0x0008
+#define CAM_FLAG_CCM_SLIDE_SHORTCUT         (1 <<  4) // 0x0010
+#define CAM_FLAG_CAM_NEAR_WALL              (1 <<  5) // 0x0020
+#define CAM_FLAG_SLEEPING                   (1 <<  6) // 0x0040
+#define CAM_FLAG_UNUSED_7                   (1 <<  7) // 0x0080
+#define CAM_FLAG_UNUSED_8                   (1 <<  8) // 0x0100
+#define CAM_FLAG_COLLIDED_WITH_WALL         (1 <<  9) // 0x0200
+#define CAM_FLAG_START_TRANSITION           (1 << 10) // 0x0400
+#define CAM_FLAG_TRANSITION_OUT_OF_C_UP     (1 << 11) // 0x0800
+#define CAM_FLAG_BLOCK_AREA_PROCESSING      (1 << 12) // 0x1000
+#define CAM_FLAG_UNUSED_13                  (1 << 13) // 0x2000
+#define CAM_FLAG_UNUSED_CUTSCENE_ACTIVE     (1 << 14) // 0x4000
+#define CAM_FLAG_BEHIND_MARIO_POST_DOOR     (1 << 15) // 0x8000
 
-#define CAM_STATUS_NONE                 0x00
-#define CAM_STATUS_MARIO                (1 << 0)
-#define CAM_STATUS_LAKITU               (1 << 1)
-#define CAM_STATUS_FIXED                (1 << 2)
-#define CAM_STATUS_C_DOWN               (1 << 3)
-#define CAM_STATUS_C_UP                 (1 << 4)
+#define CAM_STATUS_NONE                     (0 <<  0) // 0x0000
+#define CAM_STATUS_MARIO                    (1 <<  0) // 0x0001
+#define CAM_STATUS_LAKITU                   (1 <<  1) // 0x0002
+#define CAM_STATUS_FIXED                    (1 <<  2) // 0x0004
+#define CAM_STATUS_C_DOWN                   (1 <<  3) // 0x0008
+#define CAM_STATUS_C_UP                     (1 <<  4) // 0x0010
 
 #define CAM_STATUS_MODE_GROUP   (CAM_STATUS_MARIO | CAM_STATUS_LAKITU | CAM_STATUS_FIXED)
 #define CAM_STATUS_C_MODE_GROUP (CAM_STATUS_C_DOWN | CAM_STATUS_C_UP)
 
-#define SHAKE_ATTACK                    0x01
-#define SHAKE_GROUND_POUND              0x02
-#define SHAKE_SMALL_DAMAGE              0x03
-#define SHAKE_MED_DAMAGE                0x04
-#define SHAKE_LARGE_DAMAGE              0x05
-#define SHAKE_HIT_FROM_BELOW            0x08
-#define SHAKE_FALL_DAMAGE               0x09
-#define SHAKE_SHOCK                     0x0A
+#define SHAKE_ATTACK                        0x01
+#define SHAKE_GROUND_POUND                  0x02
+#define SHAKE_SMALL_DAMAGE                  0x03
+#define SHAKE_MED_DAMAGE                    0x04
+#define SHAKE_LARGE_DAMAGE                  0x05
+#define SHAKE_HIT_FROM_BELOW                0x08
+#define SHAKE_FALL_DAMAGE                   0x09
+#define SHAKE_SHOCK                         0x0A
 
-#define SHAKE_ENV_EXPLOSION             0x01
-#define SHAKE_ENV_BOWSER_THROW_BOUNCE   0x02
-#define SHAKE_ENV_BOWSER_JUMP           0x03
-#define SHAKE_ENV_UNUSED_5              0x05
-#define SHAKE_ENV_UNUSED_6              0x06
-#define SHAKE_ENV_UNUSED_7              0x07
-#define SHAKE_ENV_PYRAMID_EXPLODE       0x08
-#define SHAKE_ENV_JRB_SHIP_DRAIN        0x09
-#define SHAKE_ENV_FALLING_BITS_PLAT     0x0A
+#define SHAKE_ENV_EXPLOSION                 0x01
+#define SHAKE_ENV_BOWSER_THROW_BOUNCE       0x02
+#define SHAKE_ENV_BOWSER_JUMP               0x03
+#define SHAKE_ENV_UNUSED_5                  0x05
+#define SHAKE_ENV_UNUSED_6                  0x06
+#define SHAKE_ENV_UNUSED_7                  0x07
+#define SHAKE_ENV_PYRAMID_EXPLODE           0x08
+#define SHAKE_ENV_JRB_SHIP_DRAIN            0x09
+#define SHAKE_ENV_FALLING_BITS_PLAT         0x0A
 
-#define SHAKE_FOV_SMALL                 0x01
-#define SHAKE_FOV_UNUSED                0x02
-#define SHAKE_FOV_MEDIUM                0x03
-#define SHAKE_FOV_LARGE                 0x04
+#define SHAKE_FOV_SMALL                     0x01
+#define SHAKE_FOV_UNUSED                    0x02
+#define SHAKE_FOV_MEDIUM                    0x03
+#define SHAKE_FOV_LARGE                     0x04
 
-#define SHAKE_POS_SMALL                 0x01
-#define SHAKE_POS_MEDIUM                0x02
-#define SHAKE_POS_LARGE                 0x03
-#define SHAKE_POS_BOWLING_BALL          0x04
+#define SHAKE_POS_SMALL                     0x01
+#define SHAKE_POS_MEDIUM                    0x02
+#define SHAKE_POS_LARGE                     0x03
+#define SHAKE_POS_BOWLING_BALL              0x04
 
 // cutscene stuff was here.
 
@@ -553,7 +557,7 @@ void play_sound_if_cam_switched_to_lakitu_or_mario(void);
 void radial_camera_input(           struct Camera *c);
 void handle_c_button_movement(      struct Camera *c);
 void start_cutscene(                struct Camera *c, u8 cutscene);
-u8   get_cutscene_from_mario_status(struct Camera *c);
+s32  get_cutscene_from_mario_status(struct Camera *c);
 void warp_camera(Vec3f displacement);
 void approach_camera_height(        struct Camera *c, f32 goal, f32 inc);
 void offset_rotated(Vec3f dst, Vec3f from, Vec3f to, Vec3a rotation);

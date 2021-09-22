@@ -40,7 +40,7 @@ void one_up_loop_in_air(void) {
     if (o->oTimer < 5) {
         o->oVelY = 40.0f;
     } else {
-        o->oAngleVelPitch = -0x1000;
+        o->oAngleVelPitch = -DEG(22.5);
         o->oMoveAnglePitch += o->oAngleVelPitch;
         o->oVelY       = ((coss(o->oMoveAnglePitch) * 30.0f) + 2.0f);
         o->oForwardVel = (-sins(o->oMoveAnglePitch) * 30.0f);
@@ -52,8 +52,8 @@ void pole_1up_move_towards_mario(void) {
     f32 dy             = ((gMarioObject->header.gfx.pos[1] + 120.0f) - o->oPosY);
     f32 dz             = ( gMarioObject->header.gfx.pos[2]           - o->oPosZ);
     Angle targetPitch  = atan2s(sqrtf(sqr(dx) + sqr(dz)), dy);
-    obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_YAW_INDEX, 0x1000);
-    o->oMoveAnglePitch = approach_s16_symmetric(o->oMoveAnglePitch, targetPitch, 0x1000);
+    obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_YAW_INDEX, DEG(22.5));
+    o->oMoveAnglePitch = approach_s16_symmetric(o->oMoveAnglePitch, targetPitch, DEG(22.5));
     o->oVelY           = (sins(o->oMoveAnglePitch) * 30.0f);
     o->oForwardVel     = (coss(o->oMoveAnglePitch) * 30.0f);
     bhv_1up_interact();

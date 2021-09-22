@@ -71,7 +71,7 @@ void bhv_falling_pillar_loop(void) {
             object_step_without_floor_orient();
             // Calculate angle in front of Mario and turn towards it.
             angleInFrontOfMario = bhv_falling_pillar_calculate_angle_in_front_of_mario();
-            o->oFaceAngleYaw    = approach_s16_symmetric(o->oFaceAngleYaw, angleInFrontOfMario, 0x400);
+            o->oFaceAngleYaw    = approach_s16_symmetric(o->oFaceAngleYaw, angleInFrontOfMario, DEG(5.625));
             // After 10 ticks, start falling.
             if (o->oTimer > 10) o->oAction = FALLING_PILLAR_ACT_FALLING;
             break;

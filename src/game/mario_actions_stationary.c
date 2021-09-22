@@ -580,7 +580,7 @@ Bool32 act_twirl_land(struct MarioState *m) { //! actionState name?
     stationary_ground_step(m);
     set_mario_animation(m, MARIO_ANIM_TWIRL_LAND);
     if (m->angleVel[1] > 0x0) {
-        m->angleVel[1] -= 0x400;
+        m->angleVel[1] -= DEG(5.625);
         if (m->angleVel[1] < 0x0) m->angleVel[1] = 0x0;
         m->twirlYaw += m->angleVel[1];
     }
@@ -619,7 +619,7 @@ Bool32 act_first_person(struct MarioState *m) {
         && save_file_get_total_star_count((gCurrSaveFileNum - 1), (COURSE_MIN - 1), (COURSE_MAX - 1)) >= 10) {
         Angle headRX  =   m->statusForCamera->headRotation[0];
         Angle totalRY = (((m->statusForCamera->headRotation[1] * 4) / 3) + m->faceAngle[1]);
-        if ((headRX == -0x1800) && ((totalRY < -0x6FFF) || (totalRY >= 0x7000))) level_trigger_warp(m, WARP_OP_LOOK_UP);
+        if ((headRX == -DEG(33.75)) && ((totalRY < -0x6FFF) || (totalRY >= 0x7000))) level_trigger_warp(m, WARP_OP_LOOK_UP);
     }
     stationary_ground_step(m);
     set_mario_animation(m, MARIO_ANIM_FIRST_PERSON);

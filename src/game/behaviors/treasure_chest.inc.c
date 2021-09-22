@@ -41,7 +41,7 @@ void bhv_treasure_chest_top_loop(void) {
             if (o->parentObj->oAction == TREASURE_CHEST_BOTTOM_ACT_CLOSE) o->oAction = TREASURE_CHEST_TOP_ACT_CLOSING;
             break;
         case TREASURE_CHEST_TOP_ACT_CLOSING:
-            o->oFaceAnglePitch += 0x800;
+            o->oFaceAnglePitch += DEG(11.25);
             if (o->oFaceAnglePitch > 0x0) {
                 o->oFaceAnglePitch = 0x0;
                 o->oAction         = TREASURE_CHEST_TOP_ACT_CLOSED;

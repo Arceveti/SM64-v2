@@ -42,7 +42,7 @@ void whomp_act_turn(void) {
         if (o->oTimer > 31) {
             o->oSubAction = WHOMP_SUB_ACT_TURN_END;
         } else {
-            o->oMoveAngleYaw += 0x400;
+            o->oMoveAngleYaw += DEG(5.625);
         }
     } else {
         o->oForwardVel = 3.0f;

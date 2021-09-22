@@ -7,6 +7,9 @@
 #include "macros.h"
 #include "config.h"
 
+#define SCREEN_CENTER_X (SCREEN_WIDTH  / 2)
+#define SCREEN_CENTER_Y (SCREEN_HEIGHT / 2)
+
 struct Config
 {
     f32 audioFrequency;
@@ -89,7 +92,8 @@ typedef s32 MarioActionArg;
 typedef u32 MarioInteraction;
 typedef u32 InteractType;
 typedef u32 MarioStep;
-typedef u16 ModelID;
+typedef u8  ModelID8;
+typedef u16 ModelID16;
 typedef u32 ModelID32;
 typedef s16 DialogID16;
 typedef s32 DialogID;

@@ -180,7 +180,7 @@ static void eyerok_hand_act_idle(void) {
                     o->oGravity =  0.0f;
                 } else {
                     o->oAction = EYEROK_HAND_ACT_FIST_PUSH;
-                    o->oMoveAngleYaw = (((o->parentObj->oPosX - gMarioObject->oPosX) < 0.0f) ? -0x800 : 0x800);
+                    o->oMoveAngleYaw = (((o->parentObj->oPosX - gMarioObject->oPosX) < 0.0f) ? -DEG(11.25) : DEG(11.25));
 
                     o->oMoveAngleYaw += o->oAngleToMario;
                     o->oGravity       = -4.0f;
@@ -231,7 +231,7 @@ static void eyerok_hand_act_show_eye(void) {
                 o->oEyerokHandEyeShownTimer  = random_linear_offset(20, 50);
             }
             if (o->parentObj->oEyerokBossNumAwakeHands != 2) {
-                cur_obj_face_yaw_approach(o->oMoveAngleYaw, 0x800);
+                cur_obj_face_yaw_approach(o->oMoveAngleYaw, DEG(11.25));
                 if ((o->oTimer > 10) && (((o->oPosZ - gMarioObject->oPosZ) > 0.0f) || (o->oMoveFlags & OBJ_MOVE_HIT_EDGE))) {
                     o->parentObj->oEyerokBossActiveHand = 0;
                     o->oForwardVel = 0.0f;

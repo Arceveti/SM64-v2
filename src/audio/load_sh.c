@@ -982,15 +982,9 @@ void func_sh_802f4e50(struct PendingDmaAudioBank *audioBank, s32 audioResetStatu
     }
     encodedInfo = &audioBank->encodedInfo;
     if (audioBank->remaining == 0) {
-        mesg = (OSMesg) audioBank->encodedInfo;
-#pragma GCC diagnostic push
-#if defined(__clang__)
-#pragma GCC diagnostic ignored "-Wself-assign"
-#endif
-        mesg = mesg;    //! needs an extra read from mesg here to match...
-#pragma GCC diagnostic pop
-        temp = *encodedInfo;
-        bankId = (temp >> 8) & 0xFF;
+        mesg   = (OSMesg) audioBank->encodedInfo;
+        temp   = *encodedInfo;
+        bankId = ((temp >> 8) & 0xFF);
         switch ((u8) (temp >> 0x10)) {
             case 0:
                 if (gSeqLoadStatus[bankId] != SOUND_LOAD_STATUS_5) gSeqLoadStatus[bankId] = (u8) (temp & 0xFF);
@@ -1085,13 +1079,12 @@ void func_sh_802f5310(s32 bankId, struct AudioBank *mem, struct PatchStruct *pat
     u8 *addr;
     struct AudioBankSample *temp_s0;
     s32 i;
-    uintptr_t count;
+    uintptr_t count = 0;
     s32 temp;
     s32 sp4C = 0;
     if (D_SH_8034F68C != 0) sp4C = 1;
     D_SH_8034F688 = 0;
     patch_audio_bank(bankId, mem, patchInfo);
-    count = 0;
     for ((i = 0); (i < D_SH_8034F688); (i++)) count += ALIGN16(D_SH_8034EA88[i]->size);
     for ((i = 0); (i < D_SH_8034F688); (i++)) { //! duplicate?
         if (D_SH_8034F68C != 0x78) {

@@ -64,7 +64,7 @@ void bully_act_chase_mario(void) {
     f32 homeZ = o->oHomeZ;
     if (o->oTimer < 10) {
         o->oForwardVel = 3.0f;
-        obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_YAW_INDEX, 0x1000);
+        obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_YAW_INDEX, DEG(22.5));
     } else if (o->oBehParams2ndByte == BULLY_BP_SIZE_SMALL) {
         o->oForwardVel = 20.0f;
         if (o->oTimer >= 31) o->oTimer = 0;

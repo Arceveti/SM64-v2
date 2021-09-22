@@ -216,7 +216,7 @@ static struct Surface *read_surface_data(Collision *vertexData, Collision **vert
 
     // (v2 - v1) x (v3 - v2)
     find_vector_perpendicular_to_plane(n, v1, v2, v3);
-    vec3f_normalize(n);
+    vec3_normalize(n);
 
     surface = alloc_surface();
     vec3f_to_vec3s(surface->vertex1, v1);

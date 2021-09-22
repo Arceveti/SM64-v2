@@ -971,7 +971,7 @@ void find_surface_on_ray(Vec3f orig, Vec3f dir, struct Surface **hit_surface, Ve
     register f32 dir_length = vec3_mag(dir);
     f32 max_length = dir_length;
     vec3_copy(normalized_dir, dir);
-    vec3f_normalize(normalized_dir);
+    vec3_normalize(normalized_dir);
     // Get our cell coordinate
     register f32 fCellX          = ((orig[0] + LEVEL_BOUNDARY_MAX) / CELL_SIZE);
     register f32 fCellZ          = ((orig[2] + LEVEL_BOUNDARY_MAX) / CELL_SIZE);

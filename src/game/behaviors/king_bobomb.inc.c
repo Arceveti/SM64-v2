@@ -97,7 +97,7 @@ void king_bobomb_act_grabbed_mario(void) { // act 3
                 o->oInteractStatus                    &= ~(INT_STATUS_GRABBED_MARIO);
             } else {
                 o->oForwardVel = 3.0f;
-                if ((o->oKingBobombStationaryTimer > 20) && cur_obj_rotate_yaw_toward(0, 0x400)) {
+                if ((o->oKingBobombStationaryTimer > 20) && cur_obj_rotate_yaw_toward(0, DEG(5.625))) {
                     o->oSubAction = KING_BOBOMB_SUB_ACT_GRABBED_MARIO_THROW;
                     cur_obj_init_animation_and_anim_frame(KING_BOBOMB_ANIM_THROW_MARIO, 22);
                 }
@@ -144,13 +144,13 @@ void king_bobomb_act_hit_ground(void) { // act 6
     } else {
         if (o->oSubAction == KING_BOBOMB_SUB_ACT_HIT_GROUND_STAND_UP) {
             if (cur_obj_init_animation_and_check_if_near_end(KING_BOBOMB_ANIM_STAND_UP)) {
-                o->oSubAction = KING_BOBOMB_SUB_ACT_HIT_GROUND_START_WALKING;
+                o->oSubAction    = KING_BOBOMB_SUB_ACT_HIT_GROUND_START_WALKING;
                 o->oInteractType = INTERACT_GRABBABLE;
                 cur_obj_become_intangible();
             }
         } else {
             cur_obj_init_animation_with_sound(KING_BOBOMB_ANIM_WALKING);
-            if (cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x800)) o->oAction = KING_BOBOMB_ACT_ACTIVE;
+            if (cur_obj_rotate_yaw_toward(o->oAngleToMario, DEG(11.25))) o->oAction = KING_BOBOMB_ACT_ACTIVE;
         }
     }
 }

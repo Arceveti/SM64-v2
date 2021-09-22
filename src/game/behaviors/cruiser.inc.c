@@ -7,11 +7,11 @@ void bhv_rr_cruiser_wing_init(void) {
 
 void bhv_rr_cruiser_wing_loop(void) {
     if (o->oBehParams2ndByte == CRUISER_WING_BP_CLOCKWISE) {
-        o->oFaceAngleYaw   = (o->oRRCruiserWingInitYaw   + (sins(o->oTimer * 0x400) * 8192.0f));
-        o->oFaceAnglePitch = (o->oRRCruiserWingInitPitch + (coss(o->oTimer * 0x400) * 2048.0f));
+        o->oFaceAngleYaw   = (o->oRRCruiserWingInitYaw   + (sins(o->oTimer * DEG(5.625)) * 8192.0f));
+        o->oFaceAnglePitch = (o->oRRCruiserWingInitPitch + (coss(o->oTimer * DEG(5.625)) * 2048.0f));
     } else {
-        o->oFaceAngleYaw   = (o->oRRCruiserWingInitYaw   - (sins(o->oTimer * 0x400) * 8192.0f));
-        o->oFaceAnglePitch = (o->oRRCruiserWingInitPitch + (coss(o->oTimer * 0x400) * 2048.0f));
+        o->oFaceAngleYaw   = (o->oRRCruiserWingInitYaw   - (sins(o->oTimer * DEG(5.625)) * 8192.0f));
+        o->oFaceAnglePitch = (o->oRRCruiserWingInitPitch + (coss(o->oTimer * DEG(5.625)) * 2048.0f));
     }
 #ifndef VERSION_JP
     if (o->oTimer == 64) {

@@ -42,7 +42,7 @@ static ObjAction8 sPieceActions14[] = { BOWSER_PUZZLE_PIECE_ACT_IDLE, BOWSER_PUZ
                                         BOWSER_PUZZLE_PIECE_ACT_IDLE, BOWSER_PUZZLE_PIECE_ACT_IDLE, BOWSER_PUZZLE_PIECE_ACT_IDLE, BOWSER_PUZZLE_PIECE_ACT_IDLE, BOWSER_PUZZLE_PIECE_ACT_IDLE, BOWSER_PUZZLE_PIECE_ACT_IDLE, BOWSER_PUZZLE_PIECE_ACT_IDLE , BOWSER_PUZZLE_PIECE_ACT_IDLE , BOWSER_PUZZLE_PIECE_ACT_IDLE , BOWSER_PUZZLE_PIECE_ACT_IDLE , BOWSER_PUZZLE_PIECE_ACT_IDLE , BOWSER_PUZZLE_PIECE_ACT_IDLE, -1 };
 
 struct BowserPuzzlePiece {
-    u8 model; //! ModelID?
+    ModelID8 model;
     s8 xOffset;
     s8 zOffset;
     ObjAction8 initialAction;
@@ -84,7 +84,7 @@ static struct BowserPuzzlePiece sBowserPuzzlePieces[] = {
 /**
  * Spawn a single puzzle piece.
  */
-void bhv_lll_bowser_puzzle_spawn_piece(ModelID model, const BehaviorScript *behavior, f32 xOffset, f32 zOffset, ObjAction8 initialAction, ObjAction8 *actionList) {
+void bhv_lll_bowser_puzzle_spawn_piece(ModelID16 model, const BehaviorScript *behavior, f32 xOffset, f32 zOffset, ObjAction8 initialAction, ObjAction8 *actionList) {
     struct Object *puzzlePiece                = spawn_object(o, model, behavior);
     puzzlePiece->oPosX                       += xOffset;
     puzzlePiece->oPosZ                       += zOffset;

@@ -285,7 +285,7 @@ void mario_blow_off_cap(struct MarioState *m, f32 capSpeed) {
         capObject                = spawn_object(m->marioObj, MODEL_MARIOS_CAP, bhvNormalCap);
         capObject->oPosY        += (m->marioObj->hitboxHeight + 20.0f);
         capObject->oForwardVel   = capSpeed;
-        capObject->oMoveAngleYaw = (Angle)(m->faceAngle[1] + 0x400);
+        capObject->oMoveAngleYaw = (Angle)(m->faceAngle[1] + DEG(5.625));
         if (m->forwardVel < 0.0f) capObject->oMoveAngleYaw = (Angle)(capObject->oMoveAngleYaw + DEG(180));
     }
 }
@@ -501,7 +501,7 @@ void bounce_back_from_attack(struct MarioState *m, MarioInteraction interaction)
 }
 
 u32 should_push_or_pull_door(struct MarioState *m, struct Object *obj) {
-    return ((abs_angle_diff(obj->oMoveAngleYaw, vec3_yaw(m->pos, &obj->oPosVec)) <= DEG(90)) ? 0x00000001 : 0x00000002); //! names
+    return ((abs_angle_diff(obj->oMoveAngleYaw, vec3_yaw(m->pos, &obj->oPosVec)) <= DEG(90)) ? WARP_FLAG_DOOR_PULLED : WARP_FLAG_DOOR_FLIP_MARIO);
 }
 
 u32 take_damage_from_interact_object(struct MarioState *m) {
@@ -575,7 +575,6 @@ Bool32 interact_water_ring(struct MarioState *m, UNUSED InteractType interactTyp
 }
 
 Bool32 interact_star_or_key(struct MarioState *m, UNUSED InteractType interactType, struct Object *obj) {
-    u32 starIndex;
     MarioAction starGrabAction = ACT_STAR_DANCE_EXIT;
 #ifdef NON_STOP_STARS
     Bool32 noExit              = TRUE;
@@ -618,9 +617,9 @@ Bool32 interact_star_or_key(struct MarioState *m, UNUSED InteractType interactTy
         m->interactObj       = obj;
         m->usedObj           = obj;
 #ifdef GLOBAL_STAR_IDS
-        starIndex            = ((obj->oBehParams >> 24) & 0xFF);
+        u32 starIndex        = ((obj->oBehParams >> 24) & 0xFF);
 #else
-        starIndex            = ((obj->oBehParams >> 24) & 0x1F);
+        u32 starIndex        = ((obj->oBehParams >> 24) & 0x1F);
 #endif
         save_file_collect_star_or_key(m->numCoins, starIndex);
         m->numStars = save_file_get_total_star_count((gCurrSaveFileNum - 1), (COURSE_MIN - 1), (COURSE_MAX - 1));
@@ -691,12 +690,11 @@ Bool32 interact_warp(struct MarioState *m, UNUSED InteractType interactType, str
 }
 
 Bool32 interact_warp_door(struct MarioState *m, UNUSED InteractType interactType, struct Object *obj) {
-    MarioAction doorAction = 0;
+    MarioAction doorAction = ACT_UNINITIALIZED;
 #if !defined(DEBUG_LEVEL_SELECT) && !defined(UNLOCK_ALL)
     u32 saveFlags  = save_file_get_flags();
     s16 warpDoorId = (obj->oBehParams >> 24);
 #endif
-    u32 actionArg;
     if (m->action == ACT_WALKING || m->action == ACT_DECELERATING) {
 #if !defined(DEBUG_LEVEL_SELECT) && !defined(UNLOCK_ALL)
         if ((warpDoorId == 1) && !(saveFlags & SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR)) {
@@ -716,9 +714,9 @@ Bool32 interact_warp_door(struct MarioState *m, UNUSED InteractType interactType
             doorAction = ACT_UNLOCKING_KEY_DOOR;
         }
 #endif
-        if (m->action == ACT_WALKING || m->action == ACT_DECELERATING) {
-            actionArg = should_push_or_pull_door(m, obj) + 0x00000004; //! names
-            if (doorAction == 0) doorAction = ((actionArg & 0x1) ? ACT_PULLING_DOOR : ACT_PUSHING_DOOR);
+        if ((m->action == ACT_WALKING) || (m->action == ACT_DECELERATING)) {
+            u32 actionArg = (should_push_or_pull_door(m, obj) + WARP_FLAG_DOOR_IS_WARP);
+            if (doorAction == ACT_UNINITIALIZED) doorAction = ((actionArg & WARP_FLAG_DOOR_PULLED) ? ACT_PULLING_DOOR : ACT_PUSHING_DOOR);
             m->interactObj = obj;
             m->usedObj     = obj;
             return set_mario_action(m, doorAction, actionArg);
@@ -756,7 +754,7 @@ Bool32 interact_door(struct MarioState *m, UNUSED InteractType interactType, str
 #if !defined(DEBUG_LEVEL_SELECT) && !defined(UNLOCK_ALL)
             u32 doorSaveFileFlag;
 #endif
-            enterDoorAction = ((actionArg & 0x1) ? ACT_PULLING_DOOR : ACT_PUSHING_DOOR);
+            enterDoorAction = ((actionArg & WARP_FLAG_DOOR_PULLED) ? ACT_PULLING_DOOR : ACT_PUSHING_DOOR);
 #if !defined(DEBUG_LEVEL_SELECT) && !defined(UNLOCK_ALL)
             doorSaveFileFlag = get_door_save_file_flag(obj);
 #endif
@@ -821,7 +819,7 @@ Bool32 interact_tornado(struct MarioState *m, UNUSED InteractType interactType, 
         obj->oInteractStatus          = INT_STATUS_INTERACTED;
         m->interactObj                = obj;
         m->usedObj                    = obj;
-        marioObj->oMarioTornadoYawVel = 0x400;
+        marioObj->oMarioTornadoYawVel = DEG(5.625);
         marioObj->oMarioTornadoPosY   = (m->pos[1] - obj->oPosY);
         play_sound(SOUND_MARIO_WAAAOOOW, m->marioObj->header.gfx.cameraToObject);
 #if ENABLE_RUMBLE
@@ -1146,13 +1144,13 @@ Bool32 interact_pole(struct MarioState *m, UNUSED InteractType interactType, str
             marioObj->oMarioPolePos    = (m->pos[1] - obj->oPosY);
             marioObj->oMarioPolePos    = MAX(marioObj->oMarioPolePos, poleBottom);
 #if defined(VERSION_SH) || defined(POLE_SWING)
-            m->angleVel[1] = (s32)((velConv * 0x80) + 0x1000);
+            m->angleVel[1] = (s32)((velConv * 0x80) + DEG(22.5));
             if (dAngleToPole < 0x0) m->angleVel[1] = -m->angleVel[1];
 #else
             if (lowSpeed) return set_mario_action(m, ACT_GRAB_POLE_SLOW, 0);
             //! @bug Using m->forwardVel here is assumed to be 0.0f due to the set from earlier.
             //       This is fixed in the Shindou version.
-            m->angleVel[1] = (s32)((m->forwardVel * 0x100) + 0x1000);
+            m->angleVel[1] = (s32)((m->forwardVel * 0x100) + DEG(22.5));
 #endif
             reset_mario_pitch(m);
 #if ENABLE_RUMBLE

@@ -56,8 +56,8 @@ void water_bomb_cannon_act_active(void) { // act 1
                 } else {
                     cur_obj_play_sound_2(SOUND_OBJ_WATER_BOMB_CANNON);
                     o->oWaterCannonIdleTimer = 70;
-                    o->oWaterCannonTargetMovePitch = (0x1000 + (0x400 * (random_u16() & 0x3)));
-                    o->oWaterCannonTargetFaceYaw   = (-DEG(45) + o->oMoveAngleYaw + (0x1000 * (random_u16() % 5)));
+                    o->oWaterCannonTargetMovePitch = (DEG(22.5) + (DEG(5.625) * (random_u16() & 0x3)));
+                    o->oWaterCannonTargetFaceYaw   = (-DEG(45) + o->oMoveAngleYaw + (DEG(22.5) * (random_u16() % 5)));
                     o->oWaterCannonRotationTimer   = 60;
                 }
             }

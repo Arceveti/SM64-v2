@@ -83,10 +83,10 @@ void tox_box_move(f32 forwardVel, f32 leftVel, Angle deltaPitch, Angle deltaRoll
     }
 }
 
-void tox_box_act_move_forward(void)  { tox_box_move( 64.0f,   0.0f,  0x800,      0); } // act 4
-void tox_box_act_move_backward(void) { tox_box_move(-64.0f,   0.0f, -0x800,      0); } // act 5
-void tox_box_act_move_down(void)     { tox_box_move(  0.0f, -64.0f,      0,  0x800); } // act 6
-void tox_box_act_move_up(void)       { tox_box_move(  0.0f,  64.0f,      0, -0x800); } // act 7
+void tox_box_act_move_forward(void)  { tox_box_move( 64.0f,   0.0f,  DEG(11.25),           0); } // act 4
+void tox_box_act_move_backward(void) { tox_box_move(-64.0f,   0.0f, -DEG(11.25),           0); } // act 5
+void tox_box_act_move_down(void)     { tox_box_move(  0.0f, -64.0f,           0,  DEG(11.25)); } // act 6
+void tox_box_act_move_up(void)       { tox_box_move(  0.0f,  64.0f,           0, -DEG(11.25)); } // act 7
 
 void tox_box_act_step(void) { // act 1
     o->oForwardVel = 0.0f;

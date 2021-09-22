@@ -529,18 +529,20 @@ void chk_shapegen(struct ObjShape *shape) {
                 vec3_add(vtxbuf[facedata->data[i][2]]->normal, face->normal);
                 vec3_add(vtxbuf[facedata->data[i][3]]->normal, face->normal);
             }
-            if (shape->flag & 0x10) { //! flag name
-                for ((i = 0); (i < vtxdata->count); (i++)) {
-                    vec3_copy(vtxbuf[i]->normal, vtxbuf[i]->pos);
-                    vec3f_normalize(vtxbuf[i]->normal);
+            Vec3n normal;
+            for ((i = 0); (i < vtxdata->count); (i++)) {
+                if (shape->flag & 0x10) {
+                    vec3_copy(normal, vtxbuf[i]->pos);
+                } else {
+                    vec3_copy(normal, vtxbuf[i]->normal);
                 }
-            } else {
-                for ((i = 0); (i < vtxdata->count); (i++)) vec3f_normalize(vtxbuf[i]->normal);
+                vec3_normalize(normal);
+                vec3_copy(vtxbuf[i]->normal, normal);
             }
             gd_free(vtxbuf);
-            madeFaces = make_group_of_type(OBJ_TYPE_FACES, oldObjHead);
+            madeFaces        = make_group_of_type(OBJ_TYPE_FACES, oldObjHead);
             shape->faceGroup = madeFaces;
-            shape->vtxGroup = madeVtx;
+            shape->vtxGroup  = madeVtx;
         }
     }
     if (shapeMtls != NULL) {

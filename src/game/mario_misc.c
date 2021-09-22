@@ -201,7 +201,7 @@ static void star_door_unlock_spawn_particles(Angle angleOffset) {
 void bhv_unlock_door_star_init(void) {
     o->oUnlockDoorStarState  = UNLOCK_DOOR_STAR_RISING;
     o->oUnlockDoorStarTimer  = 0;
-    o->oUnlockDoorStarYawVel = 0x1000;
+    o->oUnlockDoorStarYawVel = DEG(22.5);
     o->oPosX += (30.0f * sins(gMarioState->faceAngle[1] - DEG(90)));
     o->oPosY += 160.0f;
     o->oPosZ += (30.0f * coss(gMarioState->faceAngle[1] - DEG(90)));
@@ -565,15 +565,11 @@ Gfx *geo_switch_mario_hand_grab_pos(s32 callContext, struct GraphNode *node, Mat
         }
     } else if (callContext == GEO_CONTEXT_HELD_OBJ) {
         //! The HOLP is set here, which is why it only updates when the held object is drawn.
-        // This is why it won't update during a pause buffered hitstun or when the camera is very far
-        // away.
+        // This is why it won't update during a pause buffered hitstun or when the camera is very far away.
         get_pos_from_transform_mtx(marioState->marioBodyState->heldObjLastPosition, *curTransform, *gCurGraphNodeCamera->matrixPtr);
     }
     return NULL;
 }
-
-// X position of the mirror
-#define MIRROR_X 4331.53f
 
 /**
  * Geo node that creates a clone of Mario's geo node and updates it to becomes
@@ -601,8 +597,8 @@ Gfx *geo_render_mirror_mario(s32 callContext, struct GraphNode *node, UNUSED Mat
                 vec3_copy(gMirrorMario.pos,    mario->header.gfx.pos  );
                 vec3_copy(gMirrorMario.scale,  mario->header.gfx.scale);
                 gMirrorMario.animInfo        = mario->header.gfx.animInfo;
-                mirroredX                    = (MIRROR_X - gMirrorMario.pos[0]);
-                gMirrorMario.pos[0]          = (mirroredX + MIRROR_X);
+                mirroredX                    = (CASTLE_MIRROR_X - gMirrorMario.pos[0]);
+                gMirrorMario.pos[0]          = (mirroredX + CASTLE_MIRROR_X);
                 gMirrorMario.angle[1]        = -gMirrorMario.angle[1];
                 gMirrorMario.scale[0]       *= -1.0f;
                 ((struct GraphNode *) &gMirrorMario)->flags |=  GRAPH_RENDER_ACTIVE;

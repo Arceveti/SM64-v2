@@ -392,7 +392,7 @@ void print_hud_lut_string_centered(s8 hudLUT, ScreenPos x, ScreenPos y, const uc
 
 
 void print_menu_generic_string(ScreenPos x, ScreenPos y, const uchar *str) {
-    UNUSED s8 mark = DIALOG_MARK_NONE; // unused in EU
+    char mark = DIALOG_MARK_NONE; // unused in EU
     s32 strPos = 0;
     u32 curX   = x;
     u32 curY   = y;
@@ -488,22 +488,22 @@ void handle_menu_scrolling(s8 scrollDirection, s8 *currentIndex, s8 minIndex, s8
 
 // EU has both get_str_x_pos_from_center and get_str_x_pos_from_center_scale
 // US and JP only implement one or the other
-s16 get_str_x_pos_from_center(s16 centerPos, uchar *str, UNUSED f32 scale) {
-    s16 strPos      = 0;
-    f32 spacesWidth = 0.0f;
+ScreenPos get_str_x_pos_from_center(ScreenPos centerPos, uchar *str, UNUSED f32 scale) {
+    ScreenPos strPos = 0;
+    f32  spacesWidth = 0.0f;
     while (str[strPos] != DIALOG_CHAR_TERMINATOR) {
         spacesWidth += gDialogCharWidths[str[strPos]];
         strPos++;
     }
     // return the x position of where the string starts as half the string's
     // length from the position of the provided center.
-    return (s16)(centerPos - (s16)(spacesWidth / 2.0f));
+    return (ScreenPos)(centerPos - (ScreenPos)(spacesWidth / 2.0f));
 }
 
 
-s16 get_string_width(uchar *str) {
-    s16 strPos = 0;
-    s16 width  = 0;
+ScreenPos get_string_width(uchar *str) {
+    ScreenPos strPos = 0;
+    ScreenPos width  = 0;
     while (str[strPos] != DIALOG_CHAR_TERMINATOR) {
         width += gDialogCharWidths[str[strPos]];
         strPos++;
@@ -1344,16 +1344,12 @@ void render_pause_my_score_coins(void) {
     uchar textStar[]         = { TEXT_STAR          };
     uchar textUnfilledStar[] = { TEXT_UNFILLED_STAR };
     uchar strCourseNum[4];
-    void **courseNameTbl;
     uchar *courseName;
-    void **actNameTbl;
     uchar *actName;
-    u8 courseIndex;
-    u8 starFlags;
-    courseNameTbl = segmented_to_virtual(languageTable[gInGameLanguage][1]);
-    actNameTbl    = segmented_to_virtual(languageTable[gInGameLanguage][2]);
-    courseIndex   = (gCurrCourseNum - 1);
-    starFlags     = save_file_get_star_flags((gCurrSaveFileNum - 1), (gCurrCourseNum - 1));
+    void **courseNameTbl = segmented_to_virtual(languageTable[gInGameLanguage][1]);
+    void **actNameTbl    = segmented_to_virtual(languageTable[gInGameLanguage][2]);
+    u8 courseIndex       = (gCurrCourseNum - 1);
+    u8 starFlags         = save_file_get_star_flags((gCurrSaveFileNum - 1), (gCurrCourseNum - 1));
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
     if (courseIndex < COURSE_STAGES_COUNT) {
@@ -1496,7 +1492,7 @@ void render_pause_castle_course_stars(ScreenPos x, ScreenPos y, s16 fileNum, s16
     u8  starFlags    = save_file_get_star_flags(fileNum, courseNum);
     u16 starCount    = save_file_get_course_star_count(fileNum, courseNum);
     u16 nextStar     = 0;
-    if (starFlags & 0x40) {
+    if (starFlags & STAR_FLAG_ACT_100_COINS) {
         starCount--;
         print_generic_string((x + 89), (y - 5), textStar);
     }
@@ -1563,7 +1559,7 @@ s8  gCourseCompleteCoinsEqual = 0;
 s32 gCourseDoneMenuTimer      = 0;
 s32 gCourseCompleteCoins      = 0;
 s8  gHudFlash                 = FALSE;
-s16 render_pause_courses_and_castle(void) {
+s32 render_pause_courses_and_castle(void) {
 #ifdef PUPPYCAM
     puppycam_check_pause_buttons();
     if (!gPCOptionOpen) {
@@ -1725,15 +1721,13 @@ void play_star_fanfare_and_flash_hud(s32 arg, u8 starNum) {
 #define TXT_CLEAR_X2 (get_string_width(name) + 79)
 
 void render_course_complete_lvl_info_and_hud_str(void) {
-    uchar textCourse[]       = { TEXT_COURSE             };
-    UNUSED uchar textClear[] = { TEXT_CLEAR              };
-    uchar textSymStar[]      = { GLYPH_STAR, GLYPH_SPACE };
-    void **actNameTbl;
-    void **courseNameTbl;
+    uchar textCourse [] = { TEXT_COURSE             };
+    uchar textClear  [] = { TEXT_CLEAR              };
+    uchar textSymStar[] = { GLYPH_STAR, GLYPH_SPACE };
     uchar *name;
     uchar strCourseNum[4];
-    actNameTbl    = segmented_to_virtual(languageTable[gInGameLanguage][2]);
-    courseNameTbl = segmented_to_virtual(languageTable[gInGameLanguage][1]);
+    void **actNameTbl    = segmented_to_virtual(languageTable[gInGameLanguage][2]);
+    void **courseNameTbl = segmented_to_virtual(languageTable[gInGameLanguage][1]);
     if (gLastCompletedCourseNum <= COURSE_STAGES_MAX) {
         print_hud_course_complete_coins(118, 103);
         play_star_fanfare_and_flash_hud(TRUE, (1 << (gLastCompletedStarNum - 1)));
@@ -1759,7 +1753,7 @@ void render_course_complete_lvl_info_and_hud_str(void) {
         gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
         print_hud_course_complete_string(HUD_PRINT_CONGRATULATIONS);
         print_hud_course_complete_coins(118, 111);
-        play_star_fanfare_and_flash_hud(FALSE, 0); // 2 isn't defined, originally for key hud?
+        play_star_fanfare_and_flash_hud(FALSE, STAR_FLAG_NONE);
         return;
     } else {
         name = segmented_to_virtual(actNameTbl[COURSE_STAGES_MAX * 6]);
@@ -1801,8 +1795,8 @@ void render_save_confirmation(ScreenPos x, ScreenPos y, s8 *index, ScreenPos yPo
     gSPPopMatrix(  gDisplayListHead++, G_MTX_MODELVIEW);
 }
 
-s16 render_course_complete_screen(void) {
-    s16 index;
+s32 render_course_complete_screen(void) {
+    s32 index;
     switch (gDialogBoxState) {
         case DIALOG_STATE_OPENING:
             render_course_complete_lvl_info_and_hud_str();
@@ -1839,8 +1833,8 @@ s16 render_course_complete_screen(void) {
     return MENU_OPT_NONE;
 }
 
-s16 render_menus_and_dialogs(void) {
-    s16 index = MENU_OPT_NONE;
+s32 render_menus_and_dialogs(void) {
+    s32 index = MENU_OPT_NONE;
     create_dl_ortho_matrix();
     if (gMenuMode != MENU_MODE_NONE) {
         switch (gMenuMode) {

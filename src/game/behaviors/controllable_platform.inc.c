@@ -94,10 +94,10 @@ void controllable_platform_check_walls(s8 nextDirection, Vec3c wallDisplacement,
 
 void controllable_platform_shake_on_wall_hit(void) {
     if ((o->oControllablePlatformWallHitDirection == MOVE_DIRECTION_NORTH) || (o->oControllablePlatformWallHitDirection == MOVE_DIRECTION_SOUTH)) {
-        o->oFaceAnglePitch = (sins(o->oTimer * 0x1000) * DEG(1) * 10.0f);
+        o->oFaceAnglePitch = (sins(o->oTimer * DEG(22.5)) * DEG(1) * 10.0f);
         o->oPosY           = (o->oControllablePlatformInitPosY + (sins(o->oTimer * 0x2000) * 20.0f));
     } else {
-        o->oFaceAngleRoll  = (sins(o->oTimer * 0x1000) * DEG(1) * 10.0f);
+        o->oFaceAngleRoll  = (sins(o->oTimer * DEG(22.5)) * DEG(1) * 10.0f);
         o->oPosY           = (o->oControllablePlatformInitPosY + (sins(o->oTimer * 0x2000) * 20.0f));
     }
     if (o->oTimer == 32) {

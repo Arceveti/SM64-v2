@@ -19,7 +19,7 @@
 
 #ifdef USE_EXT_RAM
 const GeoLayout intro_geo_error_screen[] = {
-    GEO_NODE_SCREEN_AREA(0, (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2), (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2)),
+    GEO_NODE_SCREEN_AREA(0, SCREEN_CENTER_X, SCREEN_CENTER_Y, SCREEN_CENTER_X, SCREEN_CENTER_Y),
     GEO_OPEN_NODE(),
         GEO_ZBUFFER(0),
         GEO_OPEN_NODE(),
@@ -39,7 +39,7 @@ const GeoLayout intro_geo_error_screen[] = {
 
 // 0x0E0002D0
 const GeoLayout intro_geo_splash_screen[] = {
-   GEO_NODE_SCREEN_AREA(0, (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2), (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2)),
+   GEO_NODE_SCREEN_AREA(0, SCREEN_CENTER_X, SCREEN_CENTER_Y, SCREEN_CENTER_X, SCREEN_CENTER_Y),
    GEO_OPEN_NODE(),
       GEO_ZBUFFER(0),
       GEO_OPEN_NODE(),
@@ -68,7 +68,7 @@ const GeoLayout intro_geo_splash_screen[] = {
 
 // 0x0E00035C
 const GeoLayout intro_geo_mario_head_regular[] = {
-   GEO_NODE_SCREEN_AREA(0, (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2), (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2)),
+   GEO_NODE_SCREEN_AREA(0, SCREEN_CENTER_X, SCREEN_CENTER_Y, SCREEN_CENTER_X, SCREEN_CENTER_Y),
    GEO_OPEN_NODE(),
       GEO_ZBUFFER(0),
       GEO_OPEN_NODE(),
@@ -101,7 +101,7 @@ const GeoLayout intro_geo_mario_head_regular[] = {
 
 // 0x0E0003B8
 const GeoLayout intro_geo_mario_head_dizzy[] = {
-   GEO_NODE_SCREEN_AREA(0, (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2), (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2)),
+   GEO_NODE_SCREEN_AREA(0, SCREEN_CENTER_X, SCREEN_CENTER_Y, SCREEN_CENTER_X, SCREEN_CENTER_Y),
    GEO_OPEN_NODE(),
       GEO_ZBUFFER(0),
       GEO_OPEN_NODE(),
@@ -134,7 +134,7 @@ const GeoLayout intro_geo_mario_head_dizzy[] = {
 
 // 0x0E000414
 const GeoLayout intro_geo_debug_level_select[] = {
-   GEO_NODE_SCREEN_AREA(0, (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2), (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2)),
+   GEO_NODE_SCREEN_AREA(0, SCREEN_CENTER_X, SCREEN_CENTER_Y, SCREEN_CENTER_X, SCREEN_CENTER_Y),
    GEO_OPEN_NODE(),
       GEO_ZBUFFER(0),
       GEO_OPEN_NODE(),

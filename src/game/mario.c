@@ -1338,14 +1338,14 @@ void set_submerged_cam_preset_and_spawn_bubbles(struct MarioState *m) {
                 if ((heightBelowWater < 400.0f) && (camPreset != CAMERA_MODE_WATER_SURFACE)) set_camera_mode(m->area->camera, CAMERA_MODE_WATER_SURFACE, 1);
                 // As long as Mario isn't drowning or at the top
                 // of the water with his head out, spawn bubbles.
-                if (!(m->action & ACT_FLAG_INTANGIBLE) && ((m->pos[1] < (f32)(m->waterLevel - 160)) || (m->faceAngle[0] < -0x800))) m->particleFlags |= PARTICLE_BUBBLE;
+                if (!(m->action & ACT_FLAG_INTANGIBLE) && ((m->pos[1] < (f32)(m->waterLevel - 160)) || (m->faceAngle[0] < -DEG(11.25)))) m->particleFlags |= PARTICLE_BUBBLE;
             }
         }
     } else {
         set_camera_mode(m->area->camera, CAMERA_MODE_8_DIRECTIONS, 1);
     }
     if ((gPlayer1Controller->buttonPressed & R_TRIG) && (m->action & ACT_FLAG_SWIMMING)) {
-        s8DirModeBaseYaw = (((gMarioState->faceAngle[1] - DEG(180)) + 0x1000) & DEG(-45));
+        s8DirModeBaseYaw = (((gMarioState->faceAngle[1] - DEG(180)) + DEG(22.5)) & DEG(-45));
         gWaterCamOverride ^= TRUE;
     }
 #else
@@ -1359,7 +1359,7 @@ void set_submerged_cam_preset_and_spawn_bubbles(struct MarioState *m) {
             if ((heightBelowWater < 400.0f) && (camPreset != CAMERA_MODE_WATER_SURFACE)) set_camera_mode(m->area->camera, CAMERA_MODE_WATER_SURFACE, 1);
             // As long as Mario isn't drowning or at the top
             // of the water with his head out, spawn bubbles.
-            if (!(m->action & ACT_FLAG_INTANGIBLE) && ((m->pos[1] < (f32)(m->waterLevel - 160)) || (m->faceAngle[0] < -0x800))) m->particleFlags |= PARTICLE_BUBBLE;
+            if (!(m->action & ACT_FLAG_INTANGIBLE) && ((m->pos[1] < (f32)(m->waterLevel - 160)) || (m->faceAngle[0] < -DEG(11.25)))) m->particleFlags |= PARTICLE_BUBBLE;
         }
     }
 #endif

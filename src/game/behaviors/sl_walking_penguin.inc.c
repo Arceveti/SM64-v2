@@ -20,10 +20,10 @@ struct SLWalkingPenguinStep sSLWalkingPenguinErraticSteps[] = {
 
 static s32 sl_walking_penguin_turn(void) {
     // Stay still and use walking animation for the turn.
-    o->oForwardVel = 0.0f;
+    o->oForwardVel    = 0.0f;
     cur_obj_init_animation_with_accel_and_sound(PENGUIN_ANIM_WALK, 1.0f);
     // Turn around.
-    o->oAngleVelYaw = 0x400;
+    o->oAngleVelYaw   = DEG(5.625);
     o->oMoveAngleYaw += o->oAngleVelYaw;
     return (o->oTimer == 31); // Finished turning
 }

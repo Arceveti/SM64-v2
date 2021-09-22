@@ -58,7 +58,7 @@ void butterfly_act_return_home(void) {
     vec3_diff(homeDist, &o->oHomeVec, &o->oPosVec);
     Angle hAngleToHome = atan2s(homeDist[2], homeDist[0]);
     Angle vAngleToHome = atan2s(sqrtf(sqr(homeDist[0]) + sqr(homeDist[2])), -homeDist[1]);
-    o->oMoveAngleYaw   = approach_s16_symmetric(o->oMoveAngleYaw  , hAngleToHome, 0x800);
+    o->oMoveAngleYaw   = approach_s16_symmetric(o->oMoveAngleYaw  , hAngleToHome, DEG(11.25));
     o->oMoveAnglePitch = approach_s16_symmetric(o->oMoveAnglePitch, vAngleToHome,  0x50);
     butterfly_step(7);
     if (vec3_sumsq(homeDist) < 144.0f) {

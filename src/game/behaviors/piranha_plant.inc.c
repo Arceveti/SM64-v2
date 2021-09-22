@@ -222,7 +222,7 @@ void piranha_plant_act_biting(void) {
     // Play a bite sound effect on certain frames.
     if (is_item_in_array(frame, sPiranhaPlantBiteSoundFrames)) cur_obj_play_sound_2(SOUND_OBJ2_PIRANHA_PLANT_BITE);
     // Move to face the player.
-    o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, o->oAngleToMario, 0x400);
+    o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, o->oAngleToMario, DEG(5.625));
     if ((o->oDistanceToMario > 500.0f) && cur_obj_check_if_near_animation_end()) o->oAction = PIRANHA_PLANT_ACT_STOPPED_BITING;
     // If the player is wearing the Metal Cap and interacts with the Piranha
     // Plant, the Piranha Plant will die.

@@ -90,7 +90,7 @@ void bhv_intro_lakitu_loop(void) {
                 o->oIntroLakituEndBirds1DestY =  -200.0f;
                 o->oMoveAngleYaw              = DEG(180);
                 o->oFaceAngleYaw              = (o->oMoveAngleYaw + DEG(90));
-                o->oMoveAnglePitch            =    0x800;
+                o->oMoveAnglePitch            = DEG(11.25);
             }
             cur_obj_play_sound_1(SOUND_AIR_LAKITU_FLY_HIGHPRIO);
             break;
@@ -159,7 +159,7 @@ void bhv_intro_lakitu_loop(void) {
             approach_f32_asymptotic_bool(&o->oForwardVel, 60.0f, 0.05f);
             targetYaw          = vec3_yaw(toPoint, gCamera->pos);
             o->oFaceAngleYaw   = approach_s16_symmetric(o->oFaceAngleYaw, targetYaw, 0x200);
-            if (o->oTimer < 62) o->oMoveAngleYaw = approach_s16_asymptotic(o->oMoveAngleYaw, 0x1800, 0x1E);
+            if (o->oTimer < 62) o->oMoveAngleYaw = approach_s16_asymptotic(o->oMoveAngleYaw, DEG(33.75), 0x1E);
             o->oMoveAnglePitch = approach_s16_symmetric(o->oMoveAnglePitch, -0x2000, 0x5A);
             o->oFaceAnglePitch = 0x0;
             cur_obj_set_pos_via_transform();

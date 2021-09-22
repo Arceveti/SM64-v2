@@ -32,7 +32,7 @@ static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, Vec3f pos)
     f32 amountToMove;
     Vec3f d;
     f32 distToNextWaypoint;
-    if ((ballIndex == 0) || ((u16)(o->oBehParams >> 16) & 0x0080)) {
+    if ((ballIndex == 0) || ((u16)(o->oBehParams >> 16) & 0x0080)) { //! param mask name
         initialPrevWaypoint = o->oPlatformOnTrackPrevWaypoint;
         nextWaypoint = initialPrevWaypoint;
         if (ballIndex != 0) {

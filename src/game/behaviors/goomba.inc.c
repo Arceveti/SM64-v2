@@ -215,7 +215,7 @@ static void goomba_act_jump(void) {
     if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
         o->oAction = GOOMBA_ACT_WALK;
     } else {
-        cur_obj_rotate_yaw_toward(o->oGoombaTargetYaw, 0x800);
+        cur_obj_rotate_yaw_toward(o->oGoombaTargetYaw, DEG(11.25));
     }
 }
 

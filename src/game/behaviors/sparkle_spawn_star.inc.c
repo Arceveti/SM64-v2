@@ -54,7 +54,7 @@ void bhv_spawned_star_no_level_exit_loop(void) {
                 cutscene_object(CUTSCENE_STAR_SPAWN, o);
                 set_time_stop_flags(TIME_STOP_ENABLED | TIME_STOP_MARIO_AND_DOORS);
                 o->activeFlags |= ACTIVE_FLAG_INITIATED_TIME_STOP;
-                o->oAngleVelYaw = 0x800;
+                o->oAngleVelYaw = DEG(11.25);
                 if (o->oBehParams2ndByte == SPAWN_STAR_POS_CUTSCENE_BP_SPAWN_AT_MARIO) {
                     set_home_to_mario();
                 } else {
@@ -93,7 +93,7 @@ void bhv_spawned_star_no_level_exit_loop(void) {
             break;
         case SPAWN_STAR_POS_CUTSCENE_ACT_SLOW_STAR_ROTATION:
             set_sparkle_spawn_star_hitbox();
-            if (o->oAngleVelYaw > 0x400) o->oAngleVelYaw -= 0x40; // Slow star rotation
+            if (o->oAngleVelYaw > DEG(5.625)) o->oAngleVelYaw -= 0x40; // Slow star rotation
             break;
     }
     cur_obj_move_using_fvel_and_gravity();

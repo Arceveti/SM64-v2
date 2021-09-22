@@ -184,7 +184,7 @@ index 25b27983..2ff11930 100644
 -    else if (gPlayer1Controller->buttonPressed & D_JPAD) {
 -        s8DirModeYawOffset = s8DirModeYawOffset&0xE000;
 +    if (gPlayer1Controller->buttonPressed & D_JPAD) {
-+        s8DirModeBaseYaw = (s8DirModeBaseYaw + 0x1000) & 0xE000; // Lock the camera to the nearest 45deg axis
++        s8DirModeBaseYaw = (s8DirModeBaseYaw + DEG(22.5)) & 0xE000; // Lock the camera to the nearest 45deg axis
      }
 -#endif
 
@@ -226,7 +226,7 @@ index 25b27983..2ff11930 100644
 -                    set_cam_angle(CAM_ANGLE_MARIO);
 -                } else {
 +                if (set_cam_angle(0) == CAM_ANGLE_MARIO) {
-+                    s8DirModeBaseYaw = ((gMarioState->faceAngle[1]-0x8000) + 0x1000) & 0xE000;
++                    s8DirModeBaseYaw = ((gMarioState->faceAngle[1]-0x8000) + DEG(22.5)) & 0xE000;
                      set_cam_angle(CAM_ANGLE_LAKITU);
                  }
              }
@@ -296,7 +296,7 @@ index 25b27983..2ff11930 100644
          c->mode = CAMERA_MODE_8_DIRECTIONS;
          sStatusFlags &= ~CAM_FLAG_SMOOTH_MOVEMENT;
 -        s8DirModeBaseYaw = 0x0;
-+        s8DirModeBaseYaw = ((gMarioState->faceAngle[1]-0x8000) + 0x1000) & 0xE000;
++        s8DirModeBaseYaw = ((gMarioState->faceAngle[1]-0x8000) + DEG(22.5)) & 0xE000;
          s8DirModeYawOffset = 0x0;
      }
  }
@@ -459,12 +459,12 @@ index 31e97bce..29b5e9c4 100644
 -            // As long as Mario isn't drowning or at the top
 -            // of the water with his head out, spawn bubbles.
 -            if (!(m->action & ACT_FLAG_INTANGIBLE)) {
--                if ((m->pos[1] < (f32)(m->waterLevel - 160)) || (m->faceAngle[0] < -0x800)) {
+-                if ((m->pos[1] < (f32)(m->waterLevel - 160)) || (m->faceAngle[0] < -DEG(11.25))) {
 -                    m->particleFlags |= PARTICLE_BUBBLE;
 +                // As long as Mario isn't drowning or at the top
 +                // of the water with his head out, spawn bubbles.
 +                if (!(m->action & ACT_FLAG_INTANGIBLE)) {
-+                    if ((m->pos[1] < (f32)(m->waterLevel - 160)) || (m->faceAngle[0] < -0x800)) {
++                    if ((m->pos[1] < (f32)(m->waterLevel - 160)) || (m->faceAngle[0] < -DEG(11.25))) {
 +                        m->particleFlags |= PARTICLE_BUBBLE;
 +                    }
                  }
@@ -474,7 +474,7 @@ index 31e97bce..29b5e9c4 100644
 +        set_camera_mode(m->area->camera, CAMERA_MODE_8_DIRECTIONS, 1);
 +    }
 +    if ((gPlayer1Controller->buttonPressed & R_TRIG) && (m->action & ACT_FLAG_SWIMMING)) {
-+        s8DirModeBaseYaw = ((gMarioState->faceAngle[1]-0x8000) + 0x1000) & 0xE000;
++        s8DirModeBaseYaw = ((gMarioState->faceAngle[1] - DEG(180)) + DEG(22.5)) & 0xE000;
 +        gWaterCamOverride ^= 1;
      }
  }

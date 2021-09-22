@@ -370,25 +370,25 @@ static void level_cmd_end_area(void) {
 }
 
 static void level_cmd_load_model_from_dl(void) {
-    ModelID model = CMD_GET(ModelID, 0xA);
-    s16 layer     = CMD_GET(u16,     0x8);
-    void *dl_ptr  = CMD_GET(void *,    4);
+    ModelID16 model = CMD_GET(ModelID16, 0xA);
+    s16 layer       = CMD_GET(u16,       0x8);
+    void *dl_ptr    = CMD_GET(void *,      4);
     if (model < MODEL_ID_COUNT) gLoadedGraphNodes[model] = (struct GraphNode *) init_graph_node_display_list(sLevelPool, 0, layer, dl_ptr);
     sCurrentCmd = CMD_NEXT;
 }
 
 static void level_cmd_load_model_from_geo(void) {
-    ModelID model = CMD_GET(ModelID, 2);
-    void *geo     = CMD_GET(void *,  4);
+    ModelID16 model = CMD_GET(ModelID16, 2);
+    void *geo       = CMD_GET(void *,    4);
     if (model < MODEL_ID_COUNT) gLoadedGraphNodes[model] = process_geo_layout(sLevelPool, geo);
     sCurrentCmd = CMD_NEXT;
 }
 
 static void level_cmd_load_model_from_dl_with_scale(void) {
-    ModelID model =       (CMD_GET(ModelID, 2) & 0x0FFF);
-    s16   node    = (((u16)CMD_GET(s16, 2)) >> 12);
-    void *dl_ptr  =        CMD_GET(void *,  4);
-    f32 scale     =        CMD_GET(f32, 8);
+    ModelID16 model =       (CMD_GET(ModelID16, 2) & 0x0FFF);
+    s16   node      = (((u16)CMD_GET(s16, 2)) >> 12);
+    void *dl_ptr    =        CMD_GET(void *,  4);
+    f32 scale       =        CMD_GET(f32, 8);
     // GraphNodeScale has a GraphNode at the top. This
     // is being stored to the array, so cast the pointer.
     if (model < MODEL_ID_COUNT) gLoadedGraphNodes[model] = (struct GraphNode *) init_graph_node_scale(sLevelPool, 0, node, dl_ptr, scale);
@@ -402,14 +402,14 @@ static void level_cmd_init_mario(void) {
     gMarioSpawnInfo->areaIndex       =  0;
     gMarioSpawnInfo->behaviorArg     = CMD_GET(u32,    4);
     gMarioSpawnInfo->behaviorScript  = CMD_GET(void *, 8);
-    gMarioSpawnInfo->modelNode       = gLoadedGraphNodes[CMD_GET(ModelID, 0x2)];
+    gMarioSpawnInfo->modelNode       = gLoadedGraphNodes[CMD_GET(ModelID16, 0x2)];
     gMarioSpawnInfo->next            = NULL;
     sCurrentCmd                      = CMD_NEXT;
 }
 
 static void level_cmd_place_object(void) {
     u8 val7 = (1 << (gCurrActNum - 1));
-    ModelID model;
+    ModelID16 model;
     struct SpawnInfo *spawnInfo;
 
     if ((sCurrAreaIndex != -1) && ((CMD_GET(u8, 2) & val7) || (CMD_GET(u8, 2) == 0x1F))) {

@@ -158,7 +158,7 @@ index 0000000..d7f27ad
 +  * Defines a select type for a star in the act selector.
 +@@ -92,8 +92,15 @@ void bhv_act_selector_star_type_loop(void) {
 + void render_100_coin_star(u8 stars) {
-+     if (stars & (1 << 6)) {
++     if (stars & STAR_FLAG_ACT_100_COINS) {
 +         // If the 100 coin star has been collected, create a new star selector next to the coin score.
 +-        sStarSelectorModels[6] = spawn_object_abs_with_rot(o, 0, MODEL_STAR,
 +-                                                        bhvActSelectorStarType, 370, 24, -300, 0, 0, 0);
@@ -389,7 +389,7 @@ index 0000000..667e6e2
 +  * Act Selector Star Type Loop Action
 +@@ -92,8 +93,14 @@ void bhv_act_selector_star_type_loop(void) {
 + void render_100_coin_star(u8 stars) {
-+     if (stars & (1 << 6)) {
++     if (stars & STAR_FLAG_ACT_100_COINS) {
 +         // If the 100 coin star has been collected, create a new star selector next to the coin score.
 +-        sStarSelectorModels[6] = spawn_object_abs_with_rot(o, 0, MODEL_STAR,
 +-                                                        bhvActSelectorStarType, 370, 24, -300, 0, 0, 0);
@@ -662,7 +662,7 @@ index 025dbf2..4840898 100644
   * Defines a select type for a star in the act selector.
 @@ -92,8 +92,15 @@ void bhv_act_selector_star_type_loop(void) {
  void render_100_coin_star(u8 stars) {
-     if (stars & (1 << 6)) {
+     if (stars & STAR_FLAG_ACT_100_COINS) {
          // If the 100 coin star has been collected, create a new star selector next to the coin score.
 -        sStarSelectorModels[6] = spawn_object_abs_with_rot(o, 0, MODEL_STAR,
 -                                                        bhvActSelectorStarType, 370, 24, -300, 0, 0, 0);

@@ -64,7 +64,7 @@ static void homing_amp_appear_loop(void) {
     f32 relativeTargetX = (gLakituState.goalPos[0] - o->oPosX);
     f32 relativeTargetZ = (gLakituState.goalPos[2] - o->oPosZ);
     Angle targetYaw     = atan2s(relativeTargetZ, relativeTargetX);
-    o->oMoveAngleYaw    = approach_s16_symmetric(o->oMoveAngleYaw, targetYaw, 0x1000);
+    o->oMoveAngleYaw    = approach_s16_symmetric(o->oMoveAngleYaw, targetYaw, DEG(22.5));
     // For 30 frames, make the amp "appear" by increasing its size by 0.03 each frame,
     // except for the first frame (when oTimer == 0) because the expression in cur_obj_scale
     // evaluates to 0.1, which is the same as it was before. After 30 frames, it ends at
@@ -91,8 +91,8 @@ static void homing_amp_appear_loop(void) {
  */
 static void homing_amp_chase_loop(void) {
     // Lock on to Mario if he ever goes within 11.25 degrees of the amp's line of sight
-    if (((o->oAngleToMario - 0x400) < o->oMoveAngleYaw)
-        && (o->oMoveAngleYaw < (o->oAngleToMario + 0x400))) {
+    if (((o->oAngleToMario - DEG(5.625)) < o->oMoveAngleYaw)
+        && (o->oMoveAngleYaw < (o->oAngleToMario + DEG(5.625)))) {
         o->oHomingAmpLockedOn = TRUE;
         o->oTimer             = 0;
     }
@@ -114,7 +114,7 @@ static void homing_amp_chase_loop(void) {
         // If the amp is not locked on to Mario, move forward at 10 units/second
         // while curving towards him.
         o->oForwardVel = 10.0f;
-        obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_YAW_INDEX, 0x400);
+        obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_YAW_INDEX, DEG(5.625));
         // The amp's average Y will approach Mario's graphical Y position + 250
         // at a rate of 10 units per frame. Interestingly, this is different from
         // the + 150 used while chasing him. Could this be a typo?
@@ -238,8 +238,8 @@ static void fixed_circling_amp_idle_loop(void) {
     f32 yToMario        = (gMarioObject->header.gfx.pos[1] + 120.0f - o->oPosY);
     f32 zToMario        = (gMarioObject->header.gfx.pos[2]          - o->oPosZ);
     Angle vAngleToMario = atan2s(sqrtf(sqr(xToMario) + sqr(zToMario)), -yToMario);
-    obj_turn_toward_object(o, gMarioObject, O_FACE_ANGLE_YAW_INDEX, 0x1000);
-    o->oFaceAnglePitch = approach_s16_symmetric(o->oFaceAnglePitch, vAngleToMario, 0x1000);
+    obj_turn_toward_object(o, gMarioObject, O_FACE_ANGLE_YAW_INDEX, DEG(22.5));
+    o->oFaceAnglePitch = approach_s16_symmetric(o->oFaceAnglePitch, vAngleToMario, DEG(22.5));
     // Oscillate 40 units up and down.
     // Interestingly, 0x458 (1112 in decimal) is a magic number with no apparent significance.
     // It is slightly larger than the 0x400 figure used for homing amps, which makes
@@ -267,7 +267,7 @@ static void circling_amp_idle_loop(void) {
     o->oPosX          = (o->oHomeX + (sins(o->oMoveAngleYaw     ) * o->oAmpRadiusOfRotation));
     o->oPosZ          = (o->oHomeZ + (coss(o->oMoveAngleYaw     ) * o->oAmpRadiusOfRotation));
     o->oPosY          = (o->oHomeY + (coss(o->oAmpYPhase * 0x8B0) * 30.0f                  ));
-    o->oMoveAngleYaw += 0x400;
+    o->oMoveAngleYaw += DEG(5.625);
     o->oFaceAngleYaw  = (o->oMoveAngleYaw + DEG(90));
     // Handle attacks
     check_amp_attack();

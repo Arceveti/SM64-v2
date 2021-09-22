@@ -312,40 +312,13 @@ void vec3f_to_vec3s(Vec3s dst, Vec3f src) { vec3_copy_roundf(dst, src); }
 void vec3f_to_vec3i(Vec3i dst, Vec3f src) { vec3_copy_roundf(dst, src); }
 
 /// Get the inverse magnitude of vector 'v'
-f32 vec2f_invmag(Vec2f v) {
-    register f32 mag = vec2_mag(v);
-    return (1.0f / MAX(mag, NEAR_ZERO));
-}
 f32 vec3f_invmag(Vec3f v) {
     register f32 mag = vec3_mag(v);
     return (1.0f / MAX(mag, NEAR_ZERO));
 }
 
 /// Scale vector 'v' so it has length 1
-void vec2f_normalize(Vec2f v) { f32 invMag = vec2f_invmag(v); vec2_mul_val(v, invMag); }
 void vec3f_normalize(Vec3f v) { f32 invMag = vec3f_invmag(v); vec3_mul_val(v, invMag); }
-
-/// Scale vector 'v' so it has length -1
-void vec2f_normalize_negative(Vec2f v) { f32 invMag = -vec2f_invmag(v); vec2_mul_val(v, invMag); }
-void vec3f_normalize_negative(Vec3f v) { f32 invMag = -vec3f_invmag(v); vec3_mul_val(v, invMag); }
-
-/// Scale vector 'v' so it has at most length 'max'
-void vec2f_normalize_max(Vec2f v, f32 max) {
-    register f32 mag = vec3_mag(v);
-    mag = MAX(mag, NEAR_ZERO);
-    if (mag > max) {
-        mag = (max / mag);
-        vec2_mul_val(v, mag);
-    }
-}
-void vec3f_normalize_max(Vec3f v, f32 max) {
-    register f32 mag = vec3_mag(v);
-    mag = MAX(mag, NEAR_ZERO);
-    if (mag > max) {
-        mag = (max / mag);
-        vec3_mul_val(v, mag);
-    }
-}
 
 Bool32 vec3f_are_coords_within_radius_of_point(Vec3f pos, f32 x, f32 y, f32 z, f32 dist) {
     Vec3f d = { x, y, z };
@@ -639,11 +612,11 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll) {
     colY[0] = ( sr * dz);
     colY[2] = (-sr * dx);
     vec3_diff(colZ, to, from);
-    vec3f_normalize_negative(colZ);
+    vec3_normalize_negative(colZ);
     vec3_cross(colX, colY, colZ);
-    vec3f_normalize(colX);
+    vec3_normalize(colX);
     vec3_cross(colY, colZ, colX);
-    vec3f_normalize(colY);
+    vec3_normalize(colY);
     mtx[0][0] = colX[0];
     mtx[1][0] = colX[1];
     mtx[2][0] = colX[2];
@@ -670,7 +643,7 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll) {
 void mtxf_origin_lookat(Mat4 mtx, Vec3f vec, f32 roll) {
     Vec3f unit;
     vec3_copy(unit, vec);
-    vec3f_normalize(unit);
+    vec3_normalize(unit);
     f32 hMag = sqrtf(sqr(unit[0]) + sqr(unit[2]));
     if (hMag != 0.0f) {
         roll *= RAD_PER_DEG; // convert roll from degrees to radians
@@ -824,11 +797,11 @@ void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, Angle roll, s32 zOffset
 void mtxf_align_terrain_normal(Mat4 dest, Vec3f upDir, Vec3f pos, Angle yaw) {
     Vec3f lateralDir, leftDir, forwardDir;
     vec3_set(lateralDir, sins(yaw), 0x0, coss(yaw));
-    vec3f_normalize(upDir);
+    vec3_normalize(upDir);
     vec3_cross(leftDir, upDir, lateralDir);
-    vec3f_normalize(leftDir);
+    vec3_normalize(leftDir);
     vec3_cross(forwardDir, leftDir, upDir);
-    vec3f_normalize(forwardDir);
+    vec3_normalize(forwardDir);
     vec3_copy(dest[0], leftDir);
     vec3_copy(dest[1], upDir);
     vec3_copy(dest[2], forwardDir);
@@ -866,11 +839,11 @@ void mtxf_align_terrain_triangle(Mat4 mtx, Vec3f pos, Angle yaw, f32 radius) {
     avgY = average_3(point0[1], point1[1], point2[1]);
     vec3_set(forward, sins(yaw), 0x0, coss(yaw));
     find_vector_perpendicular_to_plane(yColumn, point0, point1, point2);
-    vec3f_normalize(yColumn);
+    vec3_normalize(yColumn);
     vec3_cross(xColumn, yColumn, forward);
-    vec3f_normalize(xColumn);
+    vec3_normalize(xColumn);
     vec3_cross(zColumn, xColumn, yColumn);
-    vec3f_normalize(zColumn);
+    vec3_normalize(zColumn);
     vec3_copy(mtx[0], xColumn);
     vec3_copy(mtx[1], yColumn);
     vec3_copy(mtx[2], zColumn);

@@ -681,7 +681,7 @@ void painting_average_vertex_normals(s16 *neighborTris, s16 numVtx) {
         entry += (neighbors + 1);
         // average the surface normals from each neighboring tri
         vec3_div_val(n, neighbors);
-        vec3f_normalize(n);
+        vec3_normalize(n);
         gPaintingMesh[i].norm[0] = normalize_component(n[0]);
         gPaintingMesh[i].norm[1] = normalize_component(n[1]);
         gPaintingMesh[i].norm[2] = normalize_component(n[2]);

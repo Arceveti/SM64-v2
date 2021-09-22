@@ -94,7 +94,7 @@ void ukiki_act_idle(void) {
         if (o->oDistanceToMario > 700.0f && o->oDistanceToMario < 1000.0f) {
             o->oAction = UKIKI_ACT_RUN;
         } else if (o->oDistanceToMario <= 700.0f && 200.0f < o->oDistanceToMario) {
-            if (abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) > 0x1000) o->oAction = UKIKI_ACT_TURN_TO_MARIO;
+            if (abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) > DEG(22.5)) o->oAction = UKIKI_ACT_TURN_TO_MARIO;
         }
     } else if (o->oDistanceToMario < 300.0f) {
         o->oAction = UKIKI_ACT_RUN;
@@ -151,7 +151,7 @@ void ukiki_act_wait_to_respawn(void) {
  */
 void ukiki_act_unused_turn(void) {
     idle_ukiki_taunt();
-    if (o->oSubAction == UKIKI_SUB_ACT_TAUNT_JUMP_CLAP) cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x400);
+    if (o->oSubAction == UKIKI_SUB_ACT_TAUNT_JUMP_CLAP) cur_obj_rotate_yaw_toward(o->oAngleToMario, DEG(5.625));
 }
 
 /**
@@ -161,7 +161,7 @@ void ukiki_act_turn_to_mario(void) {
     // Initialize the action with a random fVel from 2-5.
     if (o->oTimer == 0) o->oForwardVel = ((random_float() * 3.0f) + 2.0f);
     cur_obj_init_animation_with_sound(UKIKI_ANIM_TURN);
-    s32 facingMario = cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x800);
+    s32 facingMario = cur_obj_rotate_yaw_toward(o->oAngleToMario, DEG(11.25));
     if (facingMario) o->oAction = UKIKI_ACT_IDLE;
     if (is_cap_ukiki_and_mario_has_normal_cap_on_head()){
         if (o->oDistanceToMario > 500.0f) o->oAction = UKIKI_ACT_RUN;
@@ -182,7 +182,7 @@ void ukiki_act_run(void) {
     }
     if (o->oTimer == 0) o->oUkikiChaseFleeRange = ((random_float() * 100.0f) + 350.0f);
     cur_obj_init_animation_with_sound(UKIKI_ANIM_RUN);
-    cur_obj_rotate_yaw_toward(goalYaw, 0x800);
+    cur_obj_rotate_yaw_toward(goalYaw, DEG(11.25));
     //! @bug (Ukikispeedia) This function sets forward speed to 0.9f * Mario's
     //! forward speed, which means ukiki can move at hyperspeed rates.
     cur_obj_set_vel_from_mario_vel(20.0f, 0.9f);
@@ -267,7 +267,7 @@ void ukiki_act_go_to_cage(void) {
             o->oPathedStartWaypoint = (struct Waypoint *) sCageUkikiPath;
             if (cur_obj_follow_path() != PATH_REACHED_END) {
                 o->oForwardVel = 10.0f;
-                cur_obj_rotate_yaw_toward(o->oPathedTargetYaw, 0x400);
+                cur_obj_rotate_yaw_toward(o->oPathedTargetYaw, DEG(5.625));
                 o->oPosY = o->oFloorHeight;
             } else {
                 o->oForwardVel = 0.0f;
@@ -276,7 +276,7 @@ void ukiki_act_go_to_cage(void) {
             break;
         case UKIKI_SUB_ACT_CAGE_WAIT_FOR_MARIO:
             cur_obj_init_animation_with_sound(UKIKI_ANIM_JUMP_CLAP);
-            cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x400);
+            cur_obj_rotate_yaw_toward(o->oAngleToMario, DEG(5.625));
             if (cur_obj_can_mario_activate_textbox(200.0f, 30.0f, 0x7FFF)) {
                 o->oSubAction = UKIKI_SUB_ACT_CAGE_TALK_TO_MARIO; // fallthrough
             } else {
@@ -288,7 +288,7 @@ void ukiki_act_go_to_cage(void) {
             break;
         case UKIKI_SUB_ACT_CAGE_TURN_TO_CAGE:
             cur_obj_init_animation_with_sound(UKIKI_ANIM_RUN);
-            if (cur_obj_rotate_yaw_toward(yawToCage, 0x400)) {
+            if (cur_obj_rotate_yaw_toward(yawToCage, DEG(5.625))) {
                 o->oForwardVel = 10.0f;
                 o->oSubAction = UKIKI_SUB_ACT_CAGE_JUMP_TO_CAGE;
             }
@@ -311,7 +311,7 @@ void ukiki_act_go_to_cage(void) {
             }
             break;
         case UKIKI_SUB_ACT_CAGE_SPIN_ON_CAGE:
-            o->oMoveAngleYaw += 0x800;
+            o->oMoveAngleYaw += DEG(11.25);
             o->oUkikiCageSpinTimer--;
             if (o->oUkikiCageSpinTimer < 0) {
                 o->oSubAction = UKIKI_SUB_ACT_CAGE_DESPAWN;

@@ -35,7 +35,7 @@ void bhv_tilting_inverted_pyramid_loop(void) {
         linear_mtxf_mul_vec3f(*transform, posBeforeRotation, dist);
 #endif
         vec3_diff(d, &gMarioObject->oPosVec, &o->oPosVec);
-        vec3f_normalize(d);
+        vec3_normalize(d);
         o->oTiltingPyramidMarioOnPlatform = TRUE;
     } else {
         vec3_copy(d, gVec3fY);

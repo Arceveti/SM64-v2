@@ -284,6 +284,17 @@
         - Texture filtering on edges?
     - Fix sideways environment map textures when fixing guLookAtReflect in geo_process_master_list_sub
         - Can't just rotate the textures themselves because those are Nintendo assets
+            - actors/mario/mario_metal.rgba16.png
+            - actors/mario/mario_metal_reflection_shine.i8.png
+            - actors/mario/mario_metal_reflection_lakitu.ia8.png
+            - actors/mario_cap/mario_cap_metal.rgba16.png
+            - actors/star/star_surface.rgba16.png
+            - actors/water_bubble/water_bubble.rgba16.png
+            - actors/water_ring/water_ring.rgba16.png
+            - levels/castle_inside/29.rgba16.png
+            - levels/hmc/7.rgba16.png
+            - levels/cotmc/2.rgba16.png
+            - textures/intro_raw/mario_face_shine.ia8.png
     - Silhouette:
         - Silhouette for Mario's held/riding object
         - Mirror Mario should not have silhouette

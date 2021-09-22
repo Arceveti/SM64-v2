@@ -71,7 +71,7 @@ static void klepto_anim_dive(void) {
 void bhv_klepto_init(void) {
     if (o->oBehParams2ndByte != KLEPTO_BP_NO_STAR) {
 #ifdef HELD_TRANSPARENT_STAR
-        if (save_file_get_star_flags((gCurrSaveFileNum - 1), (COURSE_SSL - 1)) & 0x1) {
+        if (save_file_get_star_flags((gCurrSaveFileNum - 1), (COURSE_SSL - 1)) & STAR_FLAG_ACT_1) {
             o->oAnimState = KLEPTO_ANIM_STATE_HOLDING_TRANSPARENT_STAR;
 #ifdef PUPPYLIGHTS
             cur_obj_set_light_properties_default(PUPPYLIGHTS_STAR_LIGHT, COLOR_RGBA32_TRANSPARENT_STAR_LIGHT);
@@ -175,8 +175,8 @@ static void klepto_act_turn_toward_mario(void) {
     if (klepto_set_and_check_if_anim_at_end()
      && cur_obj_check_if_at_animation_end()
      && (o->oKleptoDistanceToTarget > 800.0f)
-     && (abs_angle_diff(o->oAngleToMario, o->oFaceAngleYaw) < 0x800)
-     && (o->oKleptoPitchToTarget < 0x400)) {
+     && (abs_angle_diff(o->oAngleToMario, o->oFaceAngleYaw) < DEG(11.25))
+     && (o->oKleptoPitchToTarget < DEG(5.625))) {
         cur_obj_play_sound_2(SOUND_OBJ_KLEPTO_TURN);
         o->oAction       = KLEPTO_ACT_DIVE_AT_MARIO;
         o->oMoveAngleYaw = o->oFaceAngleYaw;

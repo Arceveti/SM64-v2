@@ -87,7 +87,7 @@ void bub_act_swimming_away_from_mario(void) {
         if (dy > 300.0f) o->oPosY -= 1.0f;
     }
     if (cur_obj_lateral_dist_from_mario_to_home_squared() > sqr(800.0f)) o->oAngleToMario = cur_obj_angle_to_home();
-    cur_obj_rotate_yaw_toward((o->oAngleToMario + DEG(180)), 0x400);
+    cur_obj_rotate_yaw_toward((o->oAngleToMario + DEG(180)), DEG(5.625));
     if ((o->oTimer > 200) && (o->oDistanceToMario > 600.0f)) o->oAction = BUB_ACT_SWIMMING_TOWARDS_MARIO;
 }
 

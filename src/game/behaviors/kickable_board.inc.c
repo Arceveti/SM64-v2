@@ -52,7 +52,7 @@ void bhv_kickable_board_loop(void) {
                 init_kickable_board_rock();
             }
             if (!(o->oKickableBoardRockingAngleAmount & 0x7FFF)) cur_obj_play_sound_2(SOUND_GENERAL_BUTTON_PRESS_2);
-            o->oKickableBoardRockingAngleAmount += 0x400;
+            o->oKickableBoardRockingAngleAmount += DEG(5.625);
             break;
         case KICKABLE_BOARD_ACT_FALLING:
             cur_obj_become_intangible();

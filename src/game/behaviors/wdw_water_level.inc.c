@@ -37,7 +37,7 @@ void bhv_water_level_diamond_loop(void) {
                     if ((Angle) o->oFaceAngleYaw == 0x0) {
                         o->oAction = WATER_LEVEL_DIAMOND_ACT_IDLE_SPINNING;
                     } else {
-                        o->oAngleVelYaw = 0x800;
+                        o->oAngleVelYaw = DEG(11.25);
                     }
                 } else {
                     if (o->oTimer == 0) {
@@ -45,7 +45,7 @@ void bhv_water_level_diamond_loop(void) {
                     } else {
                         cur_obj_play_sound_1(SOUND_ENV_WATER_DRAIN);
                     }
-                    o->oAngleVelYaw = 0x800;
+                    o->oAngleVelYaw = DEG(11.25);
 #if ENABLE_RUMBLE
                     reset_rumble_timers_vibrate(2);
 #endif

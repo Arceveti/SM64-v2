@@ -37,7 +37,7 @@ u8    gLastCompletedCourseNum     = COURSE_NONE;
 u8    gLastCompletedStarNum       = 0;
 Bool8 sUnusedGotGlobalCoinHiScore = FALSE;
 Bool8 gGotFileCoinHiScore         = FALSE;
-u8    gCurrCourseStarFlags        = 0;
+u8    gCurrCourseStarFlags        = STAR_FLAG_NONE;
 
 Bool8 gSpecialTripleJump = FALSE;
 

@@ -44,7 +44,7 @@ void calc_face_normal(struct ObjFace *face) {
         find_vector_perpendicular_to_plane(normal, p1, p2, p3);
         // not sure why each component is multiplied by 1000. maybe to avoid loss of precision when normalizing?
         vec3_mul_val(normal, 1000.0f);
-        vec3f_normalize(normal);
+        vec3_normalize(normal);
         vec3_copy(face->normal, normal);
     }
 }

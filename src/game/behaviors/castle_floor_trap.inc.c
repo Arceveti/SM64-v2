@@ -17,7 +17,7 @@ void bhv_castle_floor_trap_open_detect(void) {
      || gMarioStates[0].action == ACT_SPECIAL_DEATH_EXIT) {
         o->oAction = CASTLE_FLOOR_TRAP_ACT_ROTATE; // rotates trapdoor so it looks always open
     } else {
-        o->oAngleVelRoll = 0x400;
+        o->oAngleVelRoll = DEG(5.625);
         if (o->oInteractStatus & INT_STATUS_TRAP_TURN) o->oAction = CASTLE_FLOOR_TRAP_ACT_OPEN; // detects interact then opens the trapdoor
     }
 }
@@ -37,7 +37,7 @@ void bhv_castle_floor_trap_close_detect(void) {
 }
 
 void bhv_castle_floor_trap_close(void) {
-    o->oFaceAngleRoll += 0x400;
+    o->oFaceAngleRoll += DEG(5.625);
     if (o->oFaceAngleRoll   > 0x0) {
         o->oFaceAngleRoll   = 0x0;
         o->oAction          = CASTLE_FLOOR_TRAP_ACT_OPEN_DETECT; // after closing, reloads open detection

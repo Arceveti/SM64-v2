@@ -894,7 +894,7 @@
 
 /********************************************************************************************************************************
  *                                                                                                                              *
- * -- Define compatibility safeguards. Don't mess with these unless you know what you're doing.--                               *
+ * -- Compatibility safeguards. Don't mess with these unless you know what you're doing.--                                      *
  *                                                                                                                              *
  ********************************************************************************************************************************/
 

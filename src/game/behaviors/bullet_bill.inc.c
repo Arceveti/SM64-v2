@@ -50,8 +50,8 @@ void bullet_bill_act_hit(void) {
         o->oForwardVel = -30.0f;
         cur_obj_become_intangible();
     }
-    o->oFaceAnglePitch += 0x1000;
-    o->oFaceAngleRoll  += 0x1000;
+    o->oFaceAnglePitch += DEG(22.5);
+    o->oFaceAngleRoll  += DEG(22.5);
     o->oPosY           += 20.0f;
     if (o->oTimer > 90) o->oAction = BULLET_BILL_ACT_RESET;
 }

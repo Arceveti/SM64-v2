@@ -79,7 +79,7 @@ void bhv_coin_loop(void) { // bhvSingleCoinGetsSpawned, bhvMrIBlueCoin
         o->oBounciness = 0;
         if (floor->normal.y < 0.9f) {
             targetYaw = SURFACE_YAW(floor);
-            cur_obj_rotate_yaw_toward(targetYaw, 0x400);
+            cur_obj_rotate_yaw_toward(targetYaw, DEG(5.625));
         }
     }
 #endif

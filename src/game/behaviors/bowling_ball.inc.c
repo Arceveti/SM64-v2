@@ -65,7 +65,7 @@ void bhv_bowling_ball_roll_loop(void) {
     ColFlags collisionFlags  = object_step();
     s32 pathResult           = cur_obj_follow_path();
     o->oBowlingBallTargetYaw = o->oPathedTargetYaw;
-    o->oMoveAngleYaw         = approach_s16_symmetric(o->oMoveAngleYaw, o->oBowlingBallTargetYaw, 0x400);
+    o->oMoveAngleYaw         = approach_s16_symmetric(o->oMoveAngleYaw, o->oBowlingBallTargetYaw, DEG(5.625));
     if (o->oForwardVel > 70.0f) o->oForwardVel = 70.0f;
     bowling_ball_set_hitbox();
     if (pathResult == PATH_REACHED_END) {

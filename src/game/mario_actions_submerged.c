@@ -310,7 +310,7 @@ static Bool32 act_water_idle(struct MarioState *m) {
 #ifdef WATER_GROUND_POUND
     if (m->input & INPUT_Z_PRESSED) return drop_and_set_mario_action(m, ACT_WATER_GROUND_POUND , 0);
 #endif
-    if (m->faceAngle[0] < -0x1000) animSpeed = 0x30000;
+    if (m->faceAngle[0] < -DEG(22.5)) animSpeed = 0x30000;
     common_idle_step(m, MARIO_ANIM_WATER_IDLE, animSpeed);
     return FALSE;
 }
@@ -386,7 +386,7 @@ static void common_swimming_step(struct MarioState *m, s16 swimStrength) {
 #ifdef SMOOTH_WATER_FLOOR_PITCH
                 // Angle floorPitch = atan2s(sqrtf(sqr(m->floor->normal.x) + sqr(m->floor->normal.z)), m->floor->normal.y);
                 Angle floorPitch = atan2s(1.0f, m->floor->normal.y);
-                if (m->faceAngle[0] < floorPitch) approach_s16_symmetric_bool(&m->faceAngle[0], floorPitch, 0x800);
+                if (m->faceAngle[0] < floorPitch) approach_s16_symmetric_bool(&m->faceAngle[0], floorPitch, DEG(11.25));
 #else
                 Angle floorPitch = -find_floor_slope(m, -DEG(180), 5.0f);
                 if (m->faceAngle[0] < floorPitch) m->faceAngle[0] = floorPitch;
@@ -903,13 +903,13 @@ static Bool32 act_caught_in_whirlpool(struct MarioState *m) {
     }
     if (distance <= 28.0f) {
         newDistance = 16.0f;
-        angleChange = 0x1800;
+        angleChange = DEG(33.75);
     } else if (distance < 256.0f) {
         newDistance = (distance - (12.0f - (distance / 32.0f)));
         angleChange = (Angle)(0x1C00 - (distance * 20.0f));
     } else {
         newDistance = (distance - 4.0f);
-        angleChange = 0x800;
+        angleChange = DEG(11.25);
     }
     m->vel[1] = (-640.0f / (newDistance + 16.0f));
     sinAngleChange = sins(angleChange);
@@ -960,7 +960,7 @@ static void update_metal_water_walking_speed(struct MarioState *m) {
         m->forwardVel -= 1.0f;
     }
     if (m->forwardVel > 32.0f) m->forwardVel = 32.0f;
-    approach_s16_symmetric_bool(&m->faceAngle[1], m->intendedYaw, 0x800);
+    approach_s16_symmetric_bool(&m->faceAngle[1], m->intendedYaw, DEG(11.25));
     m->slideVelX    = (m->forwardVel * sins(m->faceAngle[1]));
     m->slideVelZ    = (m->forwardVel * coss(m->faceAngle[1]));
     m->vel[0]       =  m->slideVelX;
@@ -1072,7 +1072,7 @@ static Bool32 act_hold_metal_water_jump(struct MarioState *m) {
 
 static Bool32 act_metal_water_falling(struct MarioState *m) {
     if (!(m->flags & MARIO_METAL_CAP)) return set_mario_action(m, ACT_WATER_IDLE, 0);
-    if (m->input & INPUT_NONZERO_ANALOG) m->faceAngle[1] += (0x400 * sins(m->intendedYaw - m->faceAngle[1]));
+    if (m->input & INPUT_NONZERO_ANALOG) m->faceAngle[1] += (DEG(5.625) * sins(m->intendedYaw - m->faceAngle[1]));
     set_mario_animation(m, ((m->actionArg == 0) ? MARIO_ANIM_GENERAL_FALL : MARIO_ANIM_FALL_FROM_WATER));
     stationary_slow_down(m);
     if (perform_water_step(m) & WATER_STEP_HIT_FLOOR) set_mario_action(m, ACT_METAL_WATER_FALL_LAND, 0); // hit floor or cancelled
@@ -1082,7 +1082,7 @@ static Bool32 act_metal_water_falling(struct MarioState *m) {
 static Bool32 act_hold_metal_water_falling(struct MarioState *m) {
     if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_DROP_OBJECT) return drop_and_set_mario_action(m, ACT_METAL_WATER_FALLING, 0);
     if (!(m->flags & MARIO_METAL_CAP)                              ) return set_mario_action(         m, ACT_HOLD_WATER_IDLE    , 0);
-    if (m->input & INPUT_NONZERO_ANALOG) m->faceAngle[1] += (0x400 * sins(m->intendedYaw - m->faceAngle[1]));
+    if (m->input & INPUT_NONZERO_ANALOG) m->faceAngle[1] += (DEG(5.625) * sins(m->intendedYaw - m->faceAngle[1]));
     set_mario_animation(m, MARIO_ANIM_FALL_WITH_LIGHT_OBJ);
     stationary_slow_down(m);
     if (perform_water_step(m) & WATER_STEP_HIT_FLOOR) set_mario_action(m, ACT_HOLD_METAL_WATER_FALL_LAND, 0); // hit floor or cancelled

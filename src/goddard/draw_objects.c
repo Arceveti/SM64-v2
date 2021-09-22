@@ -445,8 +445,10 @@ void update_lighting(struct ObjLight *light) {
     f32 facMul;
     f32 diffuseThreshold;
     vec3_prod_val(light->colour, light->diffuse, light->diffuseFac);
-    vec3_diff(sLightPositionCache[light->id], light->position, sLightPositionOffset);
-    vec3f_normalize(sLightPositionCache[light->id]);
+    Vec3f lightPos;
+    vec3_diff(lightPos, light->position, sLightPositionOffset);
+    vec3_normalize(lightPos);
+    vec3_copy(sLightPositionCache[light->id], lightPos);
     if (light->flags & LIGHT_UNK20) {
         vec3_copy(sPhongLightPosition, sLightPositionCache[light->id]);
         sPhongLight = light;

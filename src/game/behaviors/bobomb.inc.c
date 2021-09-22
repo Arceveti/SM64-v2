@@ -73,7 +73,7 @@ void bobomb_act_chase_mario(void) {
     o->oForwardVel          = 20.0f;
     ColFlags collisionFlags = object_step();
     if ((animFrame == 5) || (animFrame == 16)) cur_obj_play_sound_2(SOUND_OBJ_BOBOMB_WALK);
-    obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_YAW_INDEX, 0x800);
+    obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_YAW_INDEX, DEG(11.25));
     obj_check_floor_death(collisionFlags, sObjFloor);
 }
 
@@ -281,7 +281,7 @@ void bobomb_buddy_act_talk(void) {
 void bobomb_buddy_act_turn_to_talk(void) {
     AnimFrame16 animFrame = o->header.gfx.animInfo.animFrame;
     if ((animFrame == 5) || (animFrame == 16)) cur_obj_play_sound_2(SOUND_OBJ_BOBOMB_WALK);
-    o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, o->oAngleToMario, 0x1000);
+    o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, o->oAngleToMario, DEG(22.5));
     if ((Angle) o->oMoveAngleYaw == (Angle) o->oAngleToMario) o->oAction = BOBOMB_BUDDY_ACT_TALK;
     cur_obj_play_sound_2(SOUND_ACTION_READ_SIGN);
 }

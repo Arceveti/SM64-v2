@@ -298,7 +298,7 @@ void update_flying(struct MarioState *m) {
     } else if (m->forwardVel > 4.0f) {
         m->faceAngle[0] += ((m->forwardVel - 32.0f) * 10.0f);
     } else {
-        m->faceAngle[0] -= 0x400;
+        m->faceAngle[0] -= DEG(5.625);
     }
     m->faceAngle[0] += m->angleVel[0];
     if (m->faceAngle[0] >  DEG(60)) m->faceAngle[0] =  DEG(60);
@@ -1079,13 +1079,12 @@ Bool32 act_thrown_backward(struct MarioState *m) {
 }
 
 Bool32 act_thrown_forward(struct MarioState *m) {
-    Angle pitch;
     MarioAction landAction = ((m->actionArg != 0) ? ACT_HARD_FORWARD_GROUND_KB : ACT_FORWARD_GROUND_KB);
     play_sound_if_no_flag(m, SOUND_MARIO_WAAAOOOW, MARIO_MARIO_SOUND_PLAYED);
     if (common_air_knockback_step(m, landAction, ACT_HARD_FORWARD_GROUND_KB, MARIO_ANIM_AIR_FORWARD_KB, m->forwardVel) == AIR_STEP_NONE) {
-        pitch = atan2s(m->forwardVel, -m->vel[1]);
-        if (pitch > 0x1800) pitch = 0x1800;
-        m->marioObj->header.gfx.angle[0] = pitch + 0x1800;
+        Angle pitch = atan2s(m->forwardVel, -m->vel[1]);
+        if (pitch > DEG(33.75)) pitch = DEG(33.75);
+        m->marioObj->header.gfx.angle[0] = (pitch + DEG(33.75));
     }
     m->forwardVel *= 0.98f;
     return FALSE;
@@ -1376,7 +1375,7 @@ Bool32 act_slide_kick(struct MarioState *m) {
         case AIR_STEP_NONE:
             if (m->actionState == ACT_SLIDE_KICK_STATE_SLIDING) {
                 m->marioObj->header.gfx.angle[0] = atan2s(m->forwardVel, -m->vel[1]);
-                if (m->marioObj->header.gfx.angle[0] > 0x1800) m->marioObj->header.gfx.angle[0] = 0x1800;
+                if (m->marioObj->header.gfx.angle[0] > DEG(33.75)) m->marioObj->header.gfx.angle[0] = DEG(33.75);
             }
             break;
         case AIR_STEP_LANDED:
@@ -1537,7 +1536,7 @@ Bool32 act_flying(struct MarioState *m) {
             break;
         case AIR_STEP_HIT_LAVA_WALL: lava_boost_on_wall(m); break;
     }
-    if ((m->faceAngle[0] > 0x800) && (m->forwardVel >= 48.0f)) m->particleFlags |= PARTICLE_DUST;
+    if ((m->faceAngle[0] > DEG(11.25)) && (m->forwardVel >= 48.0f)) m->particleFlags |= PARTICLE_DUST;
     if ((startPitch <= 0x0) && (m->faceAngle[0] > 0x0) && (m->forwardVel >= 48.0f)) {
         play_sound(SOUND_ACTION_FLYING_FAST, m->marioObj->header.gfx.cameraToObject);
 #ifndef VERSION_JP

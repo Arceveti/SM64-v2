@@ -69,7 +69,7 @@ void bhv_mr_i_iris_loop(void) {
 
 void mr_i_body_act_spin_death(void) {
     f32 scaleModifier = ((o->oBehParams2ndByte) ? 2.0f : 1.0f);
-    s16 direction     = ((o->oMrISpinDirection < 0) ? 0x1000 : -0x1000);
+    s16 direction     = ((o->oMrISpinDirection < 0) ? DEG(22.5) : -DEG(22.5));
     f32 spinAmount    = ((o->oTimer + 1) / 96.0f);
     if (o->oTimer < 64) {
         Angle startYaw    = o->oMoveAngleYaw;
@@ -117,8 +117,8 @@ void mr_i_body_act_looking_at_mario(void) {
         o->oMrISpinDirection = 0;
         o->oMrIParticleTimer = 0;
     }
-    obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_YAW_INDEX,   0x800);
-    obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_PITCH_INDEX, 0x400);
+    obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_YAW_INDEX, DEG(11.25));
+    obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_PITCH_INDEX, DEG(5.625));
     dYaw = (startYaw - (Angle)(o->oMoveAngleYaw));
     if (!dYaw) {
         o->oMrISpinAmount    = 0;
@@ -171,7 +171,7 @@ void mr_i_body_act_idle(void) {
         o->oMrIParticleTimerTarget = (random_float() * 20.0f);
         o->oAngleVelYaw            = ((o->oMrIParticleTimerTarget & 0x1) ? -256 : 256);
     }
-    if ((angleDiffMoveYawToMario < 0x400) && (angleDiffMoveYawToMarioFaceYaw > DEG(90))) {
+    if ((angleDiffMoveYawToMario < DEG(5.625)) && (angleDiffMoveYawToMarioFaceYaw > DEG(90))) {
         if (o->oDistanceToMario < 700.0f) {
             o->oAction = MR_I_BODY_ACT_LOOKING_AT_MARIO;
         } else {

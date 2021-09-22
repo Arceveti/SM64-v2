@@ -120,9 +120,9 @@ void print_intro_text(void) {
     if ((gGlobalTimer & 0x1F) < 20) {
         if (!gControllerBits) {
 #ifdef VERSION_EU
-            print_text_centered((SCREEN_WIDTH / 2), 20, gNoControllerMsg[language]);
+            print_text_centered(SCREEN_CENTER_X, 20, gNoControllerMsg[language]);
 #else
-            print_text_centered((SCREEN_WIDTH / 2), 20, "NO CONTROLLER");
+            print_text_centered(SCREEN_CENTER_X, 20, "NO CONTROLLER");
 #endif
         } else {
 #ifdef VERSION_EU
@@ -292,10 +292,10 @@ void play_transition(s16 transType, s16 time, Color red, Color green, Color blue
         // If you really wanted to, you could place the start at one corner and the end at
         // the opposite corner. This will make the transition image look like it is moving
         // across the screen.
-        gWarpTransition.data.startTexX = (SCREEN_WIDTH  / 2);
-        gWarpTransition.data.startTexY = (SCREEN_HEIGHT / 2);
-        gWarpTransition.data.endTexX   = (SCREEN_WIDTH  / 2);
-        gWarpTransition.data.endTexY   = (SCREEN_HEIGHT / 2);
+        gWarpTransition.data.startTexX = SCREEN_CENTER_X;
+        gWarpTransition.data.startTexY = SCREEN_CENTER_Y;
+        gWarpTransition.data.endTexX   = SCREEN_CENTER_X;
+        gWarpTransition.data.endTexY   = SCREEN_CENTER_Y;
         gWarpTransition.data.texTimer  = 0;
         if (transType & 0x1) { // Is the image fading in?
             gWarpTransition.data.startTexRadius = GFX_DIMENSIONS_FULL_RADIUS;

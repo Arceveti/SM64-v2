@@ -62,7 +62,7 @@ void spawn_macro_abs_special(ModelID32 model, const BehaviorScript *behavior, s1
 
 UNUSED static void spawn_macro_coin_unknown(const BehaviorScript *behavior, s16 a1[]) {
     struct Object *obj;
-    ModelID model          = ((bhvYellowCoin == behavior) ? MODEL_YELLOW_COIN : MODEL_NONE);
+    ModelID16 model        = ((bhvYellowCoin == behavior) ? MODEL_YELLOW_COIN : MODEL_NONE);
     obj                    = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, model, behavior, a1[1], a1[2], a1[3], 0x0, convert_rotation(a1[0]), 0x0);
     obj->oUnusedCoinParams =   a1[4];
     obj->oBehParams        = ((a1[4] & 0xFF) >> 16);
@@ -71,7 +71,7 @@ UNUSED static void spawn_macro_coin_unknown(const BehaviorScript *behavior, s16 
 // struct LoadedPreset {
 //     /*0x00*/ const BehaviorScript *behavior;
 //     /*0x04*/ s16 param; //! huh? why does the below function swap these.. just use the struct..
-//     /*0x06*/ ModelID model;
+//     /*0x06*/ ModelID16 model;
 // };
 
 #define MACRO_OBJ_Y_ROT  0x0
@@ -100,7 +100,7 @@ void spawn_macro_objects(s32 areaIndex, MacroObject *macroObjList) {
         macroObject[MACRO_OBJ_PARAMS] =    *macroObjList++;                    // Behavior params
         // Get the preset values from the MacroObjectPresets list.
         param = MacroObjectPresets[presetID].param;
-        if (param != 0) macroObject[MACRO_OBJ_PARAMS] = ((macroObject[MACRO_OBJ_PARAMS] & 0xFF00) + (param & 0x00FF));
+        if (param != 0) macroObject[MACRO_OBJ_PARAMS] = ((macroObject[MACRO_OBJ_PARAMS] & 0xFF00) + (param & 0x00FF)); //! param mask name
         // If object has been killed, prevent it from respawning
         if (((macroObject[MACRO_OBJ_PARAMS] >> 8) & RESPAWN_INFO_DONT_RESPAWN) != RESPAWN_INFO_DONT_RESPAWN) {
             // Spawn the new macro object.
@@ -116,8 +116,8 @@ void spawn_macro_objects(s32 areaIndex, MacroObject *macroObjList) {
                                                0x0                         // Z-rotation
                 );
             newObj->oUnusedCoinParams =    macroObject[MACRO_OBJ_PARAMS];
-            newObj->oBehParams        = (((macroObject[MACRO_OBJ_PARAMS] & 0x00FF) << 16) + (macroObject[MACRO_OBJ_PARAMS] & 0xFF00));
-            newObj->oBehParams2ndByte =   (macroObject[MACRO_OBJ_PARAMS] & 0x00FF);
+            newObj->oBehParams        = (((macroObject[MACRO_OBJ_PARAMS] & 0x00FF) << 16) + (macroObject[MACRO_OBJ_PARAMS] & 0xFF00)); //! param mask name
+            newObj->oBehParams2ndByte =   (macroObject[MACRO_OBJ_PARAMS] & 0x00FF); //! param mask name
             newObj->respawnInfoType   =    RESPAWN_INFO_TYPE_16;
             newObj->respawnInfo       =   (macroObjList - 1);
             newObj->parentObj         =    newObj;
@@ -160,7 +160,7 @@ void spawn_special_objects(s32 areaIndex, Collision **specialObjList) {
     s32 offset;
     s16 x, y, z;
     s16 extraParams[4];
-    ModelID model;
+    ModelID16 model;
     u8 type;
     u8 presetID;
     u8 defaultParam;

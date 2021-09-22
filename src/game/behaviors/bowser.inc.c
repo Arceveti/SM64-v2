@@ -441,9 +441,9 @@ void bowser_act_walk_to_mario(void) {
     // Set turning speed depending of the health
     // Also special case for BITFS
     if (o->oBehParams2ndByte == BOWSER_BP_BITFS) {
-        turnSpeed = 0x400;
+        turnSpeed = DEG(5.625);
     } else if (o->oHealth >  2) {
-        turnSpeed = 0x400;
+        turnSpeed = DEG(5.625);
     } else if (o->oHealth == 2) {
         turnSpeed = 0x300;
     } else { // 1 health (BITFS-BITS)
@@ -721,7 +721,7 @@ void bowser_act_spit_fire_onto_floor(void) {
     o->oBowserRandSplitFloor = ((gHudDisplay.wedges < 4) ? 3 : ((random_float() * 3.0f) + 1.0f));
     // Play animation and split fire at a specific frame
     cur_obj_init_animation_with_sound(BOWSER_ANIM_BREATH_QUICK);
-    if (cur_obj_check_anim_frame(5)) cur_obj_spit_fire(0, 200, 180, 7.0f, MODEL_RED_FLAME, 30.0f, 10.0f, 0x1000);
+    if (cur_obj_check_anim_frame(5)) cur_obj_spit_fire(0, 200, 180, 7.0f, MODEL_RED_FLAME, 30.0f, 10.0f, DEG(22.5));
     // Use subaction as a timer when the animation is over
     if (cur_obj_check_if_near_animation_end()) o->oSubAction = BOWSER_SUB_ACT_SPIT_FIRE_FLOOR_STOP;
     // Return to default act once we get past rand value
@@ -868,8 +868,8 @@ void bowser_act_jump_onto_stage(void) {
                 o->oFaceAnglePitch = 0x0;
                 o->oFaceAngleRoll  = 0x0;
             } //? missing else
-            o->oFaceAnglePitch += 0x800;
-            o->oFaceAngleRoll  += 0x800;
+            o->oFaceAnglePitch += DEG(11.25);
+            o->oFaceAngleRoll  += DEG(11.25);
             if (!(o->oFaceAnglePitch & 0xFFFF)) o->oSubAction = BOWSER_SUB_ACT_JUMP_ON_STAGE_START;
             bowser_set_goal_invisible();
             break;

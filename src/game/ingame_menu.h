@@ -141,13 +141,13 @@ void print_hud_lut_string_centered(s8 hudLUT, ScreenPos x, ScreenPos y, const uc
 void print_menu_generic_string(               ScreenPos x, ScreenPos y, const uchar *str);
 void handle_menu_scrolling(s8 scrollDirection, s8 *currentIndex, s8 minIndex, s8 maxIndex);
 #if defined(VERSION_US) || defined(VERSION_EU)
-s16 get_str_x_pos_from_center(s16 centerPos, uchar *str, f32 scale);
+ScreenPos get_str_x_pos_from_center(ScreenPos centerPos, uchar *str, f32 scale);
 #endif
 #if defined(VERSION_JP) || defined(VERSION_SH)
 #define get_str_x_pos_from_center get_str_x_pos_from_center_scale
 #endif
 #if defined(VERSION_JP) || defined(VERSION_EU) || defined(VERSION_SH)
-s16 get_str_x_pos_from_center_scale(s16 centerPos, uchar *str, f32 scale);
+ScreenPos get_str_x_pos_from_center_scale(ScreenPos centerPos, uchar *str, f32 scale);
 #endif
 void print_hud_my_score_coins(s32 useCourseCoinScore, s8 fileNum, s8 courseNum, ScreenPos x, ScreenPos y);
 void int_to_str(s32 num, uchar *dst);
@@ -166,4 +166,4 @@ void set_cutscene_message(ScreenPos xOffset, ScreenPos yOffset, s16 msgIndex, s1
 void do_cutscene_handler(      void);
 void render_hud_cannon_reticle(void);
 void reset_red_coins_collected(void);
-s16  render_menus_and_dialogs(  void);
+s32  render_menus_and_dialogs(  void);

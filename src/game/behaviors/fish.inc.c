@@ -10,7 +10,7 @@
 static void fish_spawner_act_spawn(void) {
     s32 i;
     s32 schoolQuantity;
-    ModelID model;
+    ModelID16 model;
     f32 minDistToMario;
     const struct Animation * const *fishAnimation;
     struct Object *fishObject;
@@ -91,7 +91,7 @@ static void fish_act_roam(void) {
     }
     o->oFishGoalY = gMarioObject->oPosY + o->oFishHeightOffset;
     // Rotate the fish towards Mario.
-    cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x400);
+    cur_obj_rotate_yaw_toward(o->oAngleToMario, DEG(5.625));
     if (o->oPosY < o->oFishWaterLevel - 50.0f) {
         if (fishY < 0.0f) fishY = -fishY;
         fish_vertical_roam((fishY < 500.0f) ? 2 : 4);

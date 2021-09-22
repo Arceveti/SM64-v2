@@ -487,6 +487,31 @@ extern Vec3s gVec3sOne;
     (mtx)[3][3] = 1.0f; \
 }
 
+#define NAME_INVMAG(v) v##_invmag
+
+/// Scale vector 'v' so it has length  1
+#define vec3_normalize(v) {                             \
+    register f32 NAME_INVMAG(v) = vec3_mag((v));            \
+    NAME_INVMAG(v) = (1.0f / MAX(NAME_INVMAG(v), NEAR_ZERO));   \
+    vec3_mul_val((v), NAME_INVMAG(v));                      \
+}
+
+/// Scale vector 'v' so it has length -1
+#define vec3_normalize_negative(v) {                    \
+    register f32 v##_invmag = vec3_mag((v));            \
+    v##_invmag = -(1.0f / MAX(v##_invmag, NEAR_ZERO));  \
+    vec3_mul_val((v), v##_invmag);                      \
+}
+
+#define vec3_normalize_max(v, max) {    \
+    register f32 v##_mag = vec3_mag(v); \
+    v##_mag = MAX(v##_mag, NEAR_ZERO);  \
+    if (v##_mag > max) {                \
+        v##_mag = (max / v##_mag);      \
+        vec3_mul_val(v, v##_mag);       \
+    }                                   \
+}
+
 // Kaze's float functions
 f32 slow_logf(f32 x);
 f32 slow_expf(f32 x);
@@ -528,14 +553,8 @@ void vec3f_to_vec3c(     Vec3c dst, Vec3f src);
 void vec3f_to_vec3s(     Vec3s dst, Vec3f src);
 void vec3f_to_vec3i(     Vec3i dst, Vec3f src);
 
-f32  vec2f_invmag(            Vec2f v);
-f32  vec3f_invmag(            Vec3f v);
-void vec2f_normalize(         Vec2f v);
 void vec3f_normalize(         Vec3f v);
-void vec2f_normalize_negative(Vec2f v);
 void vec3f_normalize_negative(Vec3f v);
-void vec2f_normalize_max(     Vec2f v, f32 max);
-void vec3f_normalize_max(     Vec3f v, f32 max);
 Bool32 vec3f_are_coords_within_radius_of_point(Vec3f pos, f32 x, f32 y, f32 z, f32 dist);
 Bool32 vec3f_are_points_within_radius(         Vec3f pos1, Vec3f pos2,         f32 dist);
 void vec2f_get_lateral_dist(                   Vec2f from, Vec2f to,            f32 *lateralDist                          );

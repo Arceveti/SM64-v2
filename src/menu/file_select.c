@@ -193,9 +193,9 @@ s32 check_clicked_button(ScreenPos x, ScreenPos y, f32 depth) {
  * Grow from main menu, used by selecting files and menus.
  */
 void bhv_menu_button_growing_from_main_menu(struct Object *button) {
-    if ( button->oMenuButtonTimer < 16) button->oFaceAngleYaw   += 0x800;
-    if ( button->oMenuButtonTimer <  8) button->oFaceAnglePitch += 0x800;
-    if ((button->oMenuButtonTimer >= 8) && (button->oMenuButtonTimer < 16)) button->oFaceAnglePitch -= 0x800;
+    if ( button->oMenuButtonTimer < 16) button->oFaceAngleYaw   += DEG(11.25);
+    if ( button->oMenuButtonTimer <  8) button->oFaceAnglePitch += DEG(11.25);
+    if ((button->oMenuButtonTimer >= 8) && (button->oMenuButtonTimer < 16)) button->oFaceAnglePitch -= DEG(11.25);
     button->oParentRelativePosX -= (button->oMenuButtonOrigPosX / 16.0f);
     button->oParentRelativePosY -= (button->oMenuButtonOrigPosY / 16.0f);
     if (button->oPosZ < (button->oMenuButtonOrigPosZ + 17800.0f)) button->oParentRelativePosZ += 1112.5f;
@@ -212,9 +212,9 @@ void bhv_menu_button_growing_from_main_menu(struct Object *button) {
  * Shrink back to main menu, used to return back while inside menus.
  */
 void bhv_menu_button_shrinking_to_main_menu(struct Object *button) {
-    if ( button->oMenuButtonTimer < 16) button->oFaceAngleYaw   -= 0x800;
-    if ( button->oMenuButtonTimer <  8) button->oFaceAnglePitch -= 0x800;
-    if ((button->oMenuButtonTimer >= 8) && (button->oMenuButtonTimer < 16)) button->oFaceAnglePitch += 0x800;
+    if ( button->oMenuButtonTimer < 16) button->oFaceAngleYaw   -= DEG(11.25);
+    if ( button->oMenuButtonTimer <  8) button->oFaceAnglePitch -= DEG(11.25);
+    if ((button->oMenuButtonTimer >= 8) && (button->oMenuButtonTimer < 16)) button->oFaceAnglePitch += DEG(11.25);
     button->oParentRelativePosX += (button->oMenuButtonOrigPosX / 16.0f);
     button->oParentRelativePosY += (button->oMenuButtonOrigPosY / 16.0f);
     if (button->oPosZ > button->oMenuButtonOrigPosZ) button->oParentRelativePosZ -= 1112.5f;
@@ -231,9 +231,9 @@ void bhv_menu_button_shrinking_to_main_menu(struct Object *button) {
  * Grow from submenu, used by selecting a file in the score menu.
  */
 void bhv_menu_button_growing_from_submenu(struct Object *button) {
-    if (button->oMenuButtonTimer < 16) button->oFaceAngleYaw   += 0x800;
-    if (button->oMenuButtonTimer <  8) button->oFaceAnglePitch += 0x800;
-    if ((button->oMenuButtonTimer >= 8) && (button->oMenuButtonTimer < 16)) button->oFaceAnglePitch -= 0x800;
+    if (button->oMenuButtonTimer < 16) button->oFaceAngleYaw   += DEG(11.25);
+    if (button->oMenuButtonTimer <  8) button->oFaceAnglePitch += DEG(11.25);
+    if ((button->oMenuButtonTimer >= 8) && (button->oMenuButtonTimer < 16)) button->oFaceAnglePitch -= DEG(11.25);
     button->oParentRelativePosX -= (button->oMenuButtonOrigPosX / 16.0f);
     button->oParentRelativePosY -= (button->oMenuButtonOrigPosY / 16.0f);
     button->oParentRelativePosZ -= 116.25f;
@@ -250,9 +250,9 @@ void bhv_menu_button_growing_from_submenu(struct Object *button) {
  * Shrink back to submenu, used to return back while inside a score save menu.
  */
 void bhv_menu_button_shrinking_to_submenu(struct Object *button) {
-    if ( button->oMenuButtonTimer < 16) button->oFaceAngleYaw   -= 0x800;
-    if ( button->oMenuButtonTimer <  8) button->oFaceAnglePitch -= 0x800;
-    if ((button->oMenuButtonTimer >= 8) && (button->oMenuButtonTimer < 16)) button->oFaceAnglePitch += 0x800;
+    if ( button->oMenuButtonTimer < 16) button->oFaceAngleYaw   -= DEG(11.25);
+    if ( button->oMenuButtonTimer <  8) button->oFaceAnglePitch -= DEG(11.25);
+    if ((button->oMenuButtonTimer >= 8) && (button->oMenuButtonTimer < 16)) button->oFaceAnglePitch += DEG(11.25);
     button->oParentRelativePosX += (button->oMenuButtonOrigPosX / 16.0f);
     button->oParentRelativePosY += (button->oMenuButtonOrigPosY / 16.0f);
     if (button->oPosZ > button->oMenuButtonOrigPosZ) button->oParentRelativePosZ += 116.25f;
@@ -1253,7 +1253,7 @@ void print_save_file_star_count(s8 fileIndex, ScreenPos x, ScreenPos y) {
     }
 }
 
-#define SELECT_FILE_X   (SCREEN_WIDTH / 2) // was 93
+#define SELECT_FILE_X   SCREEN_CENTER_X // was 93
 #define SCORE_X          52
 #define COPY_X          117
 #define ERASE_X         177
@@ -1355,7 +1355,7 @@ void print_score_menu_strings(void) {
 }
 
 #define NOFILE_COPY_X  119
-#define COPY_FILE_X    (SCREEN_WIDTH / 2) // was 104
+#define COPY_FILE_X    SCREEN_CENTER_X // was 104
 #define COPYIT_WHERE_X 109
 #define NOSAVE_DATA_X2 101
 #define COPYCOMPLETE_X 110
@@ -1702,7 +1702,7 @@ void print_score_file_course_coin_score(s8 fileIndex, s16 courseIndex, ScreenPos
         int_to_str(save_file_get_course_coin_score(fileIndex, courseIndex), coinScoreText);
         print_menu_generic_string((x + 41), y, coinScoreText);
         // If collected, print 100 coin star
-        if (stars & (1 << 6)) print_menu_generic_string((x + 70), y, textStar);
+        if (stars & STAR_FLAG_ACT_100_COINS) print_menu_generic_string((x + 70), y, textStar);
     } else { // HISCORE
         // Print "[coin] x"
         print_menu_generic_string(x + HISCORE_COIN_ICON_X, y, textCoinX);
@@ -1723,7 +1723,7 @@ void print_score_file_star_score(s8 fileIndex, s16 courseIndex, ScreenPos x, Scr
     u8 stars     = save_file_get_star_flags(       fileIndex, courseIndex);
     s8 starCount = save_file_get_course_star_count(fileIndex, courseIndex);
     // Don't count 100 coin star
-    if (stars & (1 << 6)) starCount--;
+    if (stars & STAR_FLAG_ACT_100_COINS) starCount--;
     // Add 1 star character for every star collected
     for ((i = 0); (i < starCount); (i++)) starScoreText[i] = DIALOG_CHAR_STAR_FILLED;
     // Terminating byte

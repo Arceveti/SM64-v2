@@ -34,8 +34,8 @@ void bhv_pyramid_top_spinning(void) {
     } else {
         // Then, rotate at an accelerating rate, and move upward at a constant rate.
         o->oAngleVelYaw += 0x100;
-        if (o->oAngleVelYaw > 0x1800) {
-            o->oAngleVelYaw = 0x1800;
+        if (o->oAngleVelYaw > DEG(33.75)) {
+            o->oAngleVelYaw = DEG(33.75);
             o->oVelY        = 5.0f;
         }
         o->oFaceAngleYaw += o->oAngleVelYaw;
@@ -126,8 +126,8 @@ void bhv_pyramid_top_fragment_init(void) {
  */
 void bhv_pyramid_top_fragment_loop(void) {
     object_step();
-    o->oFaceAngleYaw   += 0x1000;
-    o->oFaceAnglePitch += 0x1000;
+    o->oFaceAngleYaw   += DEG(22.5);
+    o->oFaceAnglePitch += DEG(22.5);
     if (o->oTimer == 60) obj_mark_for_deletion(o);
 }
 

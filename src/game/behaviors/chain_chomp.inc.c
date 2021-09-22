@@ -89,12 +89,12 @@ static void chain_chomp_update_chain_segments(void) {
         // Cap distance to previous chain part (so that the tail follows the
         // chomp)
         vec3_diff(offset, segment->pos, prevSegment->pos);
-        vec3f_normalize_max(offset, o->oChainChompMaxDistBetweenChainParts);
+        vec3_normalize_max(offset, o->oChainChompMaxDistBetweenChainParts);
         // Cap distance to pivot (so that it stretches when the chomp moves far
         // from the wooden post)
         vec3_add(offset, prevSegment->pos);
         maxTotalOffset = (o->oChainChompMaxDistFromPivotPerChainPart * (CHAIN_CHOMP_NUM_PARTS - i));
-        vec3f_normalize_max(offset, maxTotalOffset);
+        vec3_normalize_max(offset, maxTotalOffset);
         vec3_copy(segment->pos, offset);
     }
 }
@@ -117,8 +117,8 @@ static void chain_chomp_sub_act_turn(void) {
     chain_chomp_restore_normal_chain_lengths();
     cur_obj_move_pitch_approach(0, 0x100);
     if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
-        cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x400);
-        if (abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < 0x800) {
+        cur_obj_rotate_yaw_toward(o->oAngleToMario, DEG(5.625));
+        if (abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < DEG(11.25)) {
             if (o->oTimer > 30) {
                 if (cur_obj_check_anim_frame(0)) {
                     cur_obj_reverse_animation();
@@ -152,7 +152,7 @@ static void chain_chomp_sub_act_turn(void) {
 }
 
 static void chain_chomp_sub_act_lunge(void) {
-    cur_obj_face_pitch_approach(o->oChainChompTargetPitch, 0x400);
+    cur_obj_face_pitch_approach(o->oChainChompTargetPitch, DEG(5.625));
     if (o->oForwardVel != 0.0f) {
         // f32 val04;
         if (o->oChainChompRestrictedByChain) {
@@ -165,7 +165,7 @@ static void chain_chomp_sub_act_lunge(void) {
         o->oTimer = 0;
     } else {
         // Turn toward pivot
-        cur_obj_rotate_yaw_toward(atan2s(o->oChainChompSegments[0].pos[2], o->oChainChompSegments[0].pos[0]), 0x1000);
+        cur_obj_rotate_yaw_toward(atan2s(o->oChainChompSegments[0].pos[2], o->oChainChompSegments[0].pos[0]), DEG(22.5));
         if (o->oChainChompSignedMaxDistBetweenChainParts != 0.0f) {
             approach_f32_ptr(&o->oChainChompSignedMaxDistBetweenChainParts, 0.0f, 0.8f);
         } else {
@@ -308,7 +308,7 @@ static void chain_chomp_act_move(void) {
         // If the chain is fully stretched
         maxDistToPivot = (o->oChainChompMaxDistFromPivotPerChainPart * CHAIN_CHOMP_NUM_PARTS);
         if (o->oChainChompDistToPivot > maxDistToPivot) {
-            f32 ratio = (maxDistToPivot / o->oChainChompDistToPivot); //! vec3f_normalize_max?
+            f32 ratio = (maxDistToPivot / o->oChainChompDistToPivot); //! vec3_normalize_max?
             o->oChainChompDistToPivot = maxDistToPivot;
             vec3_mul_val(o->oChainChompSegments[0].pos, ratio);
             if (o->oChainChompReleaseStatus == CHAIN_CHOMP_NOT_RELEASED) {

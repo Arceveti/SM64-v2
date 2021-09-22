@@ -24,7 +24,7 @@ void bhv_spindrift_loop(void) {
             } else if (o->oDistanceToMario > 300.0f) {
                 o->oAngleToMario = obj_angle_to_object(o, gMarioObject);
             }
-            cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x400);
+            cur_obj_rotate_yaw_toward(o->oAngleToMario, DEG(5.625));
             break;
         case SPINDRIFT_ACT_HIT_MARIO:
             o->oFlags &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;

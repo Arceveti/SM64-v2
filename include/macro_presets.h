@@ -7,7 +7,7 @@
 struct MacroPreset
 {
     /*0x00*/ const BehaviorScript *behavior;
-    /*0x04*/ ModelID model;
+    /*0x04*/ ModelID16 model;
     /*0x06*/ s16 param;
 };
 
@@ -18,14 +18,14 @@ struct MacroPreset MacroObjectPresets[] = {
     {bhvBlueCoinSliding,                MODEL_BLUE_COIN,                    0}, // macro_sliding_blue_coin - unused
     {bhvRedCoin,                        MODEL_RED_COIN,                     0}, // macro_red_coin
     {bhvYellowCoin,                     MODEL_YELLOW_COIN,                  0}, // macro_empty_5
-    {bhvCoinFormation,                  MODEL_NONE,                         0                                                           }, // macro_coin_line_horizontal
-    {bhvCoinFormation,                  MODEL_NONE,                              COIN_FORMATION_FLAG_RING                               }, // macro_coin_ring_horizontal
-    {bhvCoinFormation,                  MODEL_NONE,                              COIN_FORMATION_FLAG_ARROW                              }, // macro_coin_arrow
-    {bhvCoinFormation,                  MODEL_NONE, COIN_FORMATION_FLAG_FLYING                                                          }, // macro_coin_line_horizontal_flying
-    {bhvCoinFormation,                  MODEL_NONE, COIN_FORMATION_FLAG_FLYING |                            COIN_FORMATION_FLAG_VERTICAL}, // macro_coin_line_vertical
-    {bhvCoinFormation,                  MODEL_NONE, COIN_FORMATION_FLAG_FLYING | COIN_FORMATION_FLAG_RING                               }, // macro_coin_ring_horizontal_flying
-    {bhvCoinFormation,                  MODEL_NONE, COIN_FORMATION_FLAG_FLYING | COIN_FORMATION_FLAG_RING | COIN_FORMATION_FLAG_VERTICAL}, // macro_coin_ring_vertical
-    {bhvCoinFormation,                  MODEL_NONE, COIN_FORMATION_FLAG_FLYING | COIN_FORMATION_FLAG_ARROW                              }, // macro_coin_arrow_flying - unused
+    {bhvCoinFormation,                  MODEL_NONE, (                        0                                                           )}, // macro_coin_line_horizontal
+    {bhvCoinFormation,                  MODEL_NONE, (                             COIN_FORMATION_FLAG_RING                               )}, // macro_coin_ring_horizontal
+    {bhvCoinFormation,                  MODEL_NONE, (                             COIN_FORMATION_FLAG_ARROW                              )}, // macro_coin_arrow
+    {bhvCoinFormation,                  MODEL_NONE, (COIN_FORMATION_FLAG_FLYING                                                          )}, // macro_coin_line_horizontal_flying
+    {bhvCoinFormation,                  MODEL_NONE, (COIN_FORMATION_FLAG_FLYING |                            COIN_FORMATION_FLAG_VERTICAL)}, // macro_coin_line_vertical
+    {bhvCoinFormation,                  MODEL_NONE, (COIN_FORMATION_FLAG_FLYING | COIN_FORMATION_FLAG_RING                               )}, // macro_coin_ring_horizontal_flying
+    {bhvCoinFormation,                  MODEL_NONE, (COIN_FORMATION_FLAG_FLYING | COIN_FORMATION_FLAG_RING | COIN_FORMATION_FLAG_VERTICAL)}, // macro_coin_ring_vertical
+    {bhvCoinFormation,                  MODEL_NONE, (COIN_FORMATION_FLAG_FLYING | COIN_FORMATION_FLAG_ARROW                              )}, // macro_coin_arrow_flying - unused
     {bhvHiddenStarTrigger,              MODEL_NONE,                         0}, // macro_hidden_star_trigger
     {bhvYellowCoin,                     MODEL_YELLOW_COIN,                  0}, // macro_empty_15
     {bhvYellowCoin,                     MODEL_YELLOW_COIN,                  0}, // macro_empty_16

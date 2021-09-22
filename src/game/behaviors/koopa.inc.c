@@ -185,7 +185,7 @@ static void koopa_shelled_act_run_from_mario(void) {
     if ((o->oTimer > 30) && (o->oDistanceToMario > 800.0f)) {
         if (cur_obj_forward_vel_approach(0.0f, 1.0f)) o->oAction = KOOPA_SHELLED_ACT_STOPPED;
     } else {
-        cur_obj_rotate_yaw_toward((o->oAngleToMario + DEG(180)), 0x400);
+        cur_obj_rotate_yaw_toward((o->oAngleToMario + DEG(180)), DEG(5.625));
         cur_obj_forward_vel_approach(17.0f, 1.0f);
     }
 }

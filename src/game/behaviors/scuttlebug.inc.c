@@ -42,7 +42,7 @@ void bhv_scuttlebug_loop(void) {
             } else if (!o->oScuttlebugIsAtttacking) {
                 o->oScuttlebugTimer = 0;
                 o->oAngleToMario    = obj_angle_to_object(o, gMarioObject);
-                if (abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < 0x800) {
+                if (abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < DEG(11.25)) {
                     o->oScuttlebugIsAtttacking = TRUE;
                     o->oVelY = 20.0f;
                     cur_obj_play_sound_2(SOUND_OBJ2_SCUTTLEBUG_ALERT);
@@ -59,7 +59,7 @@ void bhv_scuttlebug_loop(void) {
             o->oForwardVel = 5.0f;
             if ((Angle) o->oMoveAngleYaw == (Angle) o->oAngleToMario) o->oSubAction = SCUTTLEBUG_SUB_ACT_MOVING;
             if (o->oPosY < o->oHomeY - 200.0f) obj_mark_for_deletion(o);
-            cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x400);
+            cur_obj_rotate_yaw_toward(o->oAngleToMario, DEG(5.625));
             break;
         case SCUTTLEBUG_SUB_ACT_ALERT:
             o->oFlags &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;

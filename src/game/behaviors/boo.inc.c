@@ -254,8 +254,8 @@ static Bool32 boo_update_during_death(void) {
         }
     }
     o->oVelY           = 5.0f;
-    o->oFaceAngleRoll += 0x800;
-    o->oFaceAngleYaw  += 0x800;
+    o->oFaceAngleRoll += DEG(11.25);
+    o->oFaceAngleYaw  += DEG(11.25);
     return FALSE;
 }
 

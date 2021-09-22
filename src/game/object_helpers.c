@@ -998,7 +998,7 @@ void cur_obj_set_hurtbox_radius_and_height(f32 radius, f32 height) {
     o->hurtboxHeight = height;
 }
 
-static void obj_spawn_loot_coins(struct Object *obj, s32 numCoins, f32 baseYVel, const BehaviorScript *coinBehavior, s16 posJitter, ModelID model) {
+static void obj_spawn_loot_coins(struct Object *obj, s32 numCoins, f32 baseYVel, const BehaviorScript *coinBehavior, s16 posJitter, ModelID16 model) {
     s32 i;
     struct Surface *floor;
     struct Object  *coin;
@@ -1570,7 +1570,7 @@ s32 cur_obj_can_mario_activate_textbox(f32 radius, f32 height, UNUSED s32 unused
 
 s32 cur_obj_can_mario_activate_textbox_2(f32 radius, f32 height) {
     // The last argument here is unused. When this function is called directly the argument is always set to 0x7FFF.
-    return cur_obj_can_mario_activate_textbox(radius, height, 0x1000);
+    return cur_obj_can_mario_activate_textbox(radius, height, DEG(22.5));
 }
 
 static void cur_obj_end_dialog(s32 dialogFlags, s32 dialogResult) {
@@ -1688,7 +1688,7 @@ s32 cur_obj_update_dialog_with_cutscene(s32 actionArg, s32 dialogFlags, s32 cuts
         case DIALOG_STATUS_INTERRUPT:
             // Additional flag that makes the NPC rotate towards to Mario
             if (dialogFlags & DIALOG_FLAG_TURN_TO_MARIO) {
-                doneTurning = cur_obj_rotate_yaw_toward(obj_angle_to_object(o, gMarioObject), 0x800);
+                doneTurning = cur_obj_rotate_yaw_toward(obj_angle_to_object(o, gMarioObject), DEG(11.25));
                 // Failsafe just in case it takes more than 33 frames somehow
                 if (o->oDialogResponse >= 33) doneTurning = TRUE;
             }

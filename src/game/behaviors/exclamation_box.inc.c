@@ -16,7 +16,7 @@ struct ExclamationBoxContents {
     u8 id;
     u8 unk1;
     u8 behParams;
-    ModelID model;
+    ModelID16 model;
     const BehaviorScript *behavior;
 };
 
@@ -99,7 +99,7 @@ void exclamation_box_act_scaling(void) {
     o->oExclamationBoxVerticalScale   = ((( sins(o->oExclamationBoxScaleAngle) + 1.0f) *  0.3f) + 0.0f);
     o->oExclamationBoxHorizontalScale = (((-sins(o->oExclamationBoxScaleAngle) + 1.0f) *  0.5f) + 1.0f);
     o->oGraphYOffset                  =  ((-sins(o->oExclamationBoxScaleAngle) + 1.0f) * 26.0f);
-    o->oExclamationBoxScaleAngle += 0x1000;
+    o->oExclamationBoxScaleAngle     += DEG(22.5);
     o->header.gfx.scale[0] = (o->oExclamationBoxHorizontalScale * 2.0f);
     o->header.gfx.scale[1] = (o->oExclamationBoxVerticalScale   * 2.0f);
     o->header.gfx.scale[2] = (o->oExclamationBoxHorizontalScale * 2.0f);

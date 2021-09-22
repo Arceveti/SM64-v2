@@ -666,7 +666,7 @@ void apply_twirl_gravity(struct MarioState *m) {
 #ifdef Z_TWIRL
     f32 Zmodifier = ((m->input & INPUT_Z_DOWN) ? 4.0f : 1.0f);
 #endif
-    if (m->angleVel[1] > 0x400) heaviness = (1024.0f / m->angleVel[1]);
+    if (m->angleVel[1] > DEG(5.625)) heaviness = (1024.0f / m->angleVel[1]);
 #ifdef Z_TWIRL
     terminalVelocity = (-TERMINAL_GRAVITY_VELOCITY * heaviness * Zmodifier);
 #else

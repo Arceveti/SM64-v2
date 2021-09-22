@@ -97,7 +97,7 @@ void bhv_flame_moving_forward_growing_loop(void) {
     obj_set_hitbox(o, &sGrowingBowserFlameHitbox);
     o->oFlameScale = (o->oFlameScale + 0.5f);
     cur_obj_scale(o->oFlameScale);
-    if (o->oMoveAnglePitch > 0x800) o->oMoveAnglePitch -= 0x200;
+    if (o->oMoveAnglePitch > DEG(11.25)) o->oMoveAnglePitch -= 0x200;
     cur_obj_set_pos_via_transform();
     cur_obj_update_floor_height();
     if (o->oFlameScale > 30.0f) obj_mark_for_deletion(o);

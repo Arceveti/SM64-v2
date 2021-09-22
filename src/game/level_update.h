@@ -28,6 +28,11 @@
 
 #define WARP_OP_TRIGGERS_LEVEL_SELECT       0x10
 
+#define WARP_FLAGS_NONE                     (0 << 0) // 0x00
+#define WARP_FLAG_DOOR_PULLED               (1 << 0) // 0x01
+#define WARP_FLAG_DOOR_FLIP_MARIO           (1 << 1) // 0x02
+#define WARP_FLAG_DOOR_IS_WARP              (1 << 2) // 0x04
+
 #define MARIO_SPAWN_NONE                    0x00
 #define MARIO_SPAWN_DOOR_WARP               0x01
 #define MARIO_SPAWN_IDLE                    0x02
@@ -49,14 +54,10 @@
 #define MARIO_SPAWN_LAUNCH_DEATH            0x25
 #define MARIO_SPAWN_FADE_FROM_BLACK         0x27
 
-// Screen top left - Bottom text
-#define CREDITS_POS_ONE                     (0 << 4) // 0x00
-// Screen top right - Bottom text
-#define CREDITS_POS_TWO                     (1 << 4) // 0x10
-// Screen bottom left - Top text
-#define CREDITS_POS_THREE                   (2 << 4) // 0x20
-// Screen bottom right - Top text
-#define CREDITS_POS_FOUR                    (3 << 4) // 0x30
+#define CREDITS_POS_ONE                     (0 << 4) // 0x00 // Screen    top  left - Bottom text
+#define CREDITS_POS_TWO                     (1 << 4) // 0x10 // Screen    top right - Bottom text
+#define CREDITS_POS_THREE                   (2 << 4) // 0x20 // Screen bottom  left -    Top text
+#define CREDITS_POS_FOUR                    (3 << 4) // 0x30 // Screen bottom right -    Top text
 
 struct CreditsEntry
 {
@@ -84,7 +85,7 @@ struct WarpDest {
     u8 levelNum;
     u8 areaIdx;
     u8 nodeId;
-    u32 arg;
+    u32 flags;
 };
 
 extern struct WarpDest sWarpDest;
@@ -93,7 +94,7 @@ extern s16 sSpecialWarpDest;
 extern s16 sDelayedWarpOp;
 extern s16 sDelayedWarpTimer;
 extern s16 sSourceWarpNodeId;
-extern s32 sDelayedWarpArg;
+extern s32 sDelayedWarpArg; // for warp doors
 extern Bool8 sTimerRunning;
 
 struct HudDisplay {

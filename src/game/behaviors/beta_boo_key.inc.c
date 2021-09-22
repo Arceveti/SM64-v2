@@ -60,8 +60,8 @@ static void beta_boo_key_dropped_loop(void) {
     // until it reaches a multiple of 0x10000, at which point &-ing with
     // 0xFFFF returns 0 and the key stops rotating in the roll direction.
     if (o->oFaceAngleRoll & 0xFFFF) {
-        o->oFaceAngleRoll &= 0xF800; // ~348.75 degrees
-        o->oFaceAngleRoll +=  0x800; //  ~11.25 degrees
+        o->oFaceAngleRoll &= DEG(348.75);
+        o->oFaceAngleRoll += DEG( 11.25);
     }
     // Once the key stops bouncing, stop its horizontal movement on the ground.
     if (o->oMoveFlags & OBJ_MOVE_ON_GROUND) {
@@ -69,7 +69,7 @@ static void beta_boo_key_dropped_loop(void) {
         o->oVelZ = 0.0f;
     }
     // Rotate the key
-    o->oFaceAngleYaw += 0x800;
+    o->oFaceAngleYaw += DEG(11.25);
     // If the key hits the floor or 90 frames have elapsed since it was dropped,
     // become tangible and handle collision.
     if ((o->oTimer > 90) || (o->oMoveFlags & OBJ_MOVE_LANDED)) {

@@ -4,6 +4,7 @@
 #include "behavior_data.h"
 #include "engine/behavior_script.h"
 #include "engine/graph_node.h"
+#include "engine/math_util.h"
 #include "eu_translation.h"
 #include "game/area.h"
 #include "boot/game_init.h"
@@ -70,11 +71,11 @@ void bhv_act_selector_star_type_loop(void) {
         case STAR_SELECTOR_SELECTED:
             o->oStarSelectorSize += 0.1f;
             if (o->oStarSelectorSize > 1.3f) o->oStarSelectorSize = 1.3f;
-            o->oFaceAngleYaw += 0x800;
+            o->oFaceAngleYaw += DEG(11.25);
             break;
         // If the 100 coin star is selected, rotate
         case STAR_SELECTOR_100_COINS:
-            o->oFaceAngleYaw += 0x800;
+            o->oFaceAngleYaw += DEG(11.25);
             break;
     }
     // Scale act selector stars depending of the type selected
@@ -87,7 +88,7 @@ void bhv_act_selector_star_type_loop(void) {
  * Renders the 100 coin star with an special star selector type.
  */
 void render_100_coin_star(u8 stars) {
-    if (stars & (1 << 6)) {
+    if (stars & STAR_FLAG_ACT_100_COINS) {
         // If the 100 coin star has been collected, create a new star selector next to the coin score.
 #ifdef WIDE
         sStarSelectorModels[6] = spawn_object_abs_with_rot(o, 0, MODEL_STAR, bhvActSelectorStarType, (gConfig.widescreen ? ((370 * 4.0f) / 3.0f) : 370), 24, -300, 0x0, 0x0, 0x0);
@@ -107,7 +108,7 @@ void render_100_coin_star(u8 stars) {
  */
 void bhv_act_selector_init(void) {
     s16 i = 0;
-    ModelID selectorModelIDs[10];
+    ModelID16 selectorModelIDs[10];
     u8 stars = save_file_get_star_flags((gCurrSaveFileNum - 1), (gCurrCourseNum - 1));
     sVisibleStars = 0;
     while (i != sObtainedStars) {
@@ -217,7 +218,7 @@ void print_course_number(void) {
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
     int_to_str(gCurrCourseNum, courseNum);
-    print_hud_lut_string_centered(HUD_LUT_GLOBAL, ((SCREEN_WIDTH / 2) - 4), 158, courseNum); // was ((gCurrCourseNum < 10) ? 152 : 143), 1 or 2 digit number
+    print_hud_lut_string_centered(HUD_LUT_GLOBAL, (SCREEN_CENTER_X - 4), 158, courseNum); // was ((gCurrCourseNum < 10) ? 152 : 143), 1 or 2 digit number
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 }
 
@@ -343,9 +344,9 @@ s32 lvl_init_act_selector_values_and_stars(UNUSED s32 arg, UNUSED s32 unused) {
     sInitSelectedActNum   = 0;
     sVisibleStars         = 0;
     sActSelectorMenuTimer = 0;
-    sObtainedStars = save_file_get_course_star_count((gCurrSaveFileNum - 1), (gCurrCourseNum - 1));
+    sObtainedStars        = save_file_get_course_star_count((gCurrSaveFileNum - 1), (gCurrCourseNum - 1));
     // Don't count 100 coin star
-    if (stars & (1 << 6)) sObtainedStars--;
+    if (stars & STAR_FLAG_ACT_100_COINS) sObtainedStars--;
     return 0;
 }
 

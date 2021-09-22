@@ -40,9 +40,9 @@ void adjust_rolling_face_pitch(f32 f12) {
 void snowmans_bottom_act_follow_path(void) { // act 1
     o->oPathedStartWaypoint     = segmented_to_virtual(&ccm_seg7_trajectory_snowman);
     object_step_without_floor_orient();
-    s32 pathResult                  = cur_obj_follow_path();
+    s32 pathResult              = cur_obj_follow_path();
     o->oSnowmansBottomTargetYaw = o->oPathedTargetYaw;
-    o->oMoveAngleYaw            = approach_s16_symmetric(o->oMoveAngleYaw, o->oSnowmansBottomTargetYaw, 0x400);
+    o->oMoveAngleYaw            = approach_s16_symmetric(o->oMoveAngleYaw, o->oSnowmansBottomTargetYaw, DEG(5.625));
     if (o->oForwardVel > 70.0f) o->oForwardVel = 70.0f;
     if (pathResult == PATH_REACHED_END) {
         o->oSnowmansBottomTargetYaw = ((obj_check_if_facing_toward_angle(o->oMoveAngleYaw, o->oAngleToMario, DEG(45)) && o->oSnowmansBottomHitCheckpointNearMario) ? o->oAngleToMario : o->oMoveAngleYaw);
@@ -53,7 +53,7 @@ void snowmans_bottom_act_follow_path(void) { // act 1
 void snowmans_bottom_act_final_stretch(void) { // act 2
     object_step_without_floor_orient();
     if (o->oForwardVel > 70.0f) o->oForwardVel = 70.0f;
-    o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, o->oSnowmansBottomTargetYaw, 0x400);
+    o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, o->oSnowmansBottomTargetYaw, DEG(5.625));
     if (is_point_close_to_object(o, -4230.0f, -1344.0f, 1813.0f, 300)) {
         spawn_mist_particles_variable(0, 0, 70.0f);
         o->oMoveAngleYaw      = atan2s((1813.0f - o->oPosZ), (-4230.0f - o->oPosX));

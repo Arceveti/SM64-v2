@@ -11,7 +11,7 @@
 struct FerrisWheelProperties {
     void const *axleCollision;
     void const *platformCollision;
-    ModelID platformModel;
+    ModelID16 platformModel;
 };
 
 /**

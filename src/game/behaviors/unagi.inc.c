@@ -24,7 +24,7 @@ void bhv_unagi_init(void) {
         o->oPathedStartWaypoint = segmented_to_virtual(jrb_seg7_trajectory_unagi_cave);
         o->oAction              = UNAGI_ACT_IN_CAVE;
 #ifdef HELD_TRANSPARENT_STAR
-        o->oAnimState           = ((save_file_get_star_flags((gCurrSaveFileNum - 1), COURSE_JRB) & 0x2) ? UNAGI_ANIM_STATE_HAS_TRANSPARENT_STAR : UNAGI_ANIM_STATE_HAS_STAR);
+        o->oAnimState           = ((save_file_get_star_flags((gCurrSaveFileNum - 1), COURSE_JRB) & STAR_FLAG_ACT_2) ? UNAGI_ANIM_STATE_HAS_TRANSPARENT_STAR : UNAGI_ANIM_STATE_HAS_STAR);
 #endif
         o->oUnagiInitMoveYaw = o->oMoveAngleYaw;
     }

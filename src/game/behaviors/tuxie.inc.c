@@ -15,7 +15,7 @@ void tuxies_mother_act_received_baby(void) { // act 2
             cur_obj_init_animation_with_sound(PENGUIN_ANIM_WALK);
             o->oForwardVel = 10.0f;
             if (cur_obj_lateral_dist_from_mario_to_home_squared() > sqr(800.0f)) o->oSubAction = MOTHER_PENGUIN_SUB_ACT_STOP_CHASING_MARIO;
-            cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x400);
+            cur_obj_rotate_yaw_toward(o->oAngleToMario, DEG(5.625));
         } else {
             o->oForwardVel = 0.0f;
             cur_obj_init_animation_with_sound(PENGUIN_ANIM_IDLE);
@@ -175,9 +175,9 @@ void small_penguin_act_near_mother(void) { // act 5
         o->oForwardVel = ((o->oDistanceToMario < 1000.0f) ? 2.0f : 0.0f);
         Angle angleToMother = obj_angle_to_object(o, motherPenguinObj);
         if (dist_between_objects_squared(o, motherPenguinObj) > sqr(200.0f)) {
-            cur_obj_rotate_yaw_toward(angleToMother, 0x400);
+            cur_obj_rotate_yaw_toward(angleToMother, DEG(5.625));
         } else {
-            cur_obj_rotate_yaw_toward((angleToMother + DEG(180)), 0x400);
+            cur_obj_rotate_yaw_toward((angleToMother + DEG(180)), DEG(5.625));
         }
         cur_obj_init_animation_with_sound(PENGUIN_ANIM_WALK);
     }

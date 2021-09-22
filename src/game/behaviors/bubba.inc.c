@@ -84,8 +84,8 @@ void bubba_act_attack(void) {
 void bhv_bubba_loop(void) {
     o->oInteractionSubtype &= ~INT_SUBTYPE_EATS_MARIO;
     o->oBubbaNextTargetPitchTowardMario = cur_obj_turn_pitch_toward_mario(120.0f, 0);
-    if ((abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < 0x1000)
-        && (abs_angle_diff((o->oBubbaNextTargetPitchTowardMario + 0x800), o->oMoveAnglePitch) < DEG(45))) {
+    if ((abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < DEG(22.5))
+        && (abs_angle_diff((o->oBubbaNextTargetPitchTowardMario + DEG(11.25)), o->oMoveAnglePitch) < DEG(45))) {
         if ((o->oAnimState != BUBBA_ANIM_STATE_CLOSED_MOUTH) && (o->oDistanceToMario < 250.0f)) o->oInteractionSubtype |= INT_SUBTYPE_EATS_MARIO;
         o->hurtboxRadius = 100.0f;
     } else {
