@@ -25,7 +25,7 @@ void cur_obj_rotate_yaw_and_bounce_off_walls(Angle targetYaw, Angle turnAmount) 
     cur_obj_rotate_yaw_toward(targetYaw, turnAmount);
 }
 
-Bool32 cur_obj_resolve_object_collisions(s32 *targetYaw) { //! targetYaw Angle type?
+Bool32 cur_obj_resolve_object_collisions(Angle32 *targetYaw) {
     struct Object *otherObject;
     f32 dx, dz;
     Angle angle;
@@ -54,7 +54,7 @@ Bool32 cur_obj_resolve_object_collisions(s32 *targetYaw) { //! targetYaw Angle t
     return FALSE;
 }
 
-Bool32 cur_obj_bounce_off_walls_edges_objects(Angle32 *targetYaw) { //! Angle type?
+Bool32 cur_obj_bounce_off_walls_edges_objects(Angle32 *targetYaw) {
     if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) {
         *targetYaw = cur_obj_reflect_move_angle_off_wall();
     } else if (o->oMoveFlags & OBJ_MOVE_HIT_EDGE) {

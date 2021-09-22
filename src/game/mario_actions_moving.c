@@ -69,7 +69,6 @@ void play_step_sound(struct MarioState *m, AnimFrame16 frame1, AnimFrame16 frame
 #ifdef FAST_FLOOR_ALIGN
 void align_with_floor(struct MarioState *m, Bool32 smooth) {
     struct Surface *floor = m->floor;
-    Vec3f floorNormal;
     if ((floor != NULL) && (m->pos[1] < (m->floorHeight + MARIO_STEP_HEIGHT))) {
 // #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
 //         if ((m->steepness > COS45) && (mario_get_floor_class(m) == SURFACE_CLASS_NOT_SLIPPERY) && (m->forwardVel < GROUND_SPEED_THRESHOLD_2)) {
@@ -79,7 +78,7 @@ void align_with_floor(struct MarioState *m, Bool32 smooth) {
         if (smooth) {
             mtxf_align_terrain_triangle(sFloorAlignMatrix[m->playerID], m->pos, m->faceAngle[1], 40.0f);
         } else {
-            vec3_set(floorNormal, floor->normal.x, floor->normal.y, floor->normal.z);
+            Vec3f floorNormal = { floor->normal.x, floor->normal.y, floor->normal.z };
             mtxf_align_terrain_normal(sFloorAlignMatrix[m->playerID], floorNormal, m->pos, m->faceAngle[1]);
         }
         m->marioObj->header.gfx.throwMatrix = &sFloorAlignMatrix[m->playerID];
@@ -150,7 +149,7 @@ Bool32 set_triple_jump_action(struct MarioState *m, UNUSED MarioAction action, U
 void update_sliding_angle(struct MarioState *m, f32 accel, f32 lossFactor) {
     struct Surface *floor = m->floor;
     Angle slopeAngle      = m->floorYaw;
-    f32 accelSteepness    = (accel * sqrtf(sqr(floor->normal.x) + sqr(floor->normal.z)));
+    f32 accelSteepness = ((m->floor) ? (accel * sqrtf(sqr(floor->normal.x) + sqr(floor->normal.z))) : 0.0f);
     m->slideVelX += (accelSteepness * sins(slopeAngle));
     m->slideVelZ += (accelSteepness * coss(slopeAngle));
     m->slideVelX *= lossFactor;
@@ -168,9 +167,7 @@ void update_sliding_angle(struct MarioState *m, f32 accel, f32 lossFactor) {
         if ((newFacingDYaw -= 0x200) < -DEG(180)) newFacingDYaw = -DEG(180);
     }
     m->faceAngle[1] = (m->slideYaw + newFacingDYaw);
-    m->vel[0]       = m->slideVelX;
-    m->vel[1]       = 0.0f;
-    m->vel[2]       = m->slideVelZ;
+    vec3_set(m->vel, m->slideVelX, 0.0f, m->slideVelZ);
     mario_update_moving_sand(m);
     mario_update_windy_ground(m);
     //! Speed is capped a frame late (butt slide HSG)
@@ -183,13 +180,9 @@ void update_sliding_angle(struct MarioState *m, f32 accel, f32 lossFactor) {
 }
 
 Bool32 update_sliding(struct MarioState *m, f32 stopSpeed) {
-    f32 lossFactor;
-    f32 accel;
-    f32 oldSpeed, newSpeed;
+    f32 accel, lossFactor;
     Angle intendedDYaw = (m->intendedYaw - m->slideYaw);
     f32 forward        = coss(intendedDYaw);
-    f32 sideward       = sins(intendedDYaw);
-    f32 slideVelXModifier, slideVelZModifier;
     //! 10k glitch
     if ((forward < 0.0f) && (m->forwardVel >= 0.0f)) forward *= (0.5f + (0.5f * m->forwardVel / 100.0f));
     switch (mario_get_floor_class(m)) {
@@ -198,13 +191,13 @@ Bool32 update_sliding(struct MarioState *m, f32 stopSpeed) {
         default:                          accel =  7.0f; lossFactor = (((m->intendedMag / 32.0f) * forward * 0.02f) + 0.92f); break;
         case SURFACE_CLASS_NOT_SLIPPERY:  accel =  5.0f; lossFactor = (((m->intendedMag / 32.0f) * forward * 0.02f) + 0.92f); break;
     }
-    oldSpeed          = sqrtf(sqr(m->slideVelX) + sqr(m->slideVelZ));
-    sideward          = ((m->intendedMag / 32.0f) * sideward * 0.05f);
-    slideVelXModifier = (m->slideVelZ * sideward);
-    slideVelZModifier = (m->slideVelX * sideward);
-    m->slideVelX     += slideVelXModifier;
-    m->slideVelZ     -= slideVelZModifier;
-    newSpeed = sqrtf(sqr(m->slideVelX) + sqr(m->slideVelZ));
+    f32 oldSpeed          = sqrtf(sqr(m->slideVelX) + sqr(m->slideVelZ));
+    f32 sideward              = ((m->intendedMag / 32.0f) * sins(intendedDYaw) * 0.05f);
+    f32 slideVelXModifier = (m->slideVelZ * sideward);
+    f32 slideVelZModifier = (m->slideVelX * sideward);
+    m->slideVelX         += slideVelXModifier;
+    m->slideVelZ         -= slideVelZModifier;
+    f32 newSpeed          = sqrtf(sqr(m->slideVelX) + sqr(m->slideVelZ));
     if ((oldSpeed > 0.0f) && (newSpeed > 0.0f)) {
         m->slideVelX = ((m->slideVelX * oldSpeed) / newSpeed);
         m->slideVelZ = ((m->slideVelZ * oldSpeed) / newSpeed);
@@ -263,13 +256,12 @@ Bool32 apply_landing_accel(struct MarioState *m, f32 frictionFactor) {
 }
 
 void update_shell_speed(struct MarioState *m) {
-    f32 maxTargetSpeed, targetSpeed;
     if (m->floorHeight < m->waterLevel) {
         set_mario_floor(m, &gWaterSurfacePseudoFloor, m->waterLevel);
         m->floor->originOffset = -m->waterLevel;
     }
-    maxTargetSpeed  = (((m->floor != NULL) && (m->floor->type == SURFACE_SLOW)) ? 48.0f : 64.0f);
-    targetSpeed     = (m->intendedMag * 2.0f);
+    f32 maxTargetSpeed = (((m->floor != NULL) && (m->floor->type == SURFACE_SLOW)) ? 48.0f : 64.0f);
+    f32 targetSpeed    = (m->intendedMag * 2.0f);
     if (targetSpeed > maxTargetSpeed) targetSpeed = maxTargetSpeed;
     if (targetSpeed < 24.0f) targetSpeed = 24.0f;
     if (m->forwardVel <= 0.0f) {
@@ -391,7 +383,7 @@ Bool32 begin_braking_action(struct MarioState *m) {
         m->faceAngle[1] = m->actionArg;
         return set_mario_action(m, ACT_STANDING_AGAINST_WALL, 0);
     }
-    if ((m->forwardVel >= GROUND_SPEED_THRESHOLD) && (m->floor->normal.y >= COS80)) return set_mario_action(m, ACT_BRAKING, 0);
+    if ((m->forwardVel >= GROUND_SPEED_THRESHOLD) && m->floor && (m->floor->normal.y >= COS80)) return set_mario_action(m, ACT_BRAKING, 0);
     return set_mario_action(m, ACT_DECELERATING, 0);
 }
 
@@ -591,7 +583,6 @@ void tilt_body_ground_shell(struct MarioState *m, Angle startYaw) {
 }
 
 Bool32 act_walking(struct MarioState *m) {
-    Vec3f startPos;
     Angle startYaw = m->faceAngle[1];
     mario_drop_held_object(m);
     if (should_begin_sliding(m)                                                         ) return set_mario_action(m, ACT_BEGIN_SLIDING, 0);
@@ -602,6 +593,7 @@ Bool32 act_walking(struct MarioState *m) {
     if (analog_stick_held_back(m, DEG(100)) && (m->forwardVel >= GROUND_SPEED_THRESHOLD)) return set_mario_action(m, ACT_TURNING_AROUND, 0);
     if (m->input & INPUT_Z_PRESSED                                                      ) return set_mario_action(m, ACT_CROUCH_SLIDE  , 0);
     m->actionState = ACT_WALKING_STATE_NO_WALL;
+    Vec3f startPos;
     vec3_copy(startPos, m->pos);
     update_walking_speed(m);
     switch (perform_ground_step(m)) {
@@ -1152,7 +1144,6 @@ Bool32 act_dive_slide(struct MarioState *m) {
 }
 
 AnimFrame32 common_ground_knockback_action(struct MarioState *m, AnimID32 animation, AnimFrame32 checkFrame, Bool32 playLandingSound, s32 actionArg) {
-    AnimFrame32 animFrame;
     if (playLandingSound) play_mario_heavy_landing_sound_once(m, SOUND_ACTION_TERRAIN_BODY_HIT_GROUND);
     if (actionArg > 0) {
         play_sound_if_no_flag(m, SOUND_MARIO_ATTACKED, MARIO_MARIO_SOUND_PLAYED);
@@ -1165,7 +1156,7 @@ AnimFrame32 common_ground_knockback_action(struct MarioState *m, AnimID32 animat
     }
     if (m->forwardVel >  32.0f) m->forwardVel =  32.0f;
     if (m->forwardVel < -32.0f) m->forwardVel = -32.0f;
-    animFrame = set_mario_animation(m, animation);
+    AnimFrame32 animFrame = set_mario_animation(m, animation);
     if (animFrame < checkFrame) {
         apply_landing_accel(m, 0.9f);
     } else if (m->forwardVel >= 0.0f) {
@@ -1258,7 +1249,7 @@ MarioStep common_landing_action(struct MarioState *m, AnimID16 animation, MarioA
     if (m->forwardVel > GROUND_SPEED_THRESHOLD) m->particleFlags |= PARTICLE_DUST;
     set_mario_animation(m, animation);
     play_mario_landing_sound_once(m, SOUND_ACTION_TERRAIN_LANDING);
-    if ((m->floor->type >= SURFACE_SHALLOW_QUICKSAND) && (m->floor->type <= SURFACE_MOVING_QUICKSAND)) m->quicksandDepth += (((4 - m->actionTimer) * 3.5f) - 0.5f);
+    if (m->floor && (m->floor->type >= SURFACE_SHALLOW_QUICKSAND) && (m->floor->type <= SURFACE_MOVING_QUICKSAND)) m->quicksandDepth += (((4 - m->actionTimer) * 3.5f) - 0.5f);
     return stepResult;
 }
 

@@ -1,5 +1,5 @@
 struct TripletButterflyActivationData {
-    ModelID32 model; //! ModelID?
+    ModelID32 model;
     const BehaviorScript *behavior;
     f32 scale;
 };

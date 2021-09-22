@@ -123,14 +123,11 @@ Bool32 check_fall_damage_or_get_stuck(struct MarioState *m, MarioAction hardFall
 }
 
 Bool32 check_horizontal_wind(struct MarioState *m) {
-    struct Surface *floor = m->floor;
-    f32 speed;
-    Angle pushAngle;
-    if (floor->type == SURFACE_HORIZONTAL_WIND) {
-        pushAngle     = (floor->force << 8);
-        m->slideVelX += (1.2f * sins(pushAngle));
-        m->slideVelZ += (1.2f * coss(pushAngle));
-        speed = sqrtf(sqr(m->slideVelX) + sqr(m->slideVelZ));
+    if (m->floor && (m->floor->type == SURFACE_HORIZONTAL_WIND)) {
+        Angle pushAngle = (m->floor->force << 8);
+        m->slideVelX   += (1.2f * sins(pushAngle));
+        m->slideVelZ   += (1.2f * coss(pushAngle));
+        f32 speed = sqrtf(sqr(m->slideVelX) + sqr(m->slideVelZ));
         if (speed > 48.0f) {
             m->slideVelX = ((m->slideVelX * 48.0f) / speed);
             m->slideVelZ = ((m->slideVelZ * 48.0f) / speed);
@@ -576,13 +573,12 @@ Bool32 act_wall_kick_air(struct MarioState *m) {
 }
 
 Bool32 act_long_jump(struct MarioState *m) {
-    AnimID32 animation;
 #ifdef ACTION_CANCELS
     if (m->input & INPUT_B_PRESSED) return set_mario_action(m, ACT_DIVE, 0);
 #endif
-    animation = (m->marioObj->oMarioLongJumpIsSlow ? MARIO_ANIM_SLOW_LONGJUMP : MARIO_ANIM_FAST_LONGJUMP);
+    AnimID32 animation = (m->marioObj->oMarioLongJumpIsSlow ? MARIO_ANIM_SLOW_LONGJUMP : MARIO_ANIM_FAST_LONGJUMP);
     play_mario_sound(m, SOUND_ACTION_TERRAIN_JUMP, SOUND_MARIO_YAHOO);
-    if ((m->floor->type == SURFACE_VERTICAL_WIND) && (m->actionState == ACT_LONG_JUMP_STATE_PLAY_SOUND_HERE_WE_GO)) {
+    if (m->floor && (m->floor->type == SURFACE_VERTICAL_WIND) && (m->actionState == ACT_LONG_JUMP_STATE_PLAY_SOUND_HERE_WE_GO)) {
         play_sound(SOUND_MARIO_HERE_WE_GO, m->marioObj->header.gfx.cameraToObject);
         m->actionState = ACT_LONG_JUMP_STATE_PLAYED_SOUND_HERE_WE_GO;
     }
@@ -1729,9 +1725,9 @@ Bool32 act_special_triple_jump(struct MarioState *m) {
 }
 
 Bool32 check_common_airborne_cancels(struct MarioState *m) {
-    if (m->pos[1] < (m->waterLevel - 100))                                                            return set_water_plunge_action(  m                      );
-    if (m->input & INPUT_SQUISHED)                                                                    return drop_and_set_mario_action(m, ACT_SQUISHED,      0);
-    if (m->floor->type == SURFACE_VERTICAL_WIND && (m->action & ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION)) return drop_and_set_mario_action(m, ACT_VERTICAL_WIND, 0);
+    if (m->pos[1] < (m->waterLevel - 100))                                                                          return set_water_plunge_action(  m                      );
+    if (m->input & INPUT_SQUISHED)                                                                                  return drop_and_set_mario_action(m, ACT_SQUISHED,      0);
+    if (m->floor && (m->floor->type == SURFACE_VERTICAL_WIND) && (m->action & ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION)) return drop_and_set_mario_action(m, ACT_VERTICAL_WIND, 0);
     m->quicksandDepth = 0.0f;
     return FALSE;
 }

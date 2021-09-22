@@ -488,7 +488,9 @@ Bool32 act_debug_free_move(struct MarioState *m) {
     set_mario_wall(m, ((wallData.numWalls > 0) ? wallData.walls[0] : NULL)); //! only returns the first wall
     f32 floorHeight = find_floor(pos[0], (pos[1] + m->midY), pos[2], &floor);
     f32 ceilHeight  = find_ceil( pos[0], (pos[1] + m->midY), pos[2], &ceil);
+#ifndef ALLOW_OOB
     if (floor == NULL) return FALSE;
+#endif
     if ((ceilHeight - floorHeight) >= MARIO_HITBOX_HEIGHT) {
         if ((floor != NULL) && ( pos[1] < floorHeight)) pos[1] = floorHeight;
         if (( ceil != NULL) && ((pos[1] + MARIO_HITBOX_HEIGHT) > ceilHeight)) pos[1] = (ceilHeight - MARIO_HITBOX_HEIGHT);
@@ -2034,7 +2036,7 @@ static Bool32 act_end_waving_cutscene(struct MarioState *m) {
 }
 
 static Bool32 check_for_instant_quicksand(struct MarioState *m) {
-    if ((m->floor->type == SURFACE_INSTANT_QUICKSAND) && (m->action & ACT_FLAG_INVULNERABLE) && (m->action != ACT_QUICKSAND_DEATH)) {
+    if ((m->floor && (m->floor->type == SURFACE_INSTANT_QUICKSAND)) && (m->action & ACT_FLAG_INVULNERABLE) && (m->action != ACT_QUICKSAND_DEATH)) {
         update_mario_sound_and_camera(m);
         return drop_and_set_mario_action(m, ACT_QUICKSAND_DEATH, 0);
     }

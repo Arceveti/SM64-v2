@@ -73,7 +73,9 @@ static u32 perform_water_quarter_step(struct MarioState *m, Vec3f nextPos) {
     resolve_and_return_wall_collision_data(nextPos, 10.0f, 110.0f, &wallData);
     f32 floorHeight = find_floor(nextPos[0], (nextPos[1] + m->midY), nextPos[2], &floor);
     f32 ceilHeight  = find_ceil( nextPos[0], (nextPos[1] + m->midY), nextPos[2], &ceil);
+#ifndef ALLOW_OOB
     if (floor == NULL) return WATER_STEP_CANCELLED;
+#endif
     if ((ceil != NULL) && (((nextPos[1] + MARIO_HITBOX_HEIGHT) >= ceilHeight) || ((ceilHeight - floorHeight) < MARIO_HITBOX_HEIGHT))) {
         ceilAmt = ((nextPos[1] + MARIO_HITBOX_HEIGHT) - ceilHeight);
         nextPos[0] += (ceil->normal.x * ceilAmt);
@@ -111,7 +113,9 @@ static u32 perform_water_full_step(struct MarioState *m, Vec3f nextPos) {
     set_mario_wall(m, ((wallData.numWalls > 0) ? wallData.walls[0] : NULL)); //! only returns the first wall
     f32 floorHeight = find_floor(nextPos[0], (nextPos[1] + m->midY), nextPos[2], &floor);
     f32 ceilHeight  = find_ceil( nextPos[0], (nextPos[1] + m->midY), nextPos[2], &ceil);
+#ifndef ALLOW_OOB
     if (floor == NULL) return WATER_STEP_CANCELLED;
+#endif
     if (nextPos[1] >= floorHeight) {
         if ((ceilHeight - nextPos[1]) >= MARIO_HITBOX_HEIGHT) {
             vec3_copy(m->pos, nextPos);
@@ -135,7 +139,7 @@ static u32 perform_water_full_step(struct MarioState *m, Vec3f nextPos) {
 static void apply_water_current(struct MarioState *m, Vec3f step) {
     s32 i;
     f32 whirlpoolRadius = 2000.0f;
-    if (m->floor->type == SURFACE_FLOWING_WATER) {
+    if (m->floor && (m->floor->type == SURFACE_FLOWING_WATER)) {
         Angle currentAngle = (m->floor->force << 8);
         f32 currentSpeed = sWaterCurrentSpeeds[m->floor->force >> 8];
         step[0] += (currentSpeed * sins(currentAngle));
@@ -373,20 +377,21 @@ static void common_swimming_step(struct MarioState *m, s16 swimStrength) {
         return;
     }
 #endif
-    Angle floorPitch;
     update_swimming_yaw(m);
     update_swimming_pitch(m);
     update_swimming_speed(m, (swimStrength / 10.0f));
     switch (perform_water_step(m)) {
         case WATER_STEP_HIT_FLOOR:
+            if (m->floor) {
 #ifdef SMOOTH_WATER_FLOOR_PITCH
-            // floorPitch = atan2s(sqrtf(sqr(m->floor->normal.x) + sqr(m->floor->normal.z)), m->floor->normal.y);
-            floorPitch = atan2s(1.0f, m->floor->normal.y);
-            if (m->faceAngle[0] < floorPitch) approach_s16_symmetric_bool(&m->faceAngle[0], floorPitch, 0x800);
+                // Angle floorPitch = atan2s(sqrtf(sqr(m->floor->normal.x) + sqr(m->floor->normal.z)), m->floor->normal.y);
+                Angle floorPitch = atan2s(1.0f, m->floor->normal.y);
+                if (m->faceAngle[0] < floorPitch) approach_s16_symmetric_bool(&m->faceAngle[0], floorPitch, 0x800);
 #else
-            floorPitch = -find_floor_slope(m, -DEG(180), 5.0f);
-            if (m->faceAngle[0] < floorPitch) m->faceAngle[0] = floorPitch;
+                Angle floorPitch = -find_floor_slope(m, -DEG(180), 5.0f);
+                if (m->faceAngle[0] < floorPitch) m->faceAngle[0] = floorPitch;
 #endif
+            }
             break;
         case WATER_STEP_HIT_CEILING:
             if (m->faceAngle[0] > -DEG(67.5)) m->faceAngle[0] -= 0x100;
@@ -834,7 +839,6 @@ static Bool32 act_water_death(struct MarioState *m) {
 }
 
 static Bool32 act_water_plunge(struct MarioState *m) {
-    MarioStep stepResult;
     s32 stateFlags = (m->heldObj != NULL);
     f32 endVSpeed  = (swimming_near_surface(m) ? 0.0f : -5.0f);
     if (m->flags & MARIO_METAL_CAP) return set_mario_action(         m, ACT_METAL_WATER_FALLING, 1);
@@ -851,7 +855,7 @@ static Bool32 act_water_plunge(struct MarioState *m) {
     }
     m->actionTimer++;
     stationary_slow_down(m);
-    stepResult = perform_water_step(m);
+    MarioStep stepResult = perform_water_step(m);
     if (m->actionState == ACT_WATER_PLUNGE_STATE_FALL) {
         play_sound(SOUND_ACTION_WATER_PLUNGE, m->marioObj->header.gfx.cameraToObject);
         if ((m->peakHeight - m->pos[1]) > FALL_DAMAGE_HEIGHT_SMALL) play_sound(SOUND_MARIO_HAHA_WATER, m->marioObj->header.gfx.cameraToObject);

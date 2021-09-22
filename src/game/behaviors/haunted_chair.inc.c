@@ -33,7 +33,7 @@ void haunted_chair_act_fall_or_spin(void) {
                     o->oHauntedChairFallTargetAngle = ((dAngleToPiano > 0x0) ? DEG(90) : -DEG(90));
                 } else {
                     o->oHauntedChairFallFromPianoAngle = &o->oFaceAnglePitch;
-                    o->oHauntedChairFallTargetAngle = ((dAngleToPiano < 0x0) ? 0x5000 : -DEG(90)); //! why 0x5000?
+                    o->oHauntedChairFallTargetAngle = ((dAngleToPiano < 0x0) ? DEG(90) : -DEG(90));
                 }
                 o->oHauntedChairPitchVel = ((o->oHauntedChairFallTargetAngle < 0x0) ? -1500.0f : 1500.0f);
             }

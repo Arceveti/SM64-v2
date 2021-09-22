@@ -567,6 +567,7 @@ Bool32 mario_facing_downhill(struct MarioState *m, UNUSED Bool32 turnYaw) {
  */
 Bool32 mario_floor_is_slippery(struct MarioState *m) {
     f32 normY;
+    if (!m->floor) return FALSE;
 #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
     f32 steepness = m->steepness;
 #else
@@ -587,6 +588,7 @@ Bool32 mario_floor_is_slippery(struct MarioState *m) {
  */
 Bool32 mario_floor_is_slope(struct MarioState *m) {
     f32 normY;
+    if (!m->floor) return FALSE;
 #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
     f32 steepness = m->steepness;
 #else
@@ -607,6 +609,7 @@ Bool32 mario_floor_is_slope(struct MarioState *m) {
  */
 Bool32 mario_floor_is_steep(struct MarioState *m) {
     f32 normY;
+    if (!m->floor) return FALSE;
 #ifdef JUMP_KICK_FIX
     if (m->floor->type == SURFACE_NOT_SLIPPERY) return FALSE;
 #endif
@@ -1239,14 +1242,13 @@ void update_mario_joystick_inputs(struct MarioState *m) {
  * Resolves wall collisions, and updates a variety of inputs.
  */
 void update_mario_geometry_inputs(struct MarioState *m) {
-    f32 gasLevel;
-    f32 ceilToFloorDist;
     resolve_wall_collisions(m->pos, 60.0f, 50.0f);
     resolve_wall_collisions(m->pos, 30.0f, 24.0f);
     // struct WallCollisionData upperWall, lowerWall;
     // resolve_and_return_wall_collision_data(m->pos, 60.0f, 50.0f, &upperWall);
     // resolve_and_return_wall_collision_data(m->pos, 30.0f, 24.0f, &lowerWall);
     m->floorHeight = find_floor(m->pos[0], (m->pos[1] + m->midY), m->pos[2], &m->floor);
+#ifndef ALLOW_OOB
     // If Mario is OOB, move his position to his graphical position (which was not updated)
     // and check for the floor there.
     // This can cause errant behavior when combined with astral projection,
@@ -1255,8 +1257,9 @@ void update_mario_geometry_inputs(struct MarioState *m) {
         vec3_copy(m->pos, m->marioObj->header.gfx.pos);
         m->floorHeight = find_floor(m->pos[0], (m->pos[1] + m->midY), m->pos[2], &m->floor);
     }
+#endif
     m->ceilHeight = find_ceil(m->pos[0], (m->pos[1] + m->midY), m->pos[2], &m->ceil);
-    gasLevel      = find_poison_gas_level(m->pos[0], m->pos[2]);
+    f32 gasLevel  = find_poison_gas_level(m->pos[0], m->pos[2]);
     m->waterLevel = find_water_level(     m->pos[0], m->pos[2]);
     if (m->floor != NULL) {
         m->floorYaw                     = SURFACE_YAW(m->floor);
@@ -1265,14 +1268,16 @@ void update_mario_geometry_inputs(struct MarioState *m) {
         m->terrainSoundAddend = mario_get_terrain_sound_addend(m);
         if ((m->pos[1] > (m->waterLevel - 40.0f)) && mario_floor_is_slippery(m)) m->input |= INPUT_ABOVE_SLIDE;
         if ((m->floor->flags & SURFACE_FLAG_DYNAMIC) || (m->ceil && (m->ceil->flags & SURFACE_FLAG_DYNAMIC))) {
-            ceilToFloorDist = (m->ceilHeight - m->floorHeight);
+            f32 ceilToFloorDist = (m->ceilHeight - m->floorHeight);
             if ((0.0f <= ceilToFloorDist) && (ceilToFloorDist <= (gMarioObject->hitboxHeight - 10.0f))) m->input |= INPUT_SQUISHED;
         }
         if (m->pos[1] >  m->floorHeight +         MARIO_STEP_HEIGHT)  m->input |= INPUT_OFF_FLOOR;
         if (m->pos[1] < (m->waterLevel  -                     10.0f)) m->input |= INPUT_IN_WATER;
         if (m->pos[1] <      (gasLevel  - MARIO_SHORT_HITBOX_HEIGHT)) m->input |= INPUT_IN_POISON_GAS;
+#ifndef ALLOW_OOB
     } else {
         level_trigger_warp(m, WARP_OP_DEATH);
+#endif
     }
 }
 
@@ -1589,8 +1594,10 @@ Bool32 execute_mario_action(struct MarioState *m) {
         mario_handle_special_floors(m);
 #endif
         mario_process_interactions( m);
+#ifndef ALLOW_OOB
         // If Mario is OOB, stop executing actions.
         if (m->floor == NULL) return FALSE;
+#endif
         // The function can loop through many action shifts in one frame,
         // which can lead to unexpected sub-frame behavior. Could potentially hang
         // if a loop of actions were found, but there has not been a situation found.
@@ -1616,13 +1623,15 @@ Bool32 execute_mario_action(struct MarioState *m) {
         mario_update_hitbox_and_cap_model(         m);
         // Both of the wind handling portions play wind audio only in
         // non-Japanese releases.
-        if (m->floor->type == SURFACE_HORIZONTAL_WIND) {
-            spawn_wind_particles(0, (m->floor->force << 8));
-            play_sound(SOUND_ENV_WIND2, m->marioObj->header.gfx.cameraToObject);
-        }
-        if (m->floor->type == SURFACE_VERTICAL_WIND) {
-            spawn_wind_particles(1, 0);
-            play_sound(SOUND_ENV_WIND2, m->marioObj->header.gfx.cameraToObject);
+        if (m->floor) {
+            if (m->floor->type == SURFACE_HORIZONTAL_WIND) {
+                spawn_wind_particles(0, (m->floor->force << 8));
+                play_sound(SOUND_ENV_WIND2, m->marioObj->header.gfx.cameraToObject);
+            }
+            if (m->floor->type == SURFACE_VERTICAL_WIND) {
+                spawn_wind_particles(1, 0);
+                play_sound(SOUND_ENV_WIND2, m->marioObj->header.gfx.cameraToObject);
+            }
         }
         play_infinite_stairs_music();
         m->marioObj->oInteractStatus = INT_STATUS_NONE;

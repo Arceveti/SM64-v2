@@ -62,7 +62,7 @@ void bhv_piranha_plant_bubble_loop(void) {
                         // Grow from 1.0f to 5.0f.
                         scale = sins((
                                          //! they should have used beginGrowingFrame here:
-                                         (frame - (lastFrame / 2.0f + 4.0f)) / beginGrowingFrame)
+                                         (frame - ((lastFrame / 2.0f) + 4.0f)) / beginGrowingFrame)
                                      * 0x4000)
                                     * 4.0f
                                 + 1.0f;

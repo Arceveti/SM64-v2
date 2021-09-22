@@ -507,8 +507,8 @@ void chk_shapegen(struct ObjShape *shape) {
             // These ListNodes point to special, compressed data structures
             vtxdata  = (struct GdVtxData  *) shapeVtx->firstMember->obj;
             facedata = (struct GdFaceData *) shapeFaces->firstMember->obj;
-            if (facedata->type != 1) gd_exit(); // unsupported poly type
-            if (vtxdata->type  != 1) gd_exit(); // unsupported vertex type
+            if (facedata->type !=            1) gd_exit(); // unsupported poly type
+            if (vtxdata->type  !=            1) gd_exit(); // unsupported vertex type
             if (vtxdata->count >= VTX_BUF_SIZE) gd_exit(); // too many vertices
             vtxbuf     = gd_malloc_temp(VTX_BUF_SIZE * sizeof(struct ObjVertex *));
             oldObjHead = gGdObjectList;

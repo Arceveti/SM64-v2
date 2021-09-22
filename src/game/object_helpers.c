@@ -291,7 +291,7 @@ struct Object *spawn_water_droplet(struct Object *parent, struct WaterDropletPar
     struct Object *newObj = spawn_object(parent, params->model, params->behavior);
     if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE              ) newObj->oMoveAngleYaw = random_u16();
     if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE_INCR_BACKWARD) newObj->oMoveAngleYaw = ((Angle)(newObj->oMoveAngleYaw + DEG(180)) + (Angle) random_f32_around_zero(params->moveAngleRange));
-    if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE_INCR_FORWARD ) newObj->oMoveAngleYaw = ((Angle) newObj->oMoveAngleYaw                 + (Angle) random_f32_around_zero(params->moveAngleRange));
+    if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE_INCR_FORWARD ) newObj->oMoveAngleYaw = ((Angle) newObj->oMoveAngleYaw             + (Angle) random_f32_around_zero(params->moveAngleRange));
     if (params->flags & WATER_DROPLET_FLAG_SET_Y_TO_WATER_LEVEL    ) newObj->oPosY         = find_water_level(newObj->oPosX, newObj->oPosZ);
     if (params->flags & WATER_DROPLET_FLAG_RAND_OFFSET_XZ          ) obj_translate_xz_random( newObj, params->moveRange);
     if (params->flags & WATER_DROPLET_FLAG_RAND_OFFSET_XYZ         ) obj_translate_xyz_random(newObj, params->moveRange);
@@ -656,10 +656,11 @@ static void cur_obj_move_after_thrown_or_dropped(f32 forwardVel, f32 velY) {
     o->oFloorHeight = find_floor_height(o->oPosX, (o->oPosY + 160.0f), o->oPosZ);
     if (o->oFloorHeight > o->oPosY) {
         o->oPosY = o->oFloorHeight;
+#ifndef ALLOW_OOB
     } else if (o->oFloorHeight < FLOOR_LOWER_LIMIT_MISC) {
-        //! OoB failsafe
         obj_copy_pos(o, gMarioObject);
         o->oFloorHeight = find_floor_height(o->oPosX, o->oPosY, o->oPosZ);
+#endif
     }
     o->oForwardVel = forwardVel;
     o->oVelY       = velY;
@@ -1393,8 +1394,9 @@ void cur_obj_push_mario_away(f32 radius) {
     f32 marioDist = sqrtf(sqr(marioRelX) + sqr(marioRelZ));
     if (marioDist < radius) {
         //! If this function pushes Mario out of bounds, it will trigger Mario's oob failsafe
-        gMarioStates[0].pos[0] += (((radius - marioDist) / radius) * marioRelX);
-        gMarioStates[0].pos[2] += (((radius - marioDist) / radius) * marioRelZ);
+        marioDist = ((radius - marioDist) / radius);
+        gMarioStates[0].pos[0] += (marioDist * marioRelX);
+        gMarioStates[0].pos[2] += (marioDist * marioRelZ);
     }
 }
 

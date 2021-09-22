@@ -857,6 +857,9 @@
  *                                                                                                                              *
  ********************************************************************************************************************************/
 
+// Don't prevent Mario from going out of bounds
+// #define ALLOW_OOB
+
 // Variable Framerate (Fazana)
 //! Not compatible with KEEP_MARIO_HEAD
 //! Completely broken now, lol
@@ -919,6 +922,11 @@
 
 #ifndef EASIER_DIALOG_TRIGGER
 #undef DIALOG_INDICATOR
+#endif
+
+#ifdef ALLOW_OOB
+#undef NULL_FLOOR_STEPS
+#define NULL_FLOOR_STEPS 0
 #endif
 
 #ifdef VARIABLE_FRAMERATE

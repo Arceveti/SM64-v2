@@ -247,7 +247,6 @@ void copy_partial_image(RGBA16 *dst, IA8 *src,
     }
 }
 
-// src should be I8 type?
 void overlay_i8_on_rgba16_additive(RGBA16 *dst, I8 *src, u32 width, u32 height) {
     const u32 size = (width * height);
     u32 i;

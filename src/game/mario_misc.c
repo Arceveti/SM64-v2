@@ -440,10 +440,10 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
 #define METAL_W  64
 #define METAL_H  32
 #ifdef METAL_CAP_REFLECTION_SHINE
-    I8 *shineTexture  = segmented_to_virtual(mario_texture_metal_reflection_shine); //! should be I8 type
+    I8 *shineTexture  = segmented_to_virtual(mario_texture_metal_reflection_shine);
 #endif
 #ifdef METAL_CAP_REFLECTION_LAKITU
-    IA8 *lakituTexture = segmented_to_virtual(mario_texture_metal_reflection_lakitu); //! should be IA8 type
+    IA8 *lakituTexture = segmented_to_virtual(mario_texture_metal_reflection_lakitu);
 #endif
     f32 dist;
 #ifdef METAL_CAP_REFLECTION_LAKITU

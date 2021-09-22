@@ -28,13 +28,13 @@ Bool32 check_common_idle_cancels(struct MarioState *m) {
     }
 #endif
     mario_drop_held_object(m);
-    if (m->floor->normal.y < COS73   ) return mario_push_off_steep_floor(m, ACT_FREEFALL        , 0);
-    if (m->input & INPUT_STOMPED     ) return set_mario_action(          m, ACT_SHOCKWAVE_BOUNCE, 0);
-    if (m->input & INPUT_A_PRESSED   ) return set_jumping_action(        m, ACT_JUMP            , 0);
-    if (m->input & INPUT_OFF_FLOOR   ) return set_mario_action(          m, ACT_FREEFALL        , 0);
-    if (m->input & INPUT_ABOVE_SLIDE ) return set_mario_action(          m, ACT_BEGIN_SLIDING   , 0);
-    if (m->input & INPUT_FIRST_PERSON) return set_mario_action(          m, ACT_FIRST_PERSON    , 0);
-    if (m->input & INPUT_NONZERO_ANALOG) {
+    if (m->floor && (m->floor->normal.y < COS73)) return mario_push_off_steep_floor(m, ACT_FREEFALL        , 0);
+    if (m->input & INPUT_STOMPED                ) return set_mario_action(          m, ACT_SHOCKWAVE_BOUNCE, 0);
+    if (m->input & INPUT_A_PRESSED              ) return set_jumping_action(        m, ACT_JUMP            , 0);
+    if (m->input & INPUT_OFF_FLOOR              ) return set_mario_action(          m, ACT_FREEFALL        , 0);
+    if (m->input & INPUT_ABOVE_SLIDE            ) return set_mario_action(          m, ACT_BEGIN_SLIDING   , 0);
+    if (m->input & INPUT_FIRST_PERSON           ) return set_mario_action(          m, ACT_FIRST_PERSON    , 0);
+    if (m->input & INPUT_NONZERO_ANALOG         ) {
         m->faceAngle[1] = (Angle) m->intendedYaw;
         return set_mario_action(m, ACT_WALKING, 0);
     }
@@ -44,7 +44,7 @@ Bool32 check_common_idle_cancels(struct MarioState *m) {
 }
 
 Bool32 check_common_hold_idle_cancels(struct MarioState *m) {
-    if (m->floor->normal.y < COS73) return mario_push_off_steep_floor(m, ACT_HOLD_FREEFALL, 0);
+    if (m->floor && (m->floor->normal.y < COS73)) return mario_push_off_steep_floor(m, ACT_HOLD_FREEFALL, 0);
     if (m->heldObj->oInteractionSubtype & INT_SUBTYPE_DROP_IMMEDIATELY) {
         m->heldObj->oInteractionSubtype = (s32)(m->heldObj->oInteractionSubtype & ~INT_SUBTYPE_DROP_IMMEDIATELY);
         return set_mario_action(m, ACT_PLACING_DOWN, 0);
@@ -97,7 +97,7 @@ Bool32 act_idle(struct MarioState *m) {
             // actionTimer is used to track how many cycles have passed.
             if (++m->actionState == ACT_IDLE_STATE_SLEEP) {
                 f32 deltaYOfFloorBehindMario = (m->pos[1] - find_floor_height_relative_polar(m, -0x8000, 60.0f));
-                if ((deltaYOfFloorBehindMario < -24.0f) || (24.0f < deltaYOfFloorBehindMario) || (m->floor->flags & SURFACE_FLAG_DYNAMIC)) {
+                if ((deltaYOfFloorBehindMario < -24.0f) || (24.0f < deltaYOfFloorBehindMario) || (m->floor && (m->floor->flags & SURFACE_FLAG_DYNAMIC))) {
                     m->actionState = 0;
                 } else {
                     // If Mario hasn't turned his head 10 times yet, stay idle instead of going to sleep.

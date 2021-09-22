@@ -8714,7 +8714,7 @@ void zoom_fov_30(UNUSED struct MarioState *m) {
  */
 void fov_default(struct MarioState *m) {
     sStatusFlags &= ~CAM_FLAG_SLEEPING;
-    f32 fov, speed;
+    f32 fov;
     if ((m->action == ACT_SLEEPING) || (m->action == ACT_START_SLEEPING)) {
         fov = 30.0f;
         sStatusFlags |= CAM_FLAG_SLEEPING;
@@ -8722,8 +8722,8 @@ void fov_default(struct MarioState *m) {
         fov = 45.0f;
         // sFOVState.unusedIsSleeping = FALSE;
     }
-    speed = (fov - sFOVState.fov);
-    speed = ABSF(speed / 30.0f);
+    f32 speed = ((fov - sFOVState.fov) / 30.0f);
+    speed = ABSF(speed);
     approach_f32_symmetric_bool(&sFOVState.fov, fov, speed);
     if (m->area->camera->cutscene == CUTSCENE_0F_UNUSED) sFOVState.fov = 45.0f;
 }
@@ -8759,9 +8759,8 @@ void set_fov_bbh(struct MarioState *m) {
 Gfx *geo_camera_fov(s32 callContext, struct GraphNode *g, UNUSED void *context) {
     struct GraphNodePerspective *perspective = (struct GraphNodePerspective *) g;
     struct MarioState           *marioState  = &gMarioStates[0];
-    u8 fovFunc                               = sFOVState.fovFunc;
     if (callContext == GEO_CONTEXT_RENDER) {
-        switch (fovFunc) {
+        switch (sFOVState.fovFunc) {
             case CAM_FOV_SET_45:  set_fov_45(     marioState); break;
             case CAM_FOV_SET_29:  set_fov_29(     marioState); break;
             case CAM_FOV_ZOOM_30: zoom_fov_30(    marioState); break;
@@ -8773,7 +8772,7 @@ Gfx *geo_camera_fov(s32 callContext, struct GraphNode *g, UNUSED void *context) 
             case CAM_FOV_APP_80:  approach_fov_80(marioState); break;
             case CAM_FOV_APP_30:  approach_fov_30(marioState); break;
             case CAM_FOV_APP_60:  approach_fov_60(marioState); break;
-            //! No default case
+            default:              set_fov_45(     marioState); break;
         }
     }
 #ifdef CUSTOM_FOV
