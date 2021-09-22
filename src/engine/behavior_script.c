@@ -17,9 +17,7 @@
 #ifdef PUPPYLIGHTS
 #include "game/puppylights.h"
 #endif
-#ifdef VARIABLE_FRAMERATE
 #include "game/level_update.h"
-#endif
 
 // Macros for retrieving arguments from behavior scripts.
 #define BHV_CMD_GET_1ST_U8( index) (u8    )((gCurBhvCommand[index] >> 24) & 0xFF) // unused

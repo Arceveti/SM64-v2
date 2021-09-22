@@ -196,6 +196,7 @@
         - Also happens when climbing up a ledge (BITS whomp)
     - Heave-Ho's should be able to throw mario regardless of Mario's action
         - With a cooldown to prevent getting stuck in loops
+    - Mario's cap (object) scaling is weird when on the ground
 - Graphics
     - Add/check Puppylights light sources (* means added):
         - Objects:
@@ -297,7 +298,6 @@
             - textures/intro_raw/mario_face_shine.ia8.png
     - Silhouette:
         - Silhouette for Mario's held/riding object
-        - Mirror Mario should not have silhouette
     - Shadow shape based on the outline of Mario's model viewed from above
         - Render new depth buffer to a texture?
         - 2nd Mario model but colored like the silhouette and squished?

@@ -20,7 +20,7 @@ extern Texture small_font[];
 extern s8 perfIteration;
 extern s16 benchmarkLoop;
 extern s32 benchmarkTimer;
-extern u8 currEnv[4];
+extern ColorRGBA currEnv;
 extern s32 ramsizeSegment[33];
 extern s32 audioPool[12];
 extern s8 nameTable;

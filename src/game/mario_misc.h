@@ -16,7 +16,7 @@ void bhv_toad_message_loop(    void);
 void bhv_toad_message_init(    void);
 void bhv_unlock_door_star_init(void);
 void bhv_unlock_door_star_loop(void);
-Gfx *geo_vanish_mario_set_alpha(       s32 callContext,        struct GraphNode *node, UNUSED Mat4 *mtx);
+Gfx *geo_mario_set_alpha(              s32 callContext,        struct GraphNode *node, UNUSED Mat4 *mtx);
 Gfx *geo_switch_mario_stand_run(       s32 callContext,        struct GraphNode *node, UNUSED Mat4 *mtx);
 Gfx *geo_switch_mario_eyes(            s32 callContext,        struct GraphNode *node, UNUSED Mat4 *mtx);
 Gfx *geo_move_mario_part_from_parent(  s32 callContext, UNUSED struct GraphNode *node,        Mat4  mtx);

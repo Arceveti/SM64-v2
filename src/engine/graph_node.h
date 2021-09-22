@@ -8,14 +8,16 @@
 #include "geo_commands.h"
 #include "boot/memory.h"
 
-#define GRAPH_RENDER_ACTIVE         (1 << 0)
-#define GRAPH_RENDER_CHILDREN_FIRST (1 << 1)
-#define GRAPH_RENDER_BILLBOARD      (1 << 2)
-#define GRAPH_RENDER_Z_BUFFER       (1 << 3)
-#define GRAPH_RENDER_INVISIBLE      (1 << 4)
-#define GRAPH_RENDER_HAS_ANIMATION  (1 << 5)
-#define GRAPH_RENDER_UCODE_REJ      (1 << 6)
-#define GRAPH_RENDER_SILHOUETTE     (1 << 7)
+#define GRAPH_RENDER_ACTIVE         (1 << 0) // 0x01
+#define GRAPH_RENDER_CHILDREN_FIRST (1 << 1) // 0x02
+#define GRAPH_RENDER_BILLBOARD      (1 << 2) // 0x04
+#define GRAPH_RENDER_Z_BUFFER       (1 << 3) // 0x08
+#define GRAPH_RENDER_INVISIBLE      (1 << 4) // 0x10
+#define GRAPH_RENDER_HAS_ANIMATION  (1 << 5) // 0x20
+#define GRAPH_RENDER_UCODE_REJ      (1 << 6) // 0x40
+#define GRAPH_RENDER_SILHOUETTE     (1 << 7) // 0x80
+
+#define GRAPH_LAYER_OFFSET          0x8
 
 // Whether the node type has a function pointer of type GraphNodeFunc
 #define GRAPH_NODE_TYPE_FUNCTIONAL            0x100
@@ -45,7 +47,7 @@
 #define GRAPH_NODE_TYPE_HELD_OBJ             (0x02E | GRAPH_NODE_TYPE_FUNCTIONAL)
 #define GRAPH_NODE_TYPE_CULLING_RADIUS        0x02F
 
-#define GRAPH_NODE_TYPES_MASK                  0xFF
+#define GRAPH_NODE_TYPES_MASK                 0x0FF
 
 // The number of master lists. A master list determines the order and render
 // mode with which display lists are drawn.

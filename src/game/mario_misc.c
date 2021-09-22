@@ -251,7 +251,7 @@ void bhv_unlock_door_star_loop(void) {
 }
 
 /**
- * Generate a display list that sets the correct blend mode and color for vanish Mario.
+ * Generate a display list that sets the correct blend mode and color for Mario.
  */
 static Gfx *make_gfx_mario_alpha(struct GraphNodeGenerated *node, Alpha alpha) {
     Gfx *gfx;
@@ -272,15 +272,14 @@ static Gfx *make_gfx_mario_alpha(struct GraphNodeGenerated *node, Alpha alpha) {
 }
 
 /**
- * Sets the correct blend mode and color for vanish Mario.
+ * Sets the correct blend mode and color for Mario.
  */
-Gfx *geo_vanish_mario_set_alpha(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
+Gfx *geo_mario_set_alpha(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
     Gfx *gfx = NULL;
     struct GraphNodeGenerated *asGenerated = (struct GraphNodeGenerated *) node;
     struct MarioBodyState     *bodyState   = &gBodyStates[asGenerated->parameter];
-    Alpha alpha;
     if (callContext == GEO_CONTEXT_RENDER) {
-        alpha = ((bodyState->modelState & MODEL_STATE_ALPHA) ? (bodyState->modelState & MODEL_STATE_MASK) : 0xFF);
+        Alpha alpha = ((bodyState->modelState & MODEL_STATE_ALPHA) ? (bodyState->modelState & MODEL_STATE_MASK) : 0xFF);
 #ifdef PUPPYCAM
         if (alpha > gPuppyCam.opacity) {
             alpha = gPuppyCam.opacity;
@@ -627,7 +626,6 @@ Gfx *geo_mirror_mario_backface_culling(s32 callContext, struct GraphNode *node, 
             gSPSetGeometryMode(  &gfx[1], G_CULL_BACK );
         }
         gSPEndDisplayList(&gfx[2]);
-        //! Mirror Mario shouldn't have a silhouette, but stuff breaks if this doesn't match the regular Mario model.
         asGenerated->fnNode.node.flags = ((asGenerated->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_OPAQUE << 8));
     }
     return gfx;
