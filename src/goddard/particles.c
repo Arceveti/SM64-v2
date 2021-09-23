@@ -32,10 +32,9 @@ struct ObjParticle *make_particle(u32 flags, s32 colourNum, Vec3f pos) {
 
 /* 2311D8 -> 231454 */
 void accel_particle(struct ObjParticle *ptc, Vec3f b) {
-    register struct ListNode *link;
     struct ObjParticle *linkedPtc;
     if (ptc->subParticlesGrp != NULL) {
-        link = ptc->subParticlesGrp->firstMember;
+        register struct ListNode *link = ptc->subParticlesGrp->firstMember;
         while (link != NULL) {
             // FIXME: types
             linkedPtc = (struct ObjParticle *) link->obj;
@@ -61,7 +60,6 @@ void move_particle(struct ObjParticle *ptc) {
     Vec3f worldPos;
     struct ObjParticle *particle;
     s32 i;
-    struct ObjCamera *camera;
     Vec3f vec1, vec2;
     if (  ptc->flags & GD_PARTICLE_FLAG_2)  return;
     if (!(ptc->flags & GD_PARTICLE_FLAG_8)) return;
@@ -76,7 +74,7 @@ void move_particle(struct ObjParticle *ptc) {
     if (ptc->attachedToObj != NULL) {
         set_cur_dynobj(ptc->attachedToObj);
         if ((ptc->particleType == 3) && (ptc->type == 3)) {
-            camera = (struct ObjCamera *) ptc->attachedToObj;
+            struct ObjCamera *camera = (struct ObjCamera *) ptc->attachedToObj;
             // Camera->unk18C = ObjView here
             if (camera->unk18C->pickedObj != NULL) {
                 set_cur_dynobj(camera->unk18C->pickedObj);

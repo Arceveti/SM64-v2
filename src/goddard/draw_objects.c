@@ -26,18 +26,18 @@ enum SceneType {
 };
 
 // data
-static ColorRGBf sClrWhite        =   COLOR_RGBF_WHITE;
-static ColorRGBf sClrRed          =   COLOR_RGBF_RED;
-static ColorRGBf sClrGreen        =   COLOR_RGBF_GREEN;
-static ColorRGBf sClrBlue         =   COLOR_RGBF_BLUE;
-static ColorRGBf sClrErrDarkBlue  =   COLOR_RGBF_ERR_DARK_BLUE;
-static ColorRGBf sClrPink         =   COLOR_RGBF_PINK;
-static ColorRGBf sClrBlack        =   COLOR_RGBF_BLACK;
-static ColorRGBf sClrGrey         =   COLOR_RGBF_GREY;
-static ColorRGBf sClrDarkGrey     =   COLOR_RGBF_DARK_GREY;
-static ColorRGBf sClrYellow       =   COLOR_RGBF_YELLOW;
-static ColorRGBf sLightColours[1] = { COLOR_RGBF_YELLOW };
-static ColorRGBf *sSelectedColour = &sClrRed;
+static ColorRGBf sClrWhite          = COLOR_RGBF_WHITE;
+static ColorRGBf sClrRed            = COLOR_RGBF_RED;
+static ColorRGBf sClrGreen          = COLOR_RGBF_GREEN;
+static ColorRGBf sClrBlue           = COLOR_RGBF_BLUE;
+static ColorRGBf sClrErrDarkBlue    = COLOR_RGBF_ERR_DARK_BLUE;
+static ColorRGBf sClrPink           = COLOR_RGBF_PINK;
+static ColorRGBf sClrBlack          = COLOR_RGBF_BLACK;
+static ColorRGBf sClrGrey           = COLOR_RGBF_GREY;
+static ColorRGBf sClrDarkGrey       = COLOR_RGBF_DARK_GREY;
+static ColorRGBf sClrYellow         = COLOR_RGBF_YELLOW;
+static ColorRGBf sLightColours      = COLOR_RGBF_YELLOW;
+static ColorRGBf *sSelectedColour   = &sClrRed;
 struct ObjCamera *gViewUpdateCamera = NULL;
 static s32 sLightDlCounter = 1;
 
@@ -139,7 +139,7 @@ void draw_shape_2d(struct ObjShape *shape, s32 flag, Vec3f in) {
 void draw_light(struct ObjLight *light) {
     struct ObjShape *shape;
     if (sSceneProcessType == FIND_PICKS) return;
-    vec3_copy(sLightColours[0], light->colour);
+    vec3_copy(sLightColours, light->colour);
     if (light->flags & LIGHT_UNK02) {
         shape = gSpotShape;
     } else {
@@ -193,18 +193,18 @@ void create_mtl_gddl_if_empty(struct ObjMaterial *mtl) {
  */
 ColorRGBf *gd_get_colour(s32 idx) {
     switch (idx) {
-        case COLOUR_BLACK:     return &sClrBlack;        break;
-        case COLOUR_WHITE:     return &sClrWhite;        break;
-        case COLOUR_RED:       return &sClrRed;          break;
-        case COLOUR_GREEN:     return &sClrGreen;        break;
-        case COLOUR_BLUE:      return &sClrBlue;         break;
-        case COLOUR_GRAY:      return &sClrGrey;         break;
-        case COLOUR_DARK_GRAY: return &sClrDarkGrey;     break;
-        case COLOUR_DARK_BLUE: return &sClrErrDarkBlue;  break;
-        case COLOUR_BLACK2:    return &sClrBlack;        break;
-        case COLOUR_YELLOW:    return &sClrYellow;       break;
-        case COLOUR_PINK:      return &sClrPink;         break;
-        case -1:               return &sLightColours[0]; break;
+        case COLOUR_BLACK:     return &sClrBlack;       break;
+        case COLOUR_WHITE:     return &sClrWhite;       break;
+        case COLOUR_RED:       return &sClrRed;         break;
+        case COLOUR_GREEN:     return &sClrGreen;       break;
+        case COLOUR_BLUE:      return &sClrBlue;        break;
+        case COLOUR_GRAY:      return &sClrGrey;        break;
+        case COLOUR_DARK_GRAY: return &sClrDarkGrey;    break;
+        case COLOUR_DARK_BLUE: return &sClrErrDarkBlue; break;
+        case COLOUR_BLACK2:    return &sClrBlack;       break;
+        case COLOUR_YELLOW:    return &sClrYellow;      break;
+        case COLOUR_PINK:      return &sClrPink;        break;
+        case -1:               return &sLightColours;   break;
         default:               return NULL;
     }
 }
@@ -285,14 +285,12 @@ void world_pos_to_screen_coords(Vec3f pos, struct ObjCamera *cam, struct ObjView
  * @return void
  */
 void check_grabable_click(struct GdObj *input) {
-    Vec3f objPos;
-    struct GdObj  *obj;
-    Mat4 *mtx;
     if (gViewUpdateCamera == NULL) return;
-    obj = input;
+    struct GdObj  *obj = input;
     if (!(obj->drawFlags & OBJ_IS_GRABBALE)) return;
     set_cur_dynobj(obj);
-    mtx = d_get_rot_mtx_ptr();
+    Mat4 *mtx = d_get_rot_mtx_ptr();
+    Vec3f objPos;
     vec3_copy(objPos, (*mtx)[3]);
     world_pos_to_screen_coords(objPos, gViewUpdateCamera, sUpdateViewState.view);
     if ((absf(gGdCtrl.csrX - objPos[0]) < 20.0f)
@@ -386,18 +384,17 @@ void draw_shape_faces(struct ObjShape *shape) {
  */
 void draw_particle(struct GdObj *obj) {
     struct ObjParticle *ptc = (struct ObjParticle *) obj;
-    ColorRGBf white;
-    ColorRGBf black;
-    f32 brightness;
     if (ptc->timeout > 0) {
+        ColorRGBf white;
         vec3_copy(white, sClrWhite);
+        ColorRGBf black;
         vec3_copy(black, sClrBlack);
-        brightness = (ptc->timeout / 10.0f);
-        sLightColours[0][0] = (((white[0] - black[0]) * brightness) + black[0]);
-        sLightColours[0][1] = (((white[1] - black[1]) * brightness) + black[1]);
-        sLightColours[0][2] = (((white[2] - black[2]) * brightness) + black[2]);
+        f32 brightness = (ptc->timeout / 10.0f);
+        sLightColours[0] = (((white[0] - black[0]) * brightness) + black[0]);
+        sLightColours[1] = (((white[1] - black[1]) * brightness) + black[1]);
+        sLightColours[2] = (((white[2] - black[2]) * brightness) + black[2]);
     } else {
-        vec3_zero(sLightColours[0]);
+        vec3_zero(sLightColours);
     }
     if (ptc->timeout > 0) {
         ptc->shapePtr->frameIndex = ptc->timeout;
@@ -441,9 +438,6 @@ void register_light(struct ObjLight *light) {
 
 /* 229180 -> 229564 */
 void update_lighting(struct ObjLight *light) {
-    f32 diffuseFac; // diffuse factor?
-    f32 facMul;
-    f32 diffuseThreshold;
     vec3_prod_val(light->colour, light->diffuse, light->diffuseFac);
     Vec3f lightPos;
     vec3_diff(lightPos, light->position, sLightPositionOffset);
@@ -453,9 +447,10 @@ void update_lighting(struct ObjLight *light) {
         vec3_copy(sPhongLightPosition, sLightPositionCache[light->id]);
         sPhongLight = light;
     }
-    diffuseFac = light->diffuseFac;
+    f32 diffuseFac = light->diffuseFac;
     if (light->flags & LIGHT_UNK02) {
-        diffuseThreshold = (1.0f - (light->diffuseTheta / 90.0f));
+        f32 facMul;
+        f32 diffuseThreshold = (1.0f - (light->diffuseTheta / 90.0f));
         if (diffuseThreshold < 0.0f) {
             facMul = (-diffuseThreshold * (1.0f / (1.0f - diffuseThreshold)));
             facMul = CLAMP(facMul, 0.0f, 1.0f);
@@ -534,11 +529,10 @@ void create_gddl_for_shapes(struct ObjGroup *grp) {
  */
 void map_face_materials(struct ObjGroup *faces, struct ObjGroup *mtls) {
     struct ObjFace *face;
-    register struct ListNode *linkFaces;
     struct GdObj *temp;
-    register struct ListNode *linkMtls;
     struct ObjMaterial *mtl;
-    linkFaces = faces->firstMember;
+    register struct ListNode *linkMtls;
+    register struct ListNode *linkFaces = faces->firstMember;
     while (linkFaces != NULL) {
         temp = linkFaces->obj;
         face = (struct ObjFace *) temp;
@@ -603,10 +597,6 @@ void set_view_update_camera(struct ObjCamera *cam) {
  */
 void update_view(struct ObjView *view) {
     s32 i, j;
-    s32 pickOffset;
-    s32 pickDataSize;
-    s32 pickDataIdx;
-    s32 pickedObjType;
     char objTypeAbbr[0x100];
     sUpdateViewState.shapesDrawn = 0;
     if (!(view->flags & VIEW_UPDATE)) {
@@ -636,14 +626,16 @@ void update_view(struct ObjView *view) {
             if (gGdCtrl.startedDragging) {
                 init_pick_buf(sPickBuffer, ARRAY_COUNT(sPickBuffer));
                 drawscene(FIND_PICKS, sUpdateViewState.view->components, NULL);
-                pickOffset       = get_cur_pickbuf_offset();
+                s32 pickOffset   = get_cur_pickbuf_offset();
                 sPickDataTemp    = 0;
                 sPickedObject    = NULL;
                 sPickObjDistance = 10000000.0f;
                 if (pickOffset < 0) {
                     gd_exit(); // Pick buffer too small
                 } else if (pickOffset > 0) {
-                    pickDataIdx = 0;
+                    s32 pickDataIdx = 0;
+                    s32 pickDataSize;
+                    s32 pickedObjType;
                     for ((i = 0); (i < pickOffset); (i++)) {
                         pickDataSize = sPickBuffer[pickDataIdx++];
                         if (pickDataSize != 0) {

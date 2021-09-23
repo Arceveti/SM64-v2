@@ -219,9 +219,8 @@ static void platform_on_track_act_move_along_track(void) {
         platform_on_track_update_pos_or_spawn_ball(0, &o->oPosVec);
         o->oMoveAnglePitch = o->oPlatformOnTrackPitch;
         o->oMoveAngleYaw   = o->oPlatformOnTrackYaw;
-        //! Both oAngleVelYaw and oAngleVelRoll aren't reset until the platform
-        //  starts moving again, resulting in unexpected platform displacement
-        //  after reappearing
+        //! Both oAngleVelYaw and oAngleVelRoll aren't reset until the platform starts
+        //  moving again, resulting in unexpected platform displacement after reappearing
         // Turn face yaw and compute yaw vel
         if (!((u16)(o->oBehParams >> 16) & PLATFORM_ON_TRACK_BP_DONT_TURN_YAW)) {
             Angle targetFaceYaw = (o->oMoveAngleYaw + DEG(90));
@@ -267,7 +266,7 @@ static void platform_on_track_act_fall(void) {
         platform_on_track_mario_not_on_platform();
     } else {
         o->oTimer = 0;
-        //! Doesn't ensure visibility
+        o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
     }
 }
 

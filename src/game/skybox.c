@@ -272,8 +272,8 @@ Gfx *create_skybox_facing_camera(s8 player, s8 background, f32 fov, Vec3f pos, V
 #ifdef UNLOCK_SKYBOX_FOV
     if (fov == 0.0f) fov = (90.0f); // * (gFieldOfView / 100.0f));
 #else
-    //! fov is always set to 90.0f. If this line is removed, then the game crashes because fov is 0 on
-    //! the first frame, which causes a floating point divide by 0
+    // fov is always set to 90.0f. If this line is removed, then the game crashes because fov is 0 on
+    // the first frame, which causes a floating point divide by 0
     fov = (90.0f); // * (gFieldOfView / 100.0f));
 #endif
     sSkyBoxInfo[player].yaw           = atan2s(cameraFace[2], cameraFace[0]);

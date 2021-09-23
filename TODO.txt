@@ -9,6 +9,7 @@
         - Reads a null floor when hitting the pillar because of the super steep floor
     - It's Possible to clip through certain moving walls like the back wall of the JRB ship when jumping at it at certain angles
         - Might be same underlying issue as the SSL pillars issue?
+    - Silhouette doesn't work with most combine modes
 - Puppylights bugs:
     - Lights don't get cleared properly when leaving a level
     - Lights from flamethrower flames flicker

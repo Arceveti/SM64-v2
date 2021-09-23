@@ -30,37 +30,29 @@ struct ObjGroup *gGdViewsGroup;       // @ 801B9E90
 
 /* @ 22A480 for 0x70 */
 void reset_bounding_box(void) { /* Initialize Plane? */
-    gSomeBoundingBox.minX =  10000000.0f;
-    gSomeBoundingBox.minY =  10000000.0f;
-    gSomeBoundingBox.minZ =  10000000.0f;
-
-    gSomeBoundingBox.maxX = -10000000.0f;
-    gSomeBoundingBox.maxY = -10000000.0f;
-    gSomeBoundingBox.maxZ = -10000000.0f;
+    vec3_same(gSomeBoundingBox.minPos,  10000000.0f);
+    vec3_same(gSomeBoundingBox.maxPos, -10000000.0f);
 }
 
 void add_obj_pos_to_bounding_box(struct GdObj *obj) {
     Vec3f pos;
     set_cur_dynobj(obj);
     d_vec3f_get_world_pos(pos);
-    if (pos[0] < gSomeBoundingBox.minX) gSomeBoundingBox.minX = pos[0];
-    if (pos[1] < gSomeBoundingBox.minY) gSomeBoundingBox.minY = pos[1];
-    if (pos[2] < gSomeBoundingBox.minZ) gSomeBoundingBox.minZ = pos[2];
-    if (pos[0] > gSomeBoundingBox.maxX) gSomeBoundingBox.maxX = pos[0];
-    if (pos[1] > gSomeBoundingBox.maxY) gSomeBoundingBox.maxY = pos[1];
-    if (pos[2] > gSomeBoundingBox.maxZ) gSomeBoundingBox.maxZ = pos[2];
+    if (pos[0] < gSomeBoundingBox.minPos[0]) gSomeBoundingBox.minPos[0] = pos[0];
+    if (pos[1] < gSomeBoundingBox.minPos[1]) gSomeBoundingBox.minPos[1] = pos[1];
+    if (pos[2] < gSomeBoundingBox.minPos[2]) gSomeBoundingBox.minPos[2] = pos[2];
+    if (pos[0] > gSomeBoundingBox.maxPos[0]) gSomeBoundingBox.maxPos[0] = pos[0];
+    if (pos[1] > gSomeBoundingBox.maxPos[1]) gSomeBoundingBox.maxPos[1] = pos[1];
+    if (pos[2] > gSomeBoundingBox.maxPos[2]) gSomeBoundingBox.maxPos[2] = pos[2];
 }
 
 /**
  * Creates an object of the specified type
  */
 struct GdObj *make_object(enum ObjTypeFlag objType) {
-    struct GdObj *newObj;
-    struct GdObj *objListOldHead;
     s32 i, objSize;
     drawmethod_t objDrawFn;
     // const char *typeName;
-    u8 *newObjBytes;
     s32 objPermanence = 0x10;
     switch (objType) {
         case OBJ_TYPE_JOINTS:    objSize = sizeof(struct ObjJoint   ); objDrawFn = (drawmethod_t) draw_nothing;                 break;
@@ -81,17 +73,17 @@ struct GdObj *make_object(enum ObjTypeFlag objType) {
     // typeName = get_obj_name_str(objType);
     // Allocate memory for the object
     // start_memtracker(typeName);
-    newObj = gd_malloc(objSize, objPermanence);
+    struct GdObj *newObj = gd_malloc(objSize, objPermanence);
     if (newObj == NULL) gd_exit(); // Cant allocate object [typeName] memory!
     // stop_memtracker(typeName);
     // Zero out the object
-    newObjBytes = (u8 *) newObj;
+    u8 *newObjBytes = (u8 *) newObj;
     for ((i = 0); (i < objSize); (i++)) newObjBytes[i] = 0;
     // Add the new object to the beginning of gGdObjectList
     gGdObjCount++;
-    objListOldHead = gGdObjectList;
+    struct GdObj *objListOldHead = gGdObjectList;
     gGdObjectList = newObj;
-    newObj->prev = NULL;
+    newObj->prev  = NULL;
     if (objListOldHead != NULL) {
         newObj->next = objListOldHead;
         objListOldHead->prev = newObj;
@@ -110,9 +102,8 @@ struct GdObj *make_object(enum ObjTypeFlag objType) {
 struct ListNode *make_link_to_obj(struct ListNode *prevNode, struct GdObj *obj) {
     // Allocate link node
     struct ListNode *newNode = gd_malloc_perm(sizeof(struct ListNode));
-    if (newNode == NULL) gd_exit(); // Cant allocate link memory!
-    // Append to `prevNode` if not NULL
-    if (prevNode != NULL) prevNode->next = newNode;
+    if (newNode  == NULL) gd_exit(); // Cant allocate link memory!
+    if (prevNode != NULL) prevNode->next = newNode; // Append to `prevNode` if not NULL
     newNode->prev = prevNode;
     newNode->next = NULL;
     newNode->obj  = obj;
@@ -124,26 +115,21 @@ struct ListNode *make_link_to_obj(struct ListNode *prevNode, struct GdObj *obj) 
  */
 struct VtxLink *make_vtx_link(struct VtxLink *prevNode, Vtx *data) {
     struct VtxLink *newNode = gd_malloc_perm(sizeof(struct VtxLink));
-    if (newNode == NULL) gd_exit(); // Cant allocate link memory!
-    // Append to `prevNode` if not NULL
-    if (prevNode != NULL) prevNode->next = newNode;
+    if ( newNode == NULL) gd_exit(); // Cant allocate link memory!
+    if (prevNode != NULL) prevNode->next = newNode; // Append to `prevNode` if not NULL
     newNode->prev = prevNode;
     newNode->next = NULL;
     newNode->data = data;
-    //! WTF? Not sure what this is supposed to check
-    if (((uintptr_t)(newNode)) == 0x3F800000) gd_exit(); // fatal_printf("bad3\n");
     return newNode;
 }
 
 /* @ 22B6A0 for 0x21C; orig name: func_8017CED0 */
 struct ObjCamera *make_camera(void) {
-    struct ObjCamera *newCam;
-    struct ObjCamera *oldCameraHead;
-    newCam = (struct ObjCamera *) make_object(OBJ_TYPE_CAMERAS);
+    struct ObjCamera *newCam        = (struct ObjCamera *) make_object(OBJ_TYPE_CAMERAS);
     gGdCameraCount++;
-    newCam->id    = gGdCameraCount;
-    oldCameraHead = gGdCameraList;
-    gGdCameraList = newCam;
+    newCam->id                      = gGdCameraCount;
+    struct ObjCamera *oldCameraHead = gGdCameraList;
+    gGdCameraList                   = newCam;
     if (oldCameraHead != NULL) {
         newCam->next        = oldCameraHead;
         oldCameraHead->prev = newCam;
@@ -166,8 +152,7 @@ struct ObjCamera *make_camera(void) {
 
 /* @ 22B8BC for 0xA8; orig. name: func_8017D0EC */
 struct ObjMaterial *make_material(void) {
-    struct ObjMaterial *newMtl;
-    newMtl = (struct ObjMaterial *) make_object(OBJ_TYPE_MATERIALS);
+    struct ObjMaterial *newMtl = (struct ObjMaterial *) make_object(OBJ_TYPE_MATERIALS);
     // gd_strcpy(newMtl->name, "x");
     newMtl->id         = 0;
     newMtl->gddlNumber = 0;
@@ -177,8 +162,7 @@ struct ObjMaterial *make_material(void) {
 
 /* @ 22B964 for 0x114; orig name: func_8017D194 */
 struct ObjLight *make_light(void) {
-    struct ObjLight *newLight;
-    newLight = (struct ObjLight *) make_object(OBJ_TYPE_LIGHTS);
+    struct ObjLight *newLight = (struct ObjLight *) make_object(OBJ_TYPE_LIGHTS);
     // gd_strcpy(newLight->name, "x");
     newLight->id         = 0;
     newLight->diffuseFac = 1.0f;
@@ -240,10 +224,8 @@ struct ObjWeight *make_weight(s32 vtxId, struct ObjVertex *vtx /* always NULL */
  * as members.
  */
 struct ObjGroup *make_group_of_type(enum ObjTypeFlag type, struct GdObj *fromObj) {
-    struct ObjGroup *newGroup;
-    struct GdObj *curObj;
-    newGroup = make_group(0);
-    curObj   = fromObj;
+    struct ObjGroup *newGroup = make_group(0);
+    struct GdObj    *curObj   = fromObj;
     while (curObj != NULL) {
         if (curObj->type & type) addto_group(newGroup, curObj);
         if (curObj == NULL) break;
@@ -257,23 +239,20 @@ struct ObjGroup *make_group(s32 count, ...) {
     va_list args;
     s32 i;
     struct GdObj    *curObj;
-    struct ObjGroup *newGroup;
-    struct ObjGroup *oldGroupListHead;
     struct GdObj    *vargObj;
-    struct ListNode *curLink;
-    newGroup              = (struct ObjGroup *) make_object(OBJ_TYPE_GROUPS);
-    newGroup->id          = ++gGdGroupCount;
-    newGroup->memberCount = 0;
-    newGroup->firstMember = newGroup->lastMember = NULL;
-    oldGroupListHead      = gGdGroupList;
-    gGdGroupList          = newGroup;
+    struct ObjGroup *newGroup         = (struct ObjGroup *) make_object(OBJ_TYPE_GROUPS);
+    newGroup->id                      = ++gGdGroupCount;
+    newGroup->memberCount             = 0;
+    newGroup->firstMember             = newGroup->lastMember = NULL;
+    struct ObjGroup *oldGroupListHead = gGdGroupList;
+    gGdGroupList                      = newGroup;
     if (oldGroupListHead != NULL) {
         newGroup->next         = oldGroupListHead;
         oldGroupListHead->prev = newGroup;
     }
     if (count == 0) return newGroup;
     va_start(args, count);
-    curLink = NULL;
+    struct ListNode *curLink = NULL;
     for ((i = 0); (i < count); (i++)) {
         // get the next pointer in the struct.
         vargObj = va_arg(args, struct GdObj *);
@@ -343,18 +322,15 @@ Bool32 group_contains_obj(struct ObjGroup *group, struct GdObj *obj) {
  * Returns the number of objects this function was called on.
  */
 s32 apply_to_obj_types_in_group(s32 types, applyproc_t func, struct ObjGroup *group) {
-    struct ListNode *curLink;
     struct ListNode *nextLink;
     struct GdObj    *linkedObj;
     enum ObjTypeFlag linkedObjType;
-    applyproc_t objFn;
-    s32 fnAppliedCount;
-    fnAppliedCount = 0;
+    s32 fnAppliedCount = 0;
     if (group == NULL) return fnAppliedCount;
     if (group->linkType & 0x1) return fnAppliedCount; // compressed data, not an Obj
     if (!((group->memberTypes & OBJ_TYPE_GROUPS) | (group->memberTypes & types))) return fnAppliedCount;
-    objFn   = func;
-    curLink = group->firstMember;
+    applyproc_t objFn        = func;
+    struct ListNode *curLink = group->firstMember;
     while (curLink != NULL) {
         linkedObj     = curLink->obj;
         linkedObjType = linkedObj->type;
@@ -371,8 +347,6 @@ s32 apply_to_obj_types_in_group(s32 types, applyproc_t func, struct ObjGroup *gr
 
 /* @ 22D824 for 0x1BC */
 s32 transform_child_objects_recursive(struct GdObj *obj, struct GdObj *parentObj) {
-    struct ListNode *curLink;
-    struct ObjGroup *curGroup;
     Mat4 *parentUnkMtx;
     Mat4 *iMtx;
     Mat4 *unkMtx;
@@ -403,9 +377,9 @@ s32 transform_child_objects_recursive(struct GdObj *obj, struct GdObj *parentObj
     }
     // Recursively call this function on attached children
     set_cur_dynobj(obj);
-    curGroup = d_get_att_objgroup();
+    struct ObjGroup *curGroup = d_get_att_objgroup();
     if (curGroup != NULL) {
-        curLink = curGroup->firstMember;
+        struct ListNode *curLink = curGroup->firstMember;
         while (curLink != NULL) {
             transform_child_objects_recursive(curLink->obj, obj);
             curLink = curLink->next;
@@ -456,9 +430,6 @@ void move_animator(struct ObjAnimator *animObj) {
     s16(*animData3s16)[3];                // MyVec3h[]?
     s16(*animData6s16)[6];                // GdPlaneH[]?
     s16(*animDataCam)[6];                 // camera GdPlaneH[]?
-    s32 currKeyFrame;
-    s32 nextKeyFrame;
-    f32 dt;
     f32 scale = 0.1f;
     struct AnimMtxVec *mtxVec;
     register struct ListNode *link;
@@ -476,9 +447,9 @@ void move_animator(struct ObjAnimator *animObj) {
     } else if (animObj->frame < 0.0f) {
         animObj->frame = (f32) animData->count;
     }
-    currKeyFrame = (s32) animObj->frame;
-    dt           = (animObj->frame - (f32) currKeyFrame);
-    nextKeyFrame = (currKeyFrame + 1);
+    s32 currKeyFrame = (s32) animObj->frame;
+    f32 dt           = (animObj->frame - (f32) currKeyFrame);
+    s32 nextKeyFrame = (currKeyFrame + 1);
     if (nextKeyFrame > animData->count) nextKeyFrame = 1;
     // convert frame numbers to zero-indexed
     currKeyFrame--;
@@ -579,19 +550,15 @@ void move_animator(struct ObjAnimator *animObj) {
 
 /* @ 22EDF4 for 0x300; orig name: func_80180624 */
 void drag_picked_object(struct GdObj *inputObj) {
-    Vec3f displacement;
     struct GdControl *ctrl = &gGdCtrl;
     Mat4 dispMtx;
-    struct GdObj *obj;
-    f32 dispMag;
     if (gViewUpdateCamera == NULL) return;
-    dispMag = (vec3_mag(gViewUpdateCamera->relPos) / 1000.0f);
-    displacement[0] = (((f32)   (ctrl->csrX - ctrl->dragStartX)) * dispMag);
-    displacement[1] = (((f32) - (ctrl->csrY - ctrl->dragStartY)) * dispMag);
-    displacement[2] = 0.0f;
+    f32 dispMag = (vec3_mag(gViewUpdateCamera->relPos) / 1000.0f);
+    Vec3f displacement = { (((f32)   (ctrl->csrX - ctrl->dragStartX)) * dispMag),
+                           (((f32) - (ctrl->csrY - ctrl->dragStartY)) * dispMag), 0.0f };
     mtxf_inverse(&dispMtx, &gViewUpdateCamera->lookatMtx);
     linear_mtxf_self_mul_vec3f_self(dispMtx, displacement);
-    obj = inputObj;
+    struct GdObj *obj = inputObj;
     if ((inputObj->drawFlags & OBJ_PICKED) && (gGdCtrl.dragging)) {
         gd_play_sfx(GD_SFX_PINCH_FACE);
         // Note: this second sfx won't play, as it is "overwritten" by the first
@@ -621,8 +588,7 @@ void move_camera(struct ObjCamera *cam) {
     Vec3f worldPos, nextPos, latPos;
     Mat4 mtx;
     Mat4 idMtx;
-    struct GdControl *ctrl;
-    ctrl = &gGdCtrl;
+    struct GdControl *ctrl = &gGdCtrl;
     if (!(cam->flags & CAMERA_FLAG_16)) return;
     vec3_zero(worldPos);
     if ((obj = cam->dynObj) != NULL) {

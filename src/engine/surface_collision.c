@@ -392,7 +392,7 @@ f32 find_ceil(f32 x, f32 y, f32 z, struct Surface **pceil) {
  *                     FLOORS                     *
  **************************************************/
 
-Bool32 floor_type_exists_in_current_cell(f32 x, f32 z, SurfaceType type, Bool32 dynamic) {
+Bool32 floor_type_exists_in_current_cell(f32 x, f32 z, SurfaceType type, Bool32 includeDynamic) {
     register const CellIndex cellX = ((((CellIndex)x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     register const CellIndex cellZ = ((((CellIndex)z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     struct SurfaceNode *surfaceNode;
@@ -402,7 +402,7 @@ Bool32 floor_type_exists_in_current_cell(f32 x, f32 z, SurfaceType type, Bool32 
         if (surfaceNode->surface->type == type) return TRUE;
         surfaceNode = surfaceNode->next;
     }
-    if (dynamic) {
+    if (includeDynamic) {
         // Check for surfaces belonging to objects.
         surfaceNode = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
         while (surfaceNode != NULL) {

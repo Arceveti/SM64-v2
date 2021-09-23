@@ -54,24 +54,24 @@ struct DynObjInfo {
 ///@}
 
 // data
-static struct DynObjInfo *sGdDynObjList  = NULL;  // @ 801A8250; info for all loaded/made dynobjs
-static struct GdObj      *sDynListCurObj = NULL;  // @ 801A8254
+static struct DynObjInfo *sGdDynObjList  = NULL;  // info for all loaded/made dynobjs
+static struct GdObj      *sDynListCurObj = NULL;
 static Bool32 sUseIntegerNames           = FALSE; // if TRUE, then all DynNames are specified as integers
 
 // bss
 static char sIntToStringBuf[DYNOBJ_NAME_SIZE];    ///< buffer for returning formated string from
                                                   ///< `integer_name_to_string()`
-static struct DynObjInfo sNullDynObjInfo;         // @ 801B9F08
-static char sDynNameSuffix[DYNOBJ_NAME_SIZE];     // @ 801B9F20; small buf for printing dynid to?
-static s32 sUnnamedObjCount;                      // @ 801B9F28; used to print empty string ids (not NULL char *) to sDynNameSuffix
-static s32 sLoadedDynObjs;                        // @ 801B9F2C; total loaded dynobjs
-static struct DynObjInfo *sDynListCurInfo;        // @ 801B9F30; info for most recently added object
+static struct DynObjInfo sNullDynObjInfo;
+static char sDynNameSuffix[DYNOBJ_NAME_SIZE];     // small buf for printing dynid to?
+static s32  sUnnamedObjCount;                     // used to print empty string ids (not NULL char *) to sDynNameSuffix
+static s32  sLoadedDynObjs;                       // total loaded dynobjs
+static struct DynObjInfo *sDynListCurInfo;        // info for most recently added object
 static struct DynObjInfo *sParentObjInfo;         ///< Information for `ObjNet` made by `d_add_net_with_subgroup()` or `ObjJoint` made by `d_attach_joint_to_net()`
-static struct DynObjInfo *sStashedDynObjInfo;     // @ 801B9F38
-static struct GdObj *sStashedDynObj;              // @ 801B9F3C
-static s32 sDynNetCount;                          // @ 801B9F40
-static char sDynNetNameSuffix[0x20];              // @ 801B9F48
-static char sStashedDynNameSuffix[0x100];         // @ 801B9F68
+static struct DynObjInfo *sStashedDynObjInfo;
+static struct GdObj *sStashedDynObj;
+static s32  sDynNetCount;
+static char sDynNetNameSuffix[0x20];
+static char sStashedDynNameSuffix[0x100];
 
 // necessary foreward declarations
 void d_add_net_with_subgroup(   DynObjName name);
@@ -205,7 +205,7 @@ static struct DynObjInfo *get_dynobj_info(DynObjName name) {
     gd_strcat(buf, sDynNameSuffix);
     foundDynobj = NULL;
     for ((i = 0); (i < sLoadedDynObjs); (i++)) {
-        if (gd_str_not_equal(sGdDynObjList[i].name, buf) == 0) {
+        if (!gd_str_not_equal(sGdDynObjList[i].name, buf)) {
             foundDynobj = &sGdDynObjList[i];
             break;
         }
@@ -355,7 +355,7 @@ void d_attach_to(s32 flag, struct GdObj *obj) {
     }
     if (group_contains_obj(attgrp, sDynListCurObj)) return;
     addto_group(attgrp, sDynListCurObj);
-    if (flag & 0x9) {
+    if (flag & 0x9) { //! flag name
         d_vec3f_get_world_pos(currObjPos);
         set_cur_dynobj(obj);
         d_vec3f_get_world_pos(objPos);
@@ -489,35 +489,26 @@ void alloc_animdata(struct ObjAnimator *animator) {
 void chk_shapegen(struct ObjShape *shape) {
     struct ObjFace    *face;   // made face
     struct ObjVertex  *vtx;    // made gdvtx
-    struct ObjVertex **vtxbuf; // heap storage for made gd vtx
-    struct ObjGroup *shapeMtls;
-    struct ObjGroup *shapeFaces;
-    struct ObjGroup *shapeVtx;
-    struct ObjGroup *madeFaces;
-    struct ObjGroup *madeVtx;
+    struct ObjGroup *shapeMtls  = shape->mtlGroup;
+    struct ObjGroup *shapeFaces = shape->faceGroup;
+    struct ObjGroup *shapeVtx   = shape->vtxGroup;
     u32 i;
-    struct GdVtxData *vtxdata;
-    struct GdFaceData *facedata;
-    struct GdObj *oldObjHead;
-    shapeMtls  = shape->mtlGroup;
-    shapeFaces = shape->faceGroup;
-    shapeVtx   = shape->vtxGroup;
     if ((shapeVtx != NULL) && (shapeFaces != NULL)) {
         if (shapeVtx->linkType & 0x1) {
             // These ListNodes point to special, compressed data structures
-            vtxdata  = (struct GdVtxData  *) shapeVtx->firstMember->obj;
-            facedata = (struct GdFaceData *) shapeFaces->firstMember->obj;
+            struct GdVtxData  *vtxdata  = (struct GdVtxData  *) shapeVtx->firstMember->obj;
+            struct GdFaceData *facedata = (struct GdFaceData *) shapeFaces->firstMember->obj;
             if (facedata->type !=            1) gd_exit(); // unsupported poly type
             if (vtxdata->type  !=            1) gd_exit(); // unsupported vertex type
             if (vtxdata->count >= VTX_BUF_SIZE) gd_exit(); // too many vertices
-            vtxbuf     = gd_malloc_temp(VTX_BUF_SIZE * sizeof(struct ObjVertex *));
-            oldObjHead = gGdObjectList;
+            struct ObjVertex **vtxbuf = gd_malloc_temp(VTX_BUF_SIZE * sizeof(struct ObjVertex *)); // heap storage for made gd vtx
+            struct GdObj *oldObjHead  = gGdObjectList;
             for ((i = 0); (i < vtxdata->count); (i++)) {
                 vtx = gd_make_vertex(vtxdata->data[i]);
                 vec3_zero(vtx->normal);
                 vtxbuf[i] = vtx;
             }
-            madeVtx = make_group_of_type(OBJ_TYPE_VERTICES, oldObjHead);
+            struct ObjGroup *madeVtx = make_group_of_type(OBJ_TYPE_VERTICES, oldObjHead);
             oldObjHead = gGdObjectList;
             for ((i = 0); (i < facedata->count); (i++)) {
                 face = make_face_with_colour(gVec3fOne);
@@ -540,9 +531,9 @@ void chk_shapegen(struct ObjShape *shape) {
                 vec3_copy(vtxbuf[i]->normal, normal);
             }
             gd_free(vtxbuf);
-            madeFaces        = make_group_of_type(OBJ_TYPE_FACES, oldObjHead);
-            shape->faceGroup = madeFaces;
-            shape->vtxGroup  = madeVtx;
+            struct ObjGroup *madeFaces = make_group_of_type(OBJ_TYPE_FACES, oldObjHead);
+            shape->faceGroup           = madeFaces;
+            shape->vtxGroup            = madeVtx;
         }
     }
     if (shapeMtls != NULL) {
@@ -563,9 +554,8 @@ void chk_shapegen(struct ObjShape *shape) {
  * * something is set for `ObjGadget`
  */
 void d_set_nodegroup(DynObjName name) {
-    struct DynObjInfo *info;
     if (sDynListCurObj == NULL) gd_exit();
-    info = get_dynobj_info(name);
+    struct DynObjInfo *info = get_dynobj_info(name);
     if (info == NULL) gd_exit(); // fatal_printf("dSetNodeGroup(\"%s\"): Undefined group", DynNameAsStr(name));
     switch (sDynListCurObj->type) {
         case OBJ_TYPE_NETS:
@@ -1028,7 +1018,6 @@ void d_set_scale(Vec3f pos) {
 /**
  * Set the rotation value of the current active dynamic object.
  */
-//! Vec3f rotation
 void d_set_rotation(Vec3f rotation) {
     struct GdObj *dynobj;
     if (sDynListCurObj == NULL) gd_exit();
@@ -1046,10 +1035,9 @@ void d_set_rotation(Vec3f rotation) {
  * or animation data to `ObjGroup`s, or to link joints to `ObjAnimator`s.
  */
 void d_link_with_ptr(void *ptr) {
-    struct GdObj *dynobj;
     struct ListNode *link;
     if (sDynListCurObj == NULL) gd_exit();
-    dynobj = sDynListCurObj;
+    struct GdObj *dynobj = sDynListCurObj;
     switch (sDynListCurObj->type) {
         case OBJ_TYPE_CAMERAS:
             ((struct ObjCamera *) dynobj)->dynObj = ptr;
@@ -1165,7 +1153,6 @@ void d_set_ambient(ColorRGBf color) {
 /**
  * Set the diffuse color of the current dynamic `ObjMaterial` or `ObjLight`.
  */
-//! ColorRGBf
 void d_set_diffuse(ColorRGBf color) {
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
@@ -1179,9 +1166,8 @@ void d_set_diffuse(ColorRGBf color) {
  * Copy the matrix from the current dynamic object into `dst`.
  */
 void d_get_matrix(Mat4 dst) {
-    struct GdObj *dynobj;
     if (sDynListCurObj == NULL) gd_exit();
-    dynobj = sDynListCurObj;
+    struct GdObj *dynobj = sDynListCurObj;
     switch (sDynListCurObj->type) {
         case OBJ_TYPE_NETS:      mtxf_copy(dst, ((struct ObjNet    *) dynobj)->invMtx   ); break;
         case OBJ_TYPE_JOINTS:    mtxf_copy(dst, ((struct ObjJoint  *) dynobj)->invMtx   ); break;
@@ -1236,9 +1222,8 @@ Mat4 *d_get_rot_mtx_ptr(void) {
  * Maybe Identity Matrix?
  */
 void d_set_i_matrix(Mat4 *src) {
-    struct GdObj *dynobj;
     if (sDynListCurObj == NULL) gd_exit();
-    dynobj = sDynListCurObj;
+    struct GdObj *dynobj = sDynListCurObj;
     switch (sDynListCurObj->type) {
         case OBJ_TYPE_NETS:   mtxf_copy(((struct ObjNet   *) dynobj)->idMtx,    (*src)   ); break;
         case OBJ_TYPE_JOINTS: mtxf_copy(((struct ObjJoint *) dynobj)->idMtx,    (*src)   ); break;
@@ -1265,9 +1250,8 @@ Mat4 *d_get_matrix_ptr(void) {
  * TODO: What is an IMatrix?
  */
 Mat4 *d_get_i_mtx_ptr(void) {
-    struct GdObj *dynobj;
     if (sDynListCurObj == NULL) gd_exit();
-    dynobj = sDynListCurObj;
+    struct GdObj *dynobj = sDynListCurObj;
     switch (sDynListCurObj->type) {
         case OBJ_TYPE_NETS:   return &((struct ObjNet   *) dynobj)->idMtx;  break;
         case OBJ_TYPE_JOINTS: return &((struct ObjJoint *) dynobj)->idMtx; break;

@@ -731,11 +731,11 @@
 #define	CVG_DST_CLAMP	(0 <<  0) // 0x0000
 #define	CVG_DST_WRAP	(1 <<  8) // 0x0100
 #define	CVG_DST_FULL	(1 <<  9) // 0x0200
-#define	CVG_DST_SAVE	(CVG_DST_WRAP | CVG_DST_FULL) // 0x0300
+#define	CVG_DST_SAVE	(3 <<  8) // 0x0300
 #define	ZMODE_OPA		(0 <<  0) // 0x0000
 #define	ZMODE_INTER		(1 << 10) // 0x0400
 #define	ZMODE_XLU		(1 << 11) // 0x0800
-#define	ZMODE_DEC		(ZMODE_INTER | ZMODE_XLU) // 0x0C00
+#define	ZMODE_DEC		(3 << 10) // 0x0C00
 #define	CVG_X_ALPHA		(1 << 12) // 0x1000
 #define	ALPHA_CVG_SEL	(1 << 13) // 0x2000
 #define	FORCE_BL		(1 << 14) // 0x4000

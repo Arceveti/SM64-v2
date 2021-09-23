@@ -9,27 +9,19 @@
 #include "skin_movement.h"
 
 // bss
-struct ObjNet *gGdSkinNet; // @ 801BAAF0
+struct ObjNet *gGdSkinNet;
 
-static s32 sNetCount; // @ 801BAAF8
+static s32 sNetCount;
 
 /* 2406E0 -> 240894 */
 void compute_net_bounding_box(struct ObjNet *net) {
     reset_bounding_box();
     if (net->vertexGrp != NULL) apply_to_obj_types_in_group(OBJ_TYPE_ALL, (applyproc_t) add_obj_pos_to_bounding_box, net->vertexGrp);
     if (net->nodeGrp   != NULL) apply_to_obj_types_in_group(OBJ_TYPE_ALL, (applyproc_t) add_obj_pos_to_bounding_box, net->nodeGrp  );
-    gSomeBoundingBox.minX *= net->scale[0];
-    gSomeBoundingBox.maxX *= net->scale[0];
-    gSomeBoundingBox.minY *= net->scale[1];
-    gSomeBoundingBox.maxY *= net->scale[1];
-    gSomeBoundingBox.minZ *= net->scale[2];
-    gSomeBoundingBox.maxZ *= net->scale[2];
-    net->boundingBox.minX  = gSomeBoundingBox.minX;
-    net->boundingBox.minY  = gSomeBoundingBox.minY;
-    net->boundingBox.minZ  = gSomeBoundingBox.minZ;
-    net->boundingBox.maxX  = gSomeBoundingBox.maxX;
-    net->boundingBox.maxY  = gSomeBoundingBox.maxY;
-    net->boundingBox.maxZ  = gSomeBoundingBox.maxZ;
+    vec3_mul(gSomeBoundingBox.minPos, net->scale);
+    vec3_mul(gSomeBoundingBox.maxPos, net->scale);
+    vec3_copy(net->boundingBox.minPos, gSomeBoundingBox.minPos);
+    vec3_copy(net->boundingBox.maxPos, gSomeBoundingBox.maxPos);
 }
 
 /* 240894 -> 240A64; orig name: func_801920C4 */
@@ -42,7 +34,7 @@ void reset_net(struct ObjNet *net) {
     gGdSkinNet = net;
     mtxf_identity(net->rotationMtx);
     mtxf_identity(net->idMtx);
-    mtxf_rot_about_vec3f(net->idMtx,    net->initRotation); // set rot mtx to initial rotation?
+    mtxf_rot_about_vec3f(  net->idMtx,    net->initRotation); // set rot mtx to initial rotation?
     vec3_add(              net->idMtx[3], net->worldPos    ); // set to initial position?
     mtxf_copy(net->invMtx, net->idMtx);
     if ((grp = net->nodeGrp) != NULL) apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) reset_joint, grp);
@@ -58,15 +50,14 @@ void func_801922FC(struct ObjNet *net) {
     struct ObjGroup *group;
     gGdSkinNet = net;
     if (net->netType == NET_TYPE_DYNAMIC_BONES) {
-        if (net->shapePtr         != NULL) scale_verts(net->shapePtr->vtxGroup);
+        if (net->shapePtr          != NULL) scale_verts(net->shapePtr->vtxGroup);
         if ((group = net->nodeGrp) != NULL) apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) reset_joint_weights, group);
     }
 }
 
 /* 240B84 -> 240CF8 */
 struct ObjNet *make_net(struct ObjGroup *group) {
-    struct ObjNet *net;
-    net            = (struct ObjNet *) make_object(OBJ_TYPE_NETS);
+    struct ObjNet *net = (struct ObjNet *) make_object(OBJ_TYPE_NETS);
     mtxf_identity(net->invMtx);
     vec3_zero(net->initPos);
     net->id        = ++sNetCount;
@@ -85,8 +76,8 @@ struct ObjNet *make_net(struct ObjGroup *group) {
 
 /* 24142C -> 24149C; orig name: func_80192C5C */
 void move_bonesnet(struct ObjNet *net) {
-    struct ObjGroup *group;
-    if ((group = net->nodeGrp) != NULL) apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) func_80181894, group);
+    struct ObjGroup *group = net->nodeGrp;
+    if (group != NULL) apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) func_80181894, group);
 }
 
 /* 241768 -> 241AB4; orig name: func_80192F98 */

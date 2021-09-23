@@ -33,14 +33,13 @@ void scale_verts(struct ObjGroup *group) {
 
 /* @ 230064 for 0x13C*/
 void func_80181894(struct ObjJoint *joint) {
-    register struct ObjGroup *weightGroup; // baseGroup? weights Only?
     Vec3f stackVec;
     register struct ObjWeight *curWeight;
     register struct ObjVertex *connectedVtx;
     register struct ListNode *link;
     register f32 scaleFactor;
     struct GdObj *linkedObj;
-    weightGroup = joint->weightGrp;
+    register struct ObjGroup *weightGroup = joint->weightGrp; // baseGroup? weights Only?
     if (weightGroup != NULL) {
         for ((link = weightGroup->firstMember); (link != NULL); (link = link->next)) {
             linkedObj                = link->obj;

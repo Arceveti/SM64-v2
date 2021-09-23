@@ -46,12 +46,9 @@ void empty_mem_block(struct GMemBlock *block) {
  * @returns pointer to the free `GMemBlock` */
 struct GMemBlock *into_free_memblock(struct GMemBlock *block) {
     struct GMemBlock *freeBlock;
-    void *ptr;
-    u8 permanence;
-    u32 space;
-    ptr        = block->ptr;
-    space      = block->size;
-    permanence = block->permFlag;
+    void *ptr     = block->ptr;
+    u32 space     = block->size;
+    u8 permanence = block->permFlag;
     empty_mem_block(block);
     freeBlock           = make_mem_block(G_MEM_BLOCK_FREE, permanence);
     freeBlock->ptr      = ptr;
@@ -130,10 +127,8 @@ u32 gd_free_mem(void *ptr) {
  */
 void *gd_request_mem(u32 size, u8 permanence) {
     struct GMemBlock *foundBlock = NULL;
-    struct GMemBlock *curBlock;
-    struct GMemBlock *newBlock;
-    newBlock = make_mem_block(G_MEM_BLOCK_USED, permanence);
-    curBlock = sFreeBlockListHead;
+    struct GMemBlock *newBlock = make_mem_block(G_MEM_BLOCK_USED, permanence);
+    struct GMemBlock *curBlock = sFreeBlockListHead;
     while (curBlock != NULL) {
         if (curBlock->permFlag & permanence) {
             if (curBlock->size == size) {
@@ -169,13 +164,12 @@ void *gd_request_mem(u32 size, u8 permanence) {
  * @returns `GMemBlock` that contains info about the new heap memory
  */
 struct GMemBlock *gd_add_mem_to_heap(u32 size, void *addr, u8 permanence) {
-    struct GMemBlock *newBlock;
     /* eight-byte align the new block's data stats */
-    size           = (size - 8) & ~7;
-    addr           = (void *)(((uintptr_t) addr + 8) & ~7);
-    newBlock       = make_mem_block(G_MEM_BLOCK_FREE, permanence);
-    newBlock->ptr  = addr;
-    newBlock->size = size;
+    size                       = (size - 8) & ~7;
+    addr                       = (void *)(((uintptr_t) addr + 8) & ~7);
+    struct GMemBlock *newBlock = make_mem_block(G_MEM_BLOCK_FREE, permanence);
+    newBlock->ptr              = addr;
+    newBlock->size             = size;
     return newBlock;
 }
 

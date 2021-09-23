@@ -46,7 +46,7 @@ s32    collide_with_walls(              Vec3f pos, f32 offsetY, f32 radius);
 void   resolve_geometry_collisions(     Vec3f pos, UNUSED Vec3f lastGood);
 Bool32 find_wall_displacement(          Vec3f dist, f32 x, f32 y, f32 z, f32 radius);
 f32    find_ceil(                                   f32 x, f32 y, f32 z, struct Surface **pceil);
-Bool32 floor_type_exists_in_current_cell(           f32 x,        f32 z, SurfaceType type, Bool32 dynamic);
+Bool32 floor_type_exists_in_current_cell(           f32 x,        f32 z, SurfaceType type, Bool32 includeDynamic);
 f32    find_floor_height(                           f32 x, f32 y, f32 z);
 f32    find_floor(                                  f32 x, f32 y, f32 z, struct Surface **pfloor);
 f32    find_room_floor(                             f32 x, f32 y, f32 z, struct Surface **pfloor);

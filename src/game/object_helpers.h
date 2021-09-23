@@ -104,6 +104,11 @@ struct SpawnParticlesInfo
 #define cur_obj_has_behavior( bhv) (    o->behavior == segmented_to_virtual(bhv))
 #define obj_has_behavior(obj, bhv) ((obj)->behavior == segmented_to_virtual(bhv))
 
+
+#define cur_obj_check_if_at_animation_end(void)                     (o->header.gfx.animInfo.animFrame == (o->header.gfx.animInfo.curAnim->loopEnd - 1))
+#define cur_obj_check_anim_frame(frame)                             ((frame) == o->header.gfx.animInfo.animFrame)
+#define cur_obj_check_anim_frame_in_range(startFrame, rangeLength)  ((o->header.gfx.animInfo.animFrame >= (startFrame)) && (o->header.gfx.animInfo.animFrame < ((startFrame) + (rangeLength))))
+
 #define enable_time_stop(      void) (gTimeStopState |= TIME_STOP_ENABLED)
 #define disable_time_stop(     void) (gTimeStopState &= ~TIME_STOP_ENABLED)
 #define set_time_stop_flags(  flags) (gTimeStopState |= (flags))
@@ -168,9 +173,9 @@ void            cur_obj_set_vel_from_mario_vel(f32 min, f32 mul);
 void            cur_obj_reverse_animation(          void);
 void            cur_obj_extend_animation_if_at_end( void);
 Bool32          cur_obj_check_if_near_animation_end(void);
-Bool32          cur_obj_check_if_at_animation_end(  void);
-Bool32          cur_obj_check_anim_frame(         AnimFrame32 frame);
-Bool32          cur_obj_check_anim_frame_in_range(AnimFrame32 startFrame, s32 rangeLength);
+// Bool32          cur_obj_check_if_at_animation_end(  void);
+// Bool32          cur_obj_check_anim_frame(         AnimFrame32 frame);
+// Bool32          cur_obj_check_anim_frame_in_range(AnimFrame32 startFrame, s32 rangeLength);
 Bool32          cur_obj_check_frame_prior_current_frame(AnimFrame16 *frame);
 void            cur_obj_set_y_vel_and_animation(f32 yVel, s32 animIndex);
 void            cur_obj_unrender_set_action_and_anim(     s32 animIndex, ObjAction action);

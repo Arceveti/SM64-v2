@@ -37,7 +37,7 @@
 struct PlatformDisplacementInfo sObjectDisplacementInfo;
 #endif
 
-static s8 sLevelsWithRooms[]       = { LEVEL_BBH, LEVEL_CASTLE, LEVEL_HMC, -1 };
+static s8 sLevelsWithRooms[] = { LEVEL_BBH, LEVEL_CASTLE, LEVEL_HMC, -1 };
 
 static Bool32 clear_move_flag(u32 *bitSet, s32 flag);
 
@@ -59,15 +59,14 @@ Gfx *geo_update_layer_transparency(s32 callContext, struct GraphNode *node, UNUS
     Gfx *dlStart, *dlHead;
     struct Object *objectGraphNode;
     struct GraphNodeGenerated *currentGraphNode;
-    s32 objectOpacity;
     dlStart = NULL;
     if (callContext == GEO_CONTEXT_RENDER) {
         objectGraphNode  = (struct Object             *) gCurGraphNodeObject; // TODO: change this to object pointer?
         currentGraphNode = (struct GraphNodeGenerated *) node;
         if (gCurGraphNodeHeldObject) objectGraphNode = gCurGraphNodeHeldObject->objNode;
-        objectOpacity = objectGraphNode->oOpacity;
-        dlStart       = alloc_display_list(sizeof(Gfx) * 3);
-        dlHead        = dlStart;
+        s32 objectOpacity = objectGraphNode->oOpacity;
+        dlStart           = alloc_display_list(sizeof(Gfx) * 3);
+        dlHead            = dlStart;
         if (objectOpacity == 0xFF) {
             SET_GRAPH_NODE_LAYER(currentGraphNode->fnNode.node.flags, ((currentGraphNode->parameter == 20) ? LAYER_TRANSPARENT_DECAL : LAYER_OPAQUE     ));
             objectGraphNode->oAnimState = TRANSPARENCY_ANIM_STATE_OPAQUE;
@@ -82,9 +81,8 @@ Gfx *geo_update_layer_transparency(s32 callContext, struct GraphNode *node, UNUS
             }
 #else // gDebugInfo accesses were removed in all non-JP versions.
             if ((objectOpacity == 0) && (segmented_to_virtual(bhvBowser) == objectGraphNode->behavior)) objectGraphNode->oAnimState = BOWSER_ANIM_STATE_INVISIBLE;
-            // the debug info check was removed in US. so we need to
-            // perform the only necessary check instead of the debuginfo
-            // one.
+            // the debug info check was removed in US. so we need to perform
+            // the only necessary check instead of the debuginfo one.
             if ((currentGraphNode->parameter != 10) && (objectGraphNode->activeFlags & ACTIVE_FLAG_DITHERED_ALPHA)) gDPSetAlphaCompare(dlHead++, G_AC_DITHER);
 #endif
         }
@@ -112,7 +110,6 @@ Gfx *geo_switch_anim_state(s32 callContext, struct GraphNode *node, UNUSED void 
 }
 
 Gfx *geo_switch_room(s32 callContext, struct GraphNode *node, UNUSED void *context) {
-    s16 roomCase;
     struct Surface *floor;
     struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
     if (callContext == GEO_CONTEXT_RENDER) {
@@ -133,7 +130,7 @@ Gfx *geo_switch_room(s32 callContext, struct GraphNode *node, UNUSED void *conte
 #endif
             if (floor) {
                 gMarioCurrentRoom =  floor->room;
-                roomCase          = (floor->room - 1);
+                RoomData roomCase = (floor->room - 1);
                 print_debug_top_down_objectinfo("areainfo %d", floor->room);
                 if (roomCase >= 0) switchCase->selectedCase = roomCase;
             }
@@ -615,18 +612,18 @@ Bool32 cur_obj_check_if_near_animation_end(void) {
     return (((animFlags & ANIM_FLAG_NOLOOP) && ((nearLoopEnd + 1) == animFrame)) || (animFrame == nearLoopEnd));
 }
 
-Bool32 cur_obj_check_if_at_animation_end(void) {
-    return (o->header.gfx.animInfo.animFrame == (o->header.gfx.animInfo.curAnim->loopEnd - 1));
-}
+// Bool32 cur_obj_check_if_at_animation_end(void) {
+//     return (o->header.gfx.animInfo.animFrame == (o->header.gfx.animInfo.curAnim->loopEnd - 1));
+// }
 
-Bool32 cur_obj_check_anim_frame(AnimFrame32 frame) {
-    return (frame == o->header.gfx.animInfo.animFrame);
-}
+// Bool32 cur_obj_check_anim_frame(AnimFrame32 frame) {
+//     return (frame == o->header.gfx.animInfo.animFrame);
+// }
 
-Bool32 cur_obj_check_anim_frame_in_range(AnimFrame32 startFrame, s32 rangeLength) {
-    AnimFrame32 animFrame = o->header.gfx.animInfo.animFrame;
-    return ((animFrame >= startFrame) && (animFrame < (startFrame + rangeLength)));
-}
+// Bool32 cur_obj_check_anim_frame_in_range(AnimFrame32 startFrame, s32 rangeLength) {
+//     AnimFrame32 animFrame = o->header.gfx.animInfo.animFrame;
+//     return ((animFrame >= startFrame) && (animFrame < (startFrame + rangeLength)));
+// }
 
 Bool32 cur_obj_check_frame_prior_current_frame(AnimFrame16 *frame) {
     AnimFrame16 animFrame = o->header.gfx.animInfo.animFrame;

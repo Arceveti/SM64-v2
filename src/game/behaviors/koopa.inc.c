@@ -273,7 +273,6 @@ static void koopa_shelled_update(void) {
  */
 static void koopa_unshelled_act_run(void) {
     f32 distToShell = 99999.0f;
-    struct Object *shell;
     cur_obj_init_animation_with_sound(KOOPA_ANIM_UNSHELLED_RUN);
     koopa_play_footstep_sound(0,  6);
     if (o->oKoopaTurningAwayFromWall) {
@@ -282,7 +281,7 @@ static void koopa_unshelled_act_run(void) {
         // If far from home, then turn toward home
         if (o->oDistanceToMario >= 25000.0f) o->oKoopaTargetYaw = o->oAngleToMario;
         // If shell exists, then turn toward shell
-        shell = cur_obj_find_nearest_object_with_behavior(bhvKoopaShell, &distToShell);
+        struct Object *shell = cur_obj_find_nearest_object_with_behavior(bhvKoopaShell, &distToShell);
         if (shell != NULL) {
             //! This overrides turning toward home
             o->oKoopaTargetYaw = obj_angle_to_object(o, shell);

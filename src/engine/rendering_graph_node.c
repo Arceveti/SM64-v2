@@ -229,16 +229,24 @@ ScreenPos gMarioScreenX, gMarioScreenY;
 LookAt lookAt;
 #endif
 
+void reset_clipping(void) {
+    if (gMarioState->action == ACT_CREDITS_CUTSCENE) {
+        make_viewport_clip_rect(&sEndCutsceneVp);
+    } else {
+        gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH, (SCREEN_HEIGHT - gBorderHeight));
+    }
+}
+
 #if SILHOUETTE
 #define SIL_CVG_THRESHOLD    0x3F // 32..255, 63 seems to give best results
 #define SCHWA (AA_EN | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | CVG_X_ALPHA | FORCE_BL)
-#define SET_SILHOUETTE_F3D(gfx) {                                                                    \
-    gDPSetRenderMode(  (gfx)++, (SCHWA | GBL_c1(G_BL_CLR_FOG, G_BL_A_FOG, G_BL_CLR_MEM, G_BL_1MA)),  \
-                                (SCHWA | GBL_c2(G_BL_CLR_FOG, G_BL_A_FOG, G_BL_CLR_MEM, G_BL_1MA))); \
-    gSPSetGeometryMode((gfx)++, G_FOG);                      /* Enable fog                  */       \
-    gSPFogPosition(    (gfx)++, 0, 1 );                      /* Fox position                */       \
-    gDPSetFogColor(    (gfx)++, 0, 0, 0, SILHOUETTE       ); /* silhouette color & alpha    */       \
-    gDPSetEnvColor(    (gfx)++, 0, 0, 0, SIL_CVG_THRESHOLD); /* silhouette env transparency */       \
+#define SET_SILHOUETTE_F3D(gfx) {                                                                   \
+    gDPSetRenderMode(  (gfx)++, (SCHWA | GBL_c1(G_BL_CLR_FOG, G_BL_A_FOG, G_BL_CLR_MEM, G_BL_1MA)), \
+                                (SCHWA | GBL_c2(G_BL_CLR_FOG, G_BL_A_FOG, G_BL_CLR_MEM, G_BL_1MA)));\
+    gSPSetGeometryMode((gfx)++, G_FOG);                      /* Enable fog                  */      \
+    gSPFogPosition(    (gfx)++, 0, 1 );                      /* Fox position                */      \
+    gDPSetFogColor(    (gfx)++, 0, 0, 0, SILHOUETTE       ); /* silhouette color & alpha    */      \
+    gDPSetEnvColor(    (gfx)++, 0, 0, 0, SIL_CVG_THRESHOLD); /* silhouette env transparency */      \
 }
 #define CLEAR_SILHOUETTE_F3D(gfx, i) {                                                                 \
     gSPClearGeometryMode((gfx)++, G_FOG             );               /* Disable fog                 */ \
@@ -247,14 +255,6 @@ LookAt lookAt;
                                   (mode2List->modes[(i)] & ~IM_RD)); /* Use normal mode list, no AA */ \
 }
 #endif
-
-void reset_clipping(void) {
-    if (gMarioState->action == ACT_CREDITS_CUTSCENE) {
-        make_viewport_clip_rect(&sEndCutsceneVp);
-    } else {
-        gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH, (SCREEN_HEIGHT - gBorderHeight));
-    }
-}
 
 /**
  * Process a master list node. This has been modified, so now it runs twice, for each microcode.

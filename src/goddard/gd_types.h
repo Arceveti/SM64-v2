@@ -5,8 +5,8 @@
 #include "types.h"
 
 struct GdBoundingBox {
-    f32 minX, minY, minZ;
-    f32 maxX, maxY, maxZ;
+    Vec3f minPos;
+    Vec3f maxPos;
 };
 
 struct GdTriangleF {
@@ -59,9 +59,9 @@ enum ObjTypeFlag {
     OBJ_TYPE_ZONES     = (1 << 20), // 0x00100000 // unused
     OBJ_TYPE_UNUSED_21 = (1 << 21), // 0x00200000 // unused
 };
+
 /* This constant seems to be used to indicate the type of any or all objects */
 #define OBJ_TYPE_ALL 0x00FFFFFF
-
 
 /// Function pointer for a `GdObj`'s drawing routine
 typedef void (*drawmethod_t)(void *);
@@ -117,7 +117,7 @@ struct GdFaceData {
 struct GdVtxData {
     u32 count;
     s32 type;
-    s16 (*data)[3]; ///< [x, y, z]
+    Vec3s (*data); ///< [x, y, z]
 };
 
 

@@ -63,8 +63,7 @@ Gfx *geo_snufit_scale_body(s32 callContext, struct GraphNode *node, UNUSED Mat4 
  * then prepares to shoot after a period.
  */
 void snufit_act_idle(void) {
-    //! This line would could cause a crash in certain PU situations,
-    // if the game would not have already crashed.
+    //! This line would could cause a crash in certain PU situations, if the game would not have already crashed.
     if (o->oTimer > (s32)(o->oDistanceToMario / 10.0f) && (o->oDistanceToMario < 800.0f)) {
     // if (o->oDistanceToMario < 800.0f) {
         // Controls an alternating scaling factor in a cos.

@@ -40,7 +40,7 @@ void bhv_activated_back_and_forth_platform_init(void) {
     if (platformType == ACTIVATED_BF_PLAT_TYPE_BITFS_ELEVATOR) o->oActivatedBackAndForthPlatformMaxOffset -= 12.0f;
     // Truthy/falsy value that determines the direction of movement.
     // Equivalent to oBehParams2ndByte & 0x80, i.e. the most significant bit of oBehParams2ndByte.
-    o->oActivatedBackAndForthPlatformVertical = (u16)(o->oBehParams >> 16) & 0x0080; //! param mask name
+    o->oActivatedBackAndForthPlatformVertical = ((u16)(o->oBehParams >> 16) & 0x0080); //! param mask name
     o->oActivatedBackAndForthPlatformStartYaw = o->oFaceAngleYaw;
 }
 

@@ -329,10 +329,10 @@ static void chain_chomp_act_move(void) {
         if (cur_obj_check_attacks(&sChainChompHitbox, o->oAction)) {
             o->oSubAction = CHAIN_CHOMP_SUB_ACT_LUNGE;
             // o->oChainChompMaxDistFromPivotPerChainPart = (900.0f / CHAIN_CHOMP_NUM_PARTS);
-            o->oChainChompMaxDistFromPivotPerChainPart = 180.0f; // ((CHAIN_CHOMP_NUM_PARTS * 180.0f) / CHAIN_CHOMP_NUM_PARTS);
-            o->oForwardVel                             =   0.0f;
-            o->oVelY                                   = 300.0f;
-            o->oGravity                                =  -4.0f;
+            o->oChainChompMaxDistFromPivotPerChainPart =  180.0f; // ((CHAIN_CHOMP_NUM_PARTS * 180.0f) / CHAIN_CHOMP_NUM_PARTS);
+            o->oForwardVel                             =    0.0f;
+            o->oVelY                                   =  300.0f;
+            o->oGravity                                =   -4.0f;
             o->oChainChompTargetPitch                  = -0x3000;
         }
     }

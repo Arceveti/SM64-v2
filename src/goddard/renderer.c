@@ -80,7 +80,7 @@ static u8 *sMemBlockPoolBase;
 static u32 sAllocMemory; // malloc-ed bytes
 static s16 sVtxCvrtTCBuf[2];
 static struct ObjGroup *sMarioSceneGrp;
-static s32 D_801BB0B4;                  // second offset into sTriangleBuf
+static s32 sSecondOffsetIntoTriangleBuf;
 static s32 sVertexBufCount;             // vtx's to load into RPD? Vtx len in GD Dl and in the lower bank (AF30)
 static s32 sTriangleBufCount;           // number of triangles in sTriangleBuf
 static struct ObjView *sMSceneView;     // Mario scene view
@@ -1068,7 +1068,7 @@ void gd_dl_lookat(struct ObjCamera *cam, Vec3f from, Vec3f to, f32 colXY) {
 
 /* 24E1A8 -> 24E230; orig name: func_8019F9D8 */
 void check_tri_display(s32 vtxcount) {
-    D_801BB0B4 = 0;
+    sSecondOffsetIntoTriangleBuf = 0;
     if (vtxcount != 3) gd_exit(); // cant display no tris
 }
 
@@ -1084,12 +1084,12 @@ Vtx *gd_dl_make_vertex(f32 x, f32 y, f32 z, f32 alpha) {
         if ((sCurrentGdDl->vtx[i].n.ob[0] == (RawVertexData) x)
          && (sCurrentGdDl->vtx[i].n.ob[1] == (RawVertexData) y)
          && (sCurrentGdDl->vtx[i].n.ob[2] == (RawVertexData) z)) {
-            sTriangleBuf[sTriangleBufCount][D_801BB0B4++] = (s16) i;
+            sTriangleBuf[sTriangleBufCount][sSecondOffsetIntoTriangleBuf++] = (s16) i;
             return NULL;
         }
     }
     sVertexBufCount++;
-    sTriangleBuf[sTriangleBufCount][D_801BB0B4++] = (s16) sCurrentGdDl->curVtxIdx;
+    sTriangleBuf[sTriangleBufCount][sSecondOffsetIntoTriangleBuf++] = (s16) sCurrentGdDl->curVtxIdx;
     vec3_set(DL_CURRENT_VTX(sCurrentGdDl).n.ob, x, y, z);
     DL_CURRENT_VTX(sCurrentGdDl).n.flag  = 0;
     DL_CURRENT_VTX(sCurrentGdDl).n.tc[0] = sVtxCvrtTCBuf[0];
@@ -1104,7 +1104,7 @@ Vtx *gd_dl_make_vertex(f32 x, f32 y, f32 z, f32 alpha) {
 /* 24E6C0 -> 24E724 */
 void flush_current_triangle_buffer(void) {
     sTriangleBufCount++;
-    if (sVertexBufCount >= 12) { //! This is 30 in HackerSM64, but crashes
+    if (sVertexBufCount >= 12) { //! This is 30 in HackerSM64, but here it crashes in make_group
         gd_dl_flush_vertices();
         gd_dl_reset_buffers();
     }
@@ -1152,8 +1152,8 @@ void set_light_num(s32 n) {
 
 /* 24EB24 -> 24EC18 */
 s32 create_mtl_gddl(void) {
-    ColorRGBf blue = {0.0f, 0.0f, 1.0f};
-    s32 dlnum      = gd_startdisplist(7);
+    ColorRGBf blue = COLOR_RGBF_BLUE;
+    s32      dlnum = gd_startdisplist(7);
     gd_dl_material_lighting(dlnum, blue, GD_MTL_TEX_OFF);
     gd_enddlsplist_parent();
     sCurrentGdDl->totalVtx    = sCurrentGdDl->curVtxIdx;
@@ -1174,21 +1174,19 @@ void branch_to_gddl(s32 dlNum) {
 void gd_dl_hilite(s32 idx, // material GdDl number; offsets into hilite array
                    struct ObjCamera *cam,
                    Vec3f phongLightPosition, // vector to light source?
-                   ColorRGBf colour) {       // light color
-    Hilite *hilite;
-    Vec3f vec;
-    f32 mag; // magnitude of vec
+                   ColorRGBf colour) {
     const f32 xMul = 32.0f; // x scale factor?
     const f32 yMul = 32.0f; // y scale factor?
     if (idx >= 0xc8) gd_exit(); // too many hilites
-    hilite = &sHilites[idx];
+    Hilite *hilite = &sHilites[idx];
     gDPSetPrimColor(next_gfx(), 0, 0, (s32)(colour[0] * 255.0f), (s32)(colour[1] * 255.0f), (s32)(colour[2] * 255.0f), 255);
-    vec[2] = (cam->lookatMtx[0][2] + phongLightPosition[0]);
-    vec[1] = (cam->lookatMtx[1][2] + phongLightPosition[1]);
-    vec[0] = (cam->lookatMtx[2][2] + phongLightPosition[2]);
-    mag = vec3_mag(vec);
+    Vec3f vec = { (cam->lookatMtx[2][2] + phongLightPosition[2]),
+                  (cam->lookatMtx[1][2] + phongLightPosition[1]),
+                  (cam->lookatMtx[0][2] + phongLightPosition[0]) };
+    f32 mag = vec3_mag(vec);
     if (mag > 0.1f) {
-        mag = 1.0f / mag;
+        // normalize 'vec'
+        mag = (1.0f / mag);
         vec3_mul_val(vec, mag);
         hilite->h.x1 = (((vec[2] * cam->lookatMtx[0][0]) + (vec[1] * cam->lookatMtx[1][0]) + (vec[0] * cam->lookatMtx[2][0])) * xMul * 2.0f) + (xMul * 4.0f);
         hilite->h.y1 = (((vec[2] * cam->lookatMtx[0][1]) + (vec[1] * cam->lookatMtx[1][1]) + (vec[0] * cam->lookatMtx[2][1])) * yMul * 2.0f) + (yMul * 4.0f);
@@ -1250,9 +1248,7 @@ s32 gd_dl_material_lighting(s32 id, ColorRGBf colour, s32 material) {
         scaledColours[2] = (colour[2] * sLightScaleColours[i][2] * 255.0f);
         vec3_copy(DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.col,  scaledColours);
         vec3_copy(DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.colc, scaledColours);
-        lightDir[0] = (s8)sLightDirections[i][0];
-        lightDir[1] = (s8)sLightDirections[i][1];
-        lightDir[2] = (s8)sLightDirections[i][2];
+        vec3_copy(lightDir, sLightDirections[i]);
         vec3_copy(DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.dir, lightDir);
         gSPLight(next_gfx(), osVirtualToPhysical(&DL_CURRENT_LIGHT(sCurrentGdDl).l[i]), (i + 1));
     }
@@ -1279,8 +1275,7 @@ void set_gd_mtx_parameters(s32 params) {
  * Adds a viewport to the current display list based on the current active view
  */
 static void gd_dl_viewport(void) {
-    Vp *vp;
-    vp = &DL_CURRENT_VP(sCurrentGdDl);
+    Vp *vp = &DL_CURRENT_VP(sCurrentGdDl);
     vp->vp.vscale[0] = (s16)(sActiveView->lowerRight[0] * 2.0f);  // x scale
     vp->vp.vscale[1] = (s16)(sActiveView->lowerRight[1] * 2.0f);  // y scale
     vp->vp.vscale[2] = 0x1FF;  // z scale
@@ -1328,27 +1323,10 @@ void gddl_is_loading_shine_dl(Bool32 dlLoad) {
 
 /* 250C18 -> 251014; orig name: func_801A2448 */
 void start_view_dl(struct ObjView *view) {
-    f32 ulx, uly, lrx, lry;
-    if (view->upperLeft[0] < view->parent->upperLeft[0]) {
-        ulx = view->parent->upperLeft[0];
-    } else {
-        ulx = view->upperLeft[0];
-    }
-    if ((view->upperLeft[0] + view->lowerRight[0]) > (view->parent->upperLeft[0] + view->parent->lowerRight[0])) {
-        lrx = view->parent->upperLeft[0] + view->parent->lowerRight[0];
-    } else {
-        lrx = (view->upperLeft[0] + view->lowerRight[0]);
-    }
-    if (view->upperLeft[1] < view->parent->upperLeft[1]) {
-        uly = view->parent->upperLeft[1];
-    } else {
-        uly = view->upperLeft[1];
-    }
-    if ((view->upperLeft[1] + view->lowerRight[1]) > (view->parent->upperLeft[1] + view->parent->lowerRight[1])) {
-        lry = (view->parent->upperLeft[1] + view->parent->lowerRight[1]);
-    } else {
-        lry = (view->upperLeft[1] + view->lowerRight[1]);
-    }
+    f32 ulx = MAX(view->parent->upperLeft[0], view->upperLeft[0]);
+    f32 lrx = MIN((view->parent->upperLeft[0] + view->parent->lowerRight[0]), (view->upperLeft[0] + view->lowerRight[0]));
+    f32 uly = MAX(view->parent->upperLeft[1], view->upperLeft[1]);
+    f32 lry = MIN((view->parent->upperLeft[1] + view->parent->lowerRight[1]), (view->upperLeft[1] + view->lowerRight[1]));
     if (ulx >= lrx) ulx = (lrx - 1.0f);
     if (uly >= lry) uly = (lry - 1.0f);
     gDPSetScissor(       next_gfx(), G_SC_NON_INTERLACE, ulx, uly, lrx, lry);
@@ -1364,15 +1342,13 @@ void start_view_dl(struct ObjView *view) {
 void parse_p1_controller(void) {
     u32 i;
     struct GdControl *gdctrl = &gGdCtrl;
-    OSContPad *currInputs;
-    OSContPad *prevInputs;
     // Copy current inputs to previous
     u8 *src  = (u8 *) gdctrl;
     u8 *dest = (u8 *) gdctrl->prevFrame;
     for ((i = 0); (i < sizeof(struct GdControl)); (i++)) *dest++ = *src++;
     gdctrl->unk50 = gdctrl->unk4C = gdctrl->dup = gdctrl->ddown = 0;
-    currInputs = &sGdContPads[0];
-    prevInputs = &sPrevFrameCont[0];
+    OSContPad *currInputs = &sGdContPads[0];
+    OSContPad *prevInputs = &sPrevFrameCont[0];
     // stick values
     gdctrl->stickXf      = currInputs->stick_x;
     gdctrl->stickYf      = currInputs->stick_y;
@@ -1448,16 +1424,14 @@ void gd_setproperty(enum GdProperty prop, f32 f1, f32 f2, f32 f3) {
 
 /* 2522C0 -> 25245C */
 void gd_create_ortho_matrix(f32 l, f32 r, f32 b, f32 t, f32 n, f32 f) {
-    uintptr_t orthoMtx;
-    uintptr_t rotMtx;
     // Should produce G_RDPHALF_1 in Fast3D
     gSPPerspNormalize(next_gfx(), 0xFFFF);
     guOrtho(&DL_CURRENT_MTX(sCurrentGdDl), l, r, b, t, n, f, 1.0f);
-    orthoMtx = GD_LOWER_29(&DL_CURRENT_MTX(sCurrentGdDl));
+    uintptr_t orthoMtx = GD_LOWER_29(&DL_CURRENT_MTX(sCurrentGdDl));
     gSPMatrix(next_gfx(), orthoMtx, (G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH));
     next_mtx();
     guRotate(&DL_CURRENT_MTX(sCurrentGdDl), 0.0f, 0.0f, 0.0f, 1.0f);
-    rotMtx = GD_LOWER_29(&DL_CURRENT_MTX(sCurrentGdDl));
+    uintptr_t rotMtx = GD_LOWER_29(&DL_CURRENT_MTX(sCurrentGdDl));
     gSPMatrix(next_gfx(), rotMtx, (G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH));
     next_mtx();
 }
@@ -1465,16 +1439,14 @@ void gd_create_ortho_matrix(f32 l, f32 r, f32 b, f32 t, f32 n, f32 f) {
 /* 25245C -> 25262C */
 void gd_create_perspective_matrix(f32 fovy, f32 aspect, f32 near, f32 far) {
     u16 perspNorm;
-    uintptr_t perspecMtx;
-    uintptr_t rotMtx;
     sGdPerspTimer += 0.1f;
     guPerspective(&DL_CURRENT_MTX(sCurrentGdDl), &perspNorm, fovy, aspect, near, far, 1.0f);
     gSPPerspNormalize(next_gfx(), perspNorm);
-    perspecMtx = GD_LOWER_29(&DL_CURRENT_MTX(sCurrentGdDl));
+    uintptr_t perspecMtx = GD_LOWER_29(&DL_CURRENT_MTX(sCurrentGdDl));
     gSPMatrix(next_gfx(), perspecMtx, (G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH));
     next_mtx();
     guRotate(&DL_CURRENT_MTX(sCurrentGdDl), 0.0f, 0.0f, 0.0f, 1.0f);
-    rotMtx = GD_LOWER_29(&DL_CURRENT_MTX(sCurrentGdDl));
+    uintptr_t rotMtx = GD_LOWER_29(&DL_CURRENT_MTX(sCurrentGdDl));
     gSPMatrix(next_gfx(), rotMtx, (G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH));
     next_mtx();
 }
@@ -1572,8 +1544,7 @@ void update_cursor(void) {
 
 /* 253938 -> 2539DC; orig name: func_801A5168 */
 void update_view_and_dl(struct ObjView *view) {
-    s32 prevFlags;
-    prevFlags = view->flags;
+    s32 prevFlags = view->flags;
     update_view(view);
     if (prevFlags & VIEW_UPDATE) {
         sCurrentGdDl = sMHeadMainDls[gGdFrameBufNum];
@@ -1677,9 +1648,6 @@ void gd_put_sprite(RGBA16 *sprite, s32 x, s32 y, s32 wx, s32 wy) {
 
 /* 254DFC -> 254F94; orig name: proc_dyn_list */
 void gd_setup_cursor(struct ObjGroup *parentgrp) {
-    struct ObjView *mouseview;
-    struct ObjGroup *mousegrp;
-    UNUSED struct ObjNet *net;
     sHandShape = make_shape("mouse");
     sHandShape->dlNums[0] = gd_startdisplist(7);
     gd_put_sprite((RGBA16 *) gd_texture_hand_open, 100, 100, 32, 32);
@@ -1688,13 +1656,13 @@ void gd_setup_cursor(struct ObjGroup *parentgrp) {
     gd_put_sprite((RGBA16 *) gd_texture_hand_open, 100, 100, 32, 32);
     gd_enddlsplist_parent();
     d_start_group("mouseg");
-    net = (struct ObjNet *) d_makeobj(D_NET, AsDynName(0));
+    UNUSED struct ObjNet *net = (struct ObjNet *) d_makeobj(D_NET, AsDynName(0));
     d_set_init_pos(gVec3fZero);
     d_set_type(3);
     d_set_shapeptrptr(&sHandShape);
     d_end_group("mouseg");
-    mousegrp = (struct ObjGroup *) d_use_obj("mouseg");
-    mouseview = make_view("mouseview", (VIEW_2_COL_BUF | VIEW_ALLOC_ZBUF | VIEW_1_CYCLE | VIEW_MOVEMENT | VIEW_DRAW), 2, 0, 0, 32, 32, mousegrp);
+    struct ObjGroup *mousegrp = (struct ObjGroup *) d_use_obj("mouseg");
+    struct ObjView *mouseview = make_view("mouseview", (VIEW_2_COL_BUF | VIEW_ALLOC_ZBUF | VIEW_1_CYCLE | VIEW_MOVEMENT | VIEW_DRAW), 2, 0, 0, 32, 32, mousegrp);
     mouseview->flags &= ~VIEW_UPDATE;
     sHandView = mouseview;
     if (parentgrp != NULL) addto_group(parentgrp, &mousegrp->header);
@@ -1721,8 +1689,6 @@ static void gd_block_dma(u32 romAddr, void *vAddr, s32 size) {
  */
 struct GdObj *load_dynlist(struct DynList *dynlist) {
     void *allocPtr;
-    s32 tlbEntries;
-    struct GdObj *loadedList;
     s32 i = -1;
     uintptr_t dynlistSegStart = (uintptr_t) _gd_dynlistsSegmentRomStart;
     uintptr_t dynlistSegEnd   = (uintptr_t) _gd_dynlistsSegmentRomEnd;
@@ -1734,7 +1700,7 @@ struct GdObj *load_dynlist(struct DynList *dynlist) {
     // Copy the dynlist data from ROM
     gd_block_dma(dynlistSegStart, (void *) allocSegSpace, segSize);
     osUnmapTLBAll();
-    tlbEntries = (((segSize / PAGE_SIZE) / 2) + 1);
+    s32 tlbEntries = (((segSize / PAGE_SIZE) / 2) + 1);
     if (tlbEntries >= 31) gd_exit(); // too many TLBs
     // Map virtual address 0x04000000 to `allocSegSpace`
     for ((i = 0); (i < tlbEntries); (i++)) {
@@ -1746,7 +1712,7 @@ struct GdObj *load_dynlist(struct DynList *dynlist) {
     }
 #undef PAGE_SIZE
     // process the dynlist
-    loadedList = proc_dynlist(dynlist);
+    struct GdObj *loadedList = proc_dynlist(dynlist);
     gd_free(allocPtr);
     osUnmapTLBAll();
     return loadedList;

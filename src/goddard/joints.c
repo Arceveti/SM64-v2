@@ -9,7 +9,7 @@
 #include "skin.h"
 #include "engine/math_util.h"
 
-static s32 sJointCount;                   // @ 801BA974
+static s32 sJointCount;
 
 /**
  * Controls movement of grabbable joints
@@ -67,19 +67,15 @@ void grabbable_joint_update_func(struct ObjJoint *self) {
  * Update function for Mario's eye joints, which makes them follow the cursor
  */
 void eye_joint_update_func(struct ObjJoint *self) {
-    Mat4 *rotMtx;
-    Vec3f offset;
     Vec3f pos;
     register struct ListNode *att;
     struct GdObj *attobj;
     if ((sCurrentMoveCamera == NULL) || ((self->rootAnimator != NULL) && (self->rootAnimator->state != 7))) return;
     set_cur_dynobj((struct GdObj *)self);
-    rotMtx = d_get_rot_mtx_ptr();
+    Mat4 *rotMtx = d_get_rot_mtx_ptr();
     vec3_copy(pos, (*rotMtx)[3]);
     world_pos_to_screen_coords(pos, sCurrentMoveCamera, sCurrentMoveView);
-    offset[0]  =  (gGdCtrl.csrX - pos[0]);
-    offset[1]  = -(gGdCtrl.csrY - pos[1]);
-    offset[2]  = 0.0f;
+    Vec3f offset = { (gGdCtrl.csrX - pos[0]), -(gGdCtrl.csrY - pos[1]), 0.0f };
     vec3_mul_val(offset, 2.0f);
     if (vec3_sumsq(offset) > sqr(30.0f)) {
         vec3_normalize(offset);
@@ -104,12 +100,10 @@ void set_joint_vecs(struct ObjJoint *j, Vec3f pos) {
 
 /* 23D818 -> 23DA18 */
 struct ObjJoint *make_joint(s32 flags, Vec3f pos) {
-    struct ObjJoint *j; // sp24
-    struct ObjJoint *oldhead;
-    j = (struct ObjJoint *) make_object(OBJ_TYPE_JOINTS);
+    struct ObjJoint *j       = (struct ObjJoint *) make_object(OBJ_TYPE_JOINTS);
     sJointCount++;
-    oldhead      = gGdJointList;
-    gGdJointList = j;
+    struct ObjJoint *oldhead = gGdJointList;
+    gGdJointList             = j;
     if (oldhead != NULL) {
         j->nextjoint       = oldhead;
         oldhead->prevjoint = j;
@@ -151,9 +145,8 @@ struct ObjJoint *make_grabber_joint(struct ObjShape *shape, s32 flags, f32 x, f3
 
 /* 23E298 -> 23E328; orig name: func_8018FAC8 */
 Bool32 set_skin_weight(struct ObjJoint *j, s32 id, struct ObjVertex *vtx /* always NULL */, f32 weight) {
-    struct ObjWeight *w;
     if (j->weightGrp == NULL) j->weightGrp = make_group(0);
-    w = make_weight(id, vtx, weight);
+    struct ObjWeight *w = make_weight(id, vtx, weight);
     addto_group(j->weightGrp, &w->header);
     return TRUE;
 }
