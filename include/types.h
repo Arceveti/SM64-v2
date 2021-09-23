@@ -7,6 +7,9 @@
 #include "macros.h"
 #include "config.h"
 
+#define BIT(i)  (1 << (i))
+#define BITMASK(size) ((BIT(size)) - 1)
+
 #define SCREEN_CENTER_X (SCREEN_WIDTH  / 2)
 #define SCREEN_CENTER_Y (SCREEN_HEIGHT / 2)
 

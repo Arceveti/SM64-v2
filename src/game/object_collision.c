@@ -159,7 +159,7 @@ void check_destructive_object_collision(void) {
     struct Object *destructiveObj = (struct Object *) &gObjectLists[OBJ_LIST_DESTRUCTIVE];
     struct Object        *nextObj = (struct Object *) destructiveObj->header.next;
     while (nextObj != destructiveObj) {
-        if ((nextObj->oDistanceToMario < 2000.0f) && !(nextObj->activeFlags & ACTIVE_FLAG_SMALL_BOX_NOT_THROWN)) {
+        if ((nextObj->oDistanceToMario < 2000.0f) && !(nextObj->activeFlags & ACTIVE_FLAG_DESTRUCTIVE_OBJ_DONT_DESTROY)) {
             check_collision_in_list(nextObj, (struct Object *) nextObj->header.next, destructiveObj);
             check_collision_in_list(nextObj, (struct Object *) gObjectLists[OBJ_LIST_GENACTOR].next, (struct Object *) &gObjectLists[OBJ_LIST_GENACTOR]);
             check_collision_in_list(nextObj, (struct Object *) gObjectLists[OBJ_LIST_PUSHABLE].next, (struct Object *) &gObjectLists[OBJ_LIST_PUSHABLE]);

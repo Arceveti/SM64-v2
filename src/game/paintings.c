@@ -969,7 +969,7 @@ void move_ddd_painting(struct Painting *painting, f32 frontPos, f32 backPos, f32
  * Set the painting's node's layer based on its alpha
  */
 void set_painting_layer(struct GraphNodeGenerated *gen, struct Painting *painting) {
-    gen->fnNode.node.flags = ((gen->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (((painting->alpha == 0xFF) ? LAYER_OCCLUDE_SILHOUETTE_OPAQUE : LAYER_TRANSPARENT) << 8));
+    SET_GRAPH_NODE_LAYER(gen->fnNode.node.flags, ((painting->alpha == 0xFF) ? LAYER_OCCLUDE_SILHOUETTE_OPAQUE : LAYER_TRANSPARENT));
 }
 
 /**

@@ -49,10 +49,10 @@ Gfx *geo_intro_super_mario_64_logo(s32 state, struct GraphNode *node, UNUSED voi
     if (state != 1) {
         sIntroFrameCounter = 0;
     } else if (state == 1) {
-        graphNode->flags = ((graphNode->flags & GRAPH_NODE_TYPES_MASK) | (LAYER_OPAQUE << 8));
-        scaleMat         = alloc_display_list(    sizeof(*scaleMat));
-        dl               = alloc_display_list(4 * sizeof(*dl      ));
-        dlIter           = dl;
+        SET_GRAPH_NODE_LAYER(graphNode->flags, LAYER_OPAQUE);
+        scaleMat = alloc_display_list(    sizeof(*scaleMat));
+        dl       = alloc_display_list(4 * sizeof(*dl      ));
+        dlIter   = dl;
         // determine scale based on the frame counter
         if ((sIntroFrameCounter >= 0) && (sIntroFrameCounter < INTRO_STEPS_ZOOM_IN)) {
             // zooming in
@@ -92,10 +92,10 @@ Gfx *geo_intro_tm_copyright(s32 state, struct GraphNode *node, UNUSED void *cont
         gSPDisplayList(      dlIter++, dl_proj_mtx_fullscreen);
         gDPSetEnvColor(      dlIter++, 255, 255, 255, sTmCopyrightAlpha);
         if (sTmCopyrightAlpha == 255) { // opaque
-            graphNode->flags = ((graphNode->flags & GRAPH_NODE_TYPES_MASK) | (LAYER_OPAQUE      << 8));
+            SET_GRAPH_NODE_LAYER(graphNode->flags, LAYER_OPAQUE);
             gDPSetRenderMode(dlIter++, G_RM_AA_OPA_SURF, G_RM_AA_OPA_SURF2);
         } else { // blend
-            graphNode->flags = ((graphNode->flags & GRAPH_NODE_TYPES_MASK) | (LAYER_TRANSPARENT << 8));
+            SET_GRAPH_NODE_LAYER(graphNode->flags, LAYER_TRANSPARENT);
             gDPSetRenderMode(dlIter++, G_RM_AA_XLU_SURF, G_RM_AA_XLU_SURF2);
         }
         gSPDisplayList(      dlIter++, &intro_seg7_dl_copyright_trademark);  // draw model
@@ -169,7 +169,7 @@ Gfx *geo_intro_regular_backdrop(s32 state, struct GraphNode *node, UNUSED void *
     if (state == 1) {  // draw
         dl     = alloc_display_list(16 * sizeof(*dl));
         dlIter = dl;
-        graphNode->node.flags = (graphNode->node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_OPAQUE << 8);
+        SET_GRAPH_NODE_LAYER(graphNode->node.flags, LAYER_OPAQUE);
         gSPDisplayList(   dlIter++, &dl_proj_mtx_fullscreen);
         gSPDisplayList(   dlIter++, &title_screen_bg_dl_start);
         for ((i = 0); (i < 12); (++i)) gSPDisplayList(dlIter++, intro_backdrop_one_image(i, backgroundTable));
@@ -216,7 +216,7 @@ Gfx *geo_intro_gameover_backdrop(s32 state, struct GraphNode *node, UNUSED void 
             }
         }
         if (sGameOverTableIndex != 11) sGameOverFrameCounter++;
-        graphNode->flags = ((graphNode->flags & GRAPH_NODE_TYPES_MASK) | (LAYER_OPAQUE << 8));
+        SET_GRAPH_NODE_LAYER(graphNode->flags, LAYER_OPAQUE);
         // draw all the tiles
         gSPDisplayList(   dlIter++, &dl_proj_mtx_fullscreen);
         gSPDisplayList(   dlIter++, &title_screen_bg_dl_start);
@@ -339,7 +339,7 @@ Gfx *geo_intro_face_easter_egg(s32 state, struct GraphNode *node, UNUSED void *c
         if (sFaceVisible[0] || sFaceVisible[17]) {
             image = intro_sample_frame_buffer(40, 40, 2, 2, 120, 80);
             if (image != NULL) {
-                genNode->fnNode.node.flags = ((genNode->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_OPAQUE << 8));
+                SET_GRAPH_NODE_LAYER(genNode->fnNode.node.flags, LAYER_OPAQUE);
                 dl = intro_draw_face(image, 40, 40);
             }
         }
@@ -357,7 +357,7 @@ Gfx *geo_intro_rumble_pak_graphic(s32 state, struct GraphNode *node, UNUSED void
     if (state != 1) {
         dl = NULL;
     } else if (state == 1) {
-        genNode->fnNode.node.flags = ((genNode->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_OPAQUE << 8));
+        SET_GRAPH_NODE_LAYER(genNode->fnNode.node.flags, LAYER_OPAQUE);
         introContext = (genNode->parameter & 0xFF);
         if (introContext == 0) {
             backgroundTileSix = introBackgroundIndexTable[6];

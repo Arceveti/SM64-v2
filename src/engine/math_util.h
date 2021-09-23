@@ -4,9 +4,6 @@
 
 #include "types.h"
 
-#define BIT(i)  (1 << (i))
-#define BITMASK(size) ((BIT(size)) - 1)
-
 // #define CLAMP_BITS(val, size) (MIN((val), BITMASK((u32)(size))))
 
 #define NEAR_ZERO   0.00001f

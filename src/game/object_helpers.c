@@ -69,10 +69,10 @@ Gfx *geo_update_layer_transparency(s32 callContext, struct GraphNode *node, UNUS
         dlStart       = alloc_display_list(sizeof(Gfx) * 3);
         dlHead        = dlStart;
         if (objectOpacity == 0xFF) {
-            currentGraphNode->fnNode.node.flags = ((((currentGraphNode->parameter == 20) ? LAYER_TRANSPARENT_DECAL : LAYER_OPAQUE     ) << 8) | (currentGraphNode->fnNode.node.flags & GRAPH_NODE_TYPES_MASK));
+            SET_GRAPH_NODE_LAYER(currentGraphNode->fnNode.node.flags, ((currentGraphNode->parameter == 20) ? LAYER_TRANSPARENT_DECAL : LAYER_OPAQUE     ));
             objectGraphNode->oAnimState = TRANSPARENCY_ANIM_STATE_OPAQUE;
         } else {
-            currentGraphNode->fnNode.node.flags = ((((currentGraphNode->parameter == 20) ? LAYER_TRANSPARENT_DECAL : LAYER_TRANSPARENT) << 8) | (currentGraphNode->fnNode.node.flags & GRAPH_NODE_TYPES_MASK));
+            SET_GRAPH_NODE_LAYER(currentGraphNode->fnNode.node.flags, ((currentGraphNode->parameter == 20) ? LAYER_TRANSPARENT_DECAL : LAYER_TRANSPARENT));
             objectGraphNode->oAnimState = TRANSPARENCY_ANIM_STATE_TRANSPARENT;
 #ifdef VERSION_JP
             if (currentGraphNode->parameter == 10) {
@@ -840,7 +840,7 @@ static f32 cur_obj_move_y_and_get_water_level(f32 gravity, f32 buoyancy) {
     o->oVelY += gravity + buoyancy;
     if (o->oVelY < -78.0f) o->oVelY = -78.0f;
     o->oPosY += o->oVelY;
-    return (o->activeFlags & ACTIVE_FLAG_IGNORE_WATER_LEVEL) ? FLOOR_LOWER_LIMIT : find_water_level(o->oPosX, o->oPosZ);
+    return (o->activeFlags & ACTIVE_FLAG_IGNORE_ENV_BOXES) ? FLOOR_LOWER_LIMIT : find_water_level(o->oPosX, o->oPosZ);
 }
 
 void cur_obj_move_y(f32 gravity, f32 bounciness, f32 buoyancy) {

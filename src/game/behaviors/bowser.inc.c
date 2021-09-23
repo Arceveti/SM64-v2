@@ -1617,7 +1617,7 @@ Gfx *geo_bits_bowser_coloring(s32 callContext, struct GraphNode *node, UNUSED s3
         graphNode = (struct GraphNodeGenerated *) node;
         if (gCurGraphNodeHeldObject != 0) obj = gCurGraphNodeHeldObject->objNode;
         // Set layers if object is transparent or not
-        graphNode->fnNode.node.flags = ((graphNode->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (((obj->oOpacity == 0xFF) ? LAYER_OPAQUE : LAYER_TRANSPARENT) << 8));
+        SET_GRAPH_NODE_LAYER(graphNode->fnNode.node.flags, ((obj->oOpacity == 0xFF) ? LAYER_OPAQUE : LAYER_TRANSPARENT));
         gfx = gfxHead = alloc_display_list(2 * sizeof(Gfx));
         // If TRUE, clear lighting to give rainbow color
         if (obj->oBowserRainbowLight) {

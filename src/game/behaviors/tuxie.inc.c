@@ -99,7 +99,7 @@ void (*sTuxiesMotherActions[])(void) = { tuxies_mother_act_idle,
                                          tuxies_mother_act_received_baby };
 
 void bhv_tuxies_mother_loop(void) {
-    o->activeFlags |= ACTIVE_FLAG_IGNORE_WATER_LEVEL;
+    o->activeFlags |= ACTIVE_FLAG_IGNORE_ENV_BOXES;
     cur_obj_update_floor_and_walls();
     cur_obj_call_action_function(sTuxiesMotherActions);
     cur_obj_move_standard(-78);

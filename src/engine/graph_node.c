@@ -184,7 +184,7 @@ init_graph_node_translation_rotation(struct AllocOnlyPool *pool,
 #else
         vec3_copy(graphNode->rotation, rotation);
 #endif
-        graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
+        SET_GRAPH_NODE_LAYER(graphNode->node.flags, drawingLayer);
         graphNode->displayList = displayList;
     }
     return graphNode;
@@ -210,7 +210,7 @@ struct GraphNodeTranslation *init_graph_node_translation(struct AllocOnlyPool *p
         vec3_copy(graphNode->lerpPos[1], translation);
         vec3_copy(graphNode->lerpPos[2], translation);
 #endif
-        graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
+        SET_GRAPH_NODE_LAYER(graphNode->node.flags, drawingLayer);
         graphNode->displayList = displayList;
     }
     return graphNode;
@@ -232,7 +232,7 @@ struct GraphNodeRotation *init_graph_node_rotation(struct AllocOnlyPool *pool,
         vec3_copy(graphNode->lerpRot[1], rotation);
         vec3_copy(graphNode->lerpRot[2], rotation);
 #endif
-        graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
+        SET_GRAPH_NODE_LAYER(graphNode->node.flags, drawingLayer);
         graphNode->displayList = displayList;
     }
     return graphNode;
@@ -247,7 +247,7 @@ struct GraphNodeScale *init_graph_node_scale(struct AllocOnlyPool *pool,
     if (pool      != NULL) graphNode = alloc_only_pool_alloc(pool, sizeof(struct GraphNodeScale));
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_SCALE);
-        graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
+        SET_GRAPH_NODE_LAYER(graphNode->node.flags, drawingLayer);
         graphNode->scale       = scale;
 #ifdef VARIABLE_FRAMERATE
         graphNode->lerpScale[0] = scale;
@@ -333,7 +333,7 @@ struct GraphNodeAnimatedPart *init_graph_node_animated_part(struct AllocOnlyPool
         vec3_zero(graphNode->lerpRot[1]);
         vec3_zero(graphNode->lerpRot[2]);
 #endif
-        graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
+        SET_GRAPH_NODE_LAYER(graphNode->node.flags, drawingLayer);
         graphNode->displayList = displayList;
     }
     return graphNode;
@@ -351,7 +351,7 @@ struct GraphNodeBone *init_graph_node_bone(struct AllocOnlyPool *pool,
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_BONE);
         vec3_copy(graphNode->translation, translation);
         vec3_copy(graphNode->rotation,       rotation);
-        graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
+        SET_GRAPH_NODE_LAYER(graphNode->node.flags, drawingLayer);
         graphNode->displayList = displayList;
     }
     return graphNode;
@@ -368,7 +368,7 @@ struct GraphNodeBillboard *init_graph_node_billboard(struct AllocOnlyPool *pool,
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_BILLBOARD);
         vec3_copy(graphNode->translation, translation);
-        graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
+        SET_GRAPH_NODE_LAYER(graphNode->node.flags, drawingLayer);
         graphNode->displayList = displayList;
         graphNode->zOffset     = zOffset;
     }
@@ -384,7 +384,7 @@ struct GraphNodeDisplayList *init_graph_node_display_list(struct AllocOnlyPool *
     if (pool      != NULL) graphNode = alloc_only_pool_alloc(pool, sizeof(struct GraphNodeDisplayList));
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_DISPLAY_LIST);
-        graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
+        SET_GRAPH_NODE_LAYER(graphNode->node.flags, drawingLayer);
         graphNode->displayList = displayList;
     }
     return graphNode;
