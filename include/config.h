@@ -136,6 +136,9 @@
 // Fixes the game reading the ia8 burn smoke texture as an rgba16
 #define BURN_SMOKE_FIX
 
+// Disable the fix to Koopa's unshelled model
+#define KOOPA_KEEP_PINK_SHORTS
+
 // Lightweight directional lighting engine by Fazana. Intended for giving proximity and positional pointlights to small objects.
 #define PUPPYLIGHTS
 

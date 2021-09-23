@@ -1593,7 +1593,7 @@ void generate_yellow_sparkles(s16 x, s16 y, s16 z, f32 radius) {
     Vec3s offset;
     vec3s_set_dist_and_angle(gVec3sZero, offset, radius, sSparkleGenTheta, sSparkleGenPhi);
     spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvSparkleSpawn, (x + offset[0]), (y + offset[1]), (z + offset[2]), 0x0, 0x0, 0x0);
-    vec3_mul_val(offset, (4 / 3));
+    vec3_mul_val(offset, ((f32)4 / 3));
     spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvSparkleSpawn, (x - offset[0]), (y - offset[1]), (z - offset[2]), 0x0, 0x0, 0x0);
     sSparkleGenTheta += DEG(78.75);
     sSparkleGenPhi   += DEG(  135);

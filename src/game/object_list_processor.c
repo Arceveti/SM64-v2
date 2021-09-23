@@ -389,8 +389,8 @@ void set_object_respawn_info_bits(struct Object *obj, u8 bits) {
     u32 *info32;
     u16 *info16;
     switch (obj->respawnInfoType) {
-        case RESPAWN_INFO_TYPE_32: info32 = (u32 *) obj->respawnInfo; *info32 |= bits << 8; break;
-        case RESPAWN_INFO_TYPE_16: info16 = (u16 *) obj->respawnInfo; *info16 |= bits << 8; break;
+        case RESPAWN_INFO_TYPE_32: info32 = (u32 *)obj->respawnInfo; *info32 |= (bits << 8); break;
+        case RESPAWN_INFO_TYPE_16: info16 = (u16 *)obj->respawnInfo; *info16 |= (bits << 8); break;
     }
 }
 
