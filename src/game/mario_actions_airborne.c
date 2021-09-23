@@ -491,7 +491,10 @@ Bool32 act_hold_freefall(struct MarioState *m) {
 }
 
 Bool32 act_side_flip(struct MarioState *m) {
-    if (m->input & INPUT_B_PRESSED) return set_mario_action(m, ACT_DIVE, 0);
+    if (m->input & INPUT_B_PRESSED) {
+        m->marioObj->header.gfx.angle[1] += DEG(180);
+        return set_mario_action(m, ACT_DIVE, 0);
+    }
     if (m->input & INPUT_Z_PRESSED) {
         m->marioObj->header.gfx.angle[1] += DEG(180);
         return set_mario_action(m, ACT_GROUND_POUND, 0);
