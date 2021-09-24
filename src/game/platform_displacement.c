@@ -20,12 +20,11 @@ struct Object *gMarioPlatform = NULL;
  * within 4 units of the floor. Set his referenced platform object accordingly.
  */
 void update_mario_platform(void) {
-    struct Surface *floor;
     if (gMarioObject == NULL) return;
-    floor = gMarioState->floor;
-    if ((absf(gMarioState->pos[1] - gMarioState->floorHeight) < 4.0f) && (floor != NULL) && (floor->object != NULL)) {
-        gMarioPlatform         = floor->object;
-        gMarioObject->platform = floor->object;
+    struct Object *floorObj = gMarioState->floor->object;
+    if ((absf(gMarioState->pos[1] - gMarioState->floorHeight) < 4.0f) && (gMarioState->floor != NULL) && (floorObj != NULL)) {
+        gMarioPlatform         = floorObj;
+        gMarioObject->platform = floorObj;
     } else {
         gMarioPlatform         = NULL;
         gMarioObject->platform = NULL;

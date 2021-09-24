@@ -64,8 +64,7 @@ void bhv_fish_spawner_loop(void) {
  */
 static void fish_vertical_roam(s32 speed) {
     f32 parentY = o->parentObj->oPosY;
-    // If the stage is Secret Aquarium, the fish can
-    // travel as far vertically as they wish.
+    // If the stage is Secret Aquarium, the fish can travel as far vertically as they wish.
     if (gCurrLevelNum == LEVEL_SA) {
         if (500.0f < absf(o->oPosY - o->oFishGoalY)) speed = 10;
         approach_f32_symmetric_bool(&o->oPosY, o->oFishGoalY, speed);

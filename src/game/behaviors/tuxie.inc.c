@@ -33,16 +33,13 @@ void tuxies_mother_act_received_baby(void) { // act 2
 }
 
 void tuxies_mother_act_receiving_baby(void) { // act 1
-    s32 motherParam;
-    s32 babyParam;
-    DialogID dialogID;
     switch (o->oSubAction) {
         case MOTHER_PENGUIN_SUB_ACT_RECEIVE_BABY:
             cur_obj_init_animation_with_sound(PENGUIN_ANIM_IDLE);
             if (!cur_obj_is_mario_on_platform()) {
-                motherParam = ((o->oBehParams >> 0x10) & 0xFF);
-                babyParam   = ((o->prevObj->oBehParams >> 0x10) & 0xFF);
-                dialogID    = ((motherParam == babyParam) ? DIALOG_058 : DIALOG_059);
+                s32 motherParam   = ((o->oBehParams >> 0x10) & 0xFF);
+                s32 babyParam     = ((o->prevObj->oBehParams >> 0x10) & 0xFF);
+                DialogID dialogID = ((motherParam == babyParam) ? DIALOG_058 : DIALOG_059);
                 if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP, DIALOG_FLAG_TURN_TO_MARIO, CUTSCENE_DIALOG, dialogID)) {
                     o->oSubAction = ((dialogID == DIALOG_058) ? MOTHER_PENGUIN_SUB_ACT_CORRECT_BABY : MOTHER_PENGUIN_SUB_ACT_WRONG_BABY);
                     o->prevObj->oInteractionSubtype |= INT_SUBTYPE_DROP_IMMEDIATELY;

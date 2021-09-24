@@ -750,11 +750,10 @@ Bool32 interact_door(struct MarioState *m, UNUSED InteractType interactType, str
         if (numStars >= requiredNumStars) {
 #endif
             u32 actionArg = should_push_or_pull_door(m, obj);
-            MarioAction enterDoorAction;
 #if !defined(DEBUG_LEVEL_SELECT) && !defined(UNLOCK_ALL)
             u32 doorSaveFileFlag;
 #endif
-            enterDoorAction = ((actionArg & WARP_FLAG_DOOR_PULLED) ? ACT_PULLING_DOOR : ACT_PUSHING_DOOR);
+            MarioAction enterDoorAction = ((actionArg & WARP_FLAG_DOOR_PULLED) ? ACT_PULLING_DOOR : ACT_PUSHING_DOOR);
 #if !defined(DEBUG_LEVEL_SELECT) && !defined(UNLOCK_ALL)
             doorSaveFileFlag = get_door_save_file_flag(obj);
 #endif

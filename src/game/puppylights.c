@@ -190,7 +190,7 @@ void puppylights_run(Lights1 *src, struct Object *obj, UNUSED s32 flags, RGBA32 
     Bool32 offsetPlaced = FALSE;
     s32 lightFlags = flags;
     s32 colour;
-    if (gCurrLevelNum < 4) return;
+    if (gCurrLevelNum < LEVEL_BBH) return;
     // Checks if there's a hardset colour. Colours are only the first 3 bytes, so you can really put whatever you want in the last.
     // If there isn't a colour, then it decides whether to apply the ambient lighting, or the default lighting as the baseline.
     // Otherwise, it hardsets a colour to begin with. I don't recommend you use this, simply because it's intended to be used
@@ -227,7 +227,7 @@ void puppylights_run(Lights1 *src, struct Object *obj, UNUSED s32 flags, RGBA32 
 // 0xFFFF is essentially the null ID. If the display flag is met, it will find and set an ID, otherwise it frees up the spot.
 void puppylights_object_emit(struct Object *obj) {
     s32 i;
-    if (gCurrLevelNum < 4) return;
+    if (gCurrLevelNum < LEVEL_BBH) return;
     if (obj->oFlags & OBJ_FLAG_EMIT_LIGHT) {
         Vec3d d;
         vec3_diff(d, &obj->oPosVec, gMarioState->pos);

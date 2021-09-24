@@ -720,8 +720,7 @@ void update_mario_sound_and_camera(struct MarioState *m) {
 void set_steep_jump_action(struct MarioState *m) {
     m->marioObj->oMarioSteepJumpYaw = m->faceAngle[1];
     if (m->forwardVel > 0.0f) {
-        //! ((s16)0x8000) has undefined behavior. Therefore, this downcast has
-        //! undefined behavior if m->floorYaw >= 0.
+        //! ((s16)0x8000) has undefined behavior. Therefore, this downcast has undefined behavior if m->floorYaw >= 0.
         Angle angleTemp     = (m->floorYaw + DEG(180));
         Angle faceAngleTemp = (m->faceAngle[1] - angleTemp);
         f32 y               = (sins(faceAngleTemp) * m->forwardVel);

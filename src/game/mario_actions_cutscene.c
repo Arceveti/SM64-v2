@@ -216,7 +216,7 @@ void handle_save_menu(struct MarioState *m) {
         // save and continue / save and quit
         if ((gSaveOptSelectIndex == MENU_OPT_SAVE_AND_CONTINUE) || (gSaveOptSelectIndex == MENU_OPT_SAVE_AND_QUIT)) {
             save_file_do_save(gCurrSaveFileNum - 1);
-            if (gSaveOptSelectIndex == MENU_OPT_SAVE_AND_QUIT) fade_into_special_warp(-2, 0); // reset game
+            if (gSaveOptSelectIndex == MENU_OPT_SAVE_AND_QUIT) fade_into_special_warp(WARP_SPECIAL_MARIO_HEAD_REGULAR, 0); // reset game
         }
         // not quitting
         if (gSaveOptSelectIndex != MENU_OPT_SAVE_AND_QUIT) {
@@ -733,17 +733,15 @@ Bool32 act_unlocking_star_door(struct MarioState *m) {
 }
 
 Bool32 act_entering_star_door(struct MarioState *m) {
-    f32 targetDX, targetDZ;
-    Angle targetAngle;
     if (m->actionTimer++ == 0) {
         m->interactObj->oInteractStatus = INT_STATUS_DOOR_PULLED;
         // ~30 degrees / 1/12 rot
-        targetAngle = (m->usedObj->oMoveAngleYaw + DEG(30));
+        Angle targetAngle = (m->usedObj->oMoveAngleYaw + DEG(30));
         if (m->actionArg & WARP_FLAG_DOOR_FLIP_MARIO) targetAngle += DEG(120); // ~120 degrees / 1/3 rot (total 150d / 5/12) //! why not DEG(180)?
         // targetDX and targetDZ are the offsets to add to Mario's position to
         // have Mario stand 150 units in front of the door
-        targetDX = (m->usedObj->oPosX + (150.0f * sins(targetAngle)) - m->pos[0]);
-        targetDZ = (m->usedObj->oPosZ + (150.0f * coss(targetAngle)) - m->pos[2]);
+        f32 targetDX = (m->usedObj->oPosX + (150.0f * sins(targetAngle)) - m->pos[0]);
+        f32 targetDZ = (m->usedObj->oPosZ + (150.0f * coss(targetAngle)) - m->pos[2]);
         m->marioObj->oMarioReadingSignDPosX = (targetDX / 20.0f);
         m->marioObj->oMarioReadingSignDPosZ = (targetDZ / 20.0f);
         m->faceAngle[1] = atan2s(targetDZ, targetDX);

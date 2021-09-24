@@ -4,7 +4,6 @@
 #endif
 
 #include "sm64.h"
-#include "level_commands.h"
 #include "audio/external.h"
 #include "buffers/framebuffers.h"
 #include "buffers/zbuffer.h"
@@ -24,6 +23,7 @@
 #include "graph_node.h"
 #include "level_script.h"
 #include "level_misc_macros.h"
+#include "level_commands.h"
 #include "math_util.h"
 #include "surface_collision.h"
 #include "surface_load.h"

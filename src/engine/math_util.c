@@ -822,7 +822,6 @@ void mtxf_align_terrain_triangle(Mat4 mtx, Vec3f pos, Angle yaw, f32 radius) {
     Vec3f point0, point1, point2;
     Vec3f forward;
     Vec3f xColumn, yColumn, zColumn;
-    f32 avgY;
     f32 minY  = (-radius * 3);
     point0[0] = (pos[0] + (radius * sins(yaw + DEG( 60))));
     point0[2] = (pos[2] + (radius * coss(yaw + DEG( 60))));
@@ -836,7 +835,7 @@ void mtxf_align_terrain_triangle(Mat4 mtx, Vec3f pos, Angle yaw, f32 radius) {
     if ((point0[1] - pos[1]) < minY) point0[1] = pos[1];
     if ((point1[1] - pos[1]) < minY) point1[1] = pos[1];
     if ((point2[1] - pos[1]) < minY) point2[1] = pos[1];
-    avgY = average_3(point0[1], point1[1], point2[1]);
+    f32 avgY = average_3(point0[1], point1[1], point2[1]);
     vec3_set(forward, sins(yaw), 0x0, coss(yaw));
     find_vector_perpendicular_to_plane(yColumn, point0, point1, point2);
     vec3_normalize(yColumn);

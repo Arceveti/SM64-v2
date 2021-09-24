@@ -117,12 +117,12 @@ const LevelScript level_main_scripts_entry[] = {
         EXECUTE(/*seg*/ 0x14, _menuSegmentRomStart, _menuSegmentRomEnd, level_main_menu_entry_act_select),
         JUMP_LINK(script_exec_level_table),
         SLEEP(/*frames*/ 1),
-    LOOP_UNTIL(/*op*/ OP_LT, /*arg*/  0),
-    JUMP_IF(   /*op*/ OP_EQ, /*arg*/ -1, goto_ending),
-    JUMP_IF(   /*op*/ OP_EQ, /*arg*/ -2, goto_mario_head_regular),
-    JUMP_IF(   /*op*/ OP_EQ, /*arg*/ -3, goto_mario_head_dizzy),
-    JUMP_IF(   /*op*/ OP_EQ, /*arg*/ -8, goto_intro_splash_screen),
-    JUMP_IF(   /*op*/ OP_EQ, /*arg*/ -9, goto_debug_level_select),
+    LOOP_UNTIL(/*op*/ OP_LT, /*arg*/ WARP_SPECIAL_NONE),
+    JUMP_IF(   /*op*/ OP_EQ, /*arg*/ WARP_SPECIAL_ENDING,              goto_ending),
+    JUMP_IF(   /*op*/ OP_EQ, /*arg*/ WARP_SPECIAL_MARIO_HEAD_REGULAR,  goto_mario_head_regular),
+    JUMP_IF(   /*op*/ OP_EQ, /*arg*/ WARP_SPECIAL_MARIO_HEAD_DIZZY,    goto_mario_head_dizzy),
+    JUMP_IF(   /*op*/ OP_EQ, /*arg*/ WARP_SPECIAL_INTRO_SPLASH_SCREEN, goto_intro_splash_screen),
+    JUMP_IF(   /*op*/ OP_EQ, /*arg*/ WARP_SPECIAL_LEVEL_SELECT,        goto_debug_level_select),
 };
 
 static const LevelScript goto_intro_splash_screen[] = {

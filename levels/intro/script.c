@@ -66,8 +66,8 @@ const LevelScript level_intro_splash_screen[] = {
 };
 
 const LevelScript level_intro_mario_head_regular[] = {
-    INIT_LEVEL(),
 #ifdef KEEP_MARIO_HEAD
+    INIT_LEVEL(),
     BLACKOUT(/*active*/ TRUE),
     FIXED_LOAD(/*loadAddr*/ _goddardSegmentStart, /*romStart*/ _goddardSegmentRomStart, /*romEnd*/ _goddardSegmentRomEnd),
     LOAD_MARIO_HEAD(/*loadHeadID*/ REGULAR_FACE),

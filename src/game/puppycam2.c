@@ -421,7 +421,7 @@ void puppycam_init(void) {
     if (gMarioState->marioObj) gPuppyCam.targetObj = gMarioState->marioObj;
     gPuppyCam.targetObj2 = NULL;
     gPuppyCam.intendedFlags = PUPPYCAM_BEHAVIOUR_DEFAULT;
-    if ((gCurrLevelNum == 27) || ((gCurrLevelNum == 36) && (gCurrAreaIndex == 2)) || ((gCurrLevelNum == 5) && (gCurrAreaIndex == 2))) gPuppyCam.intendedFlags |= PUPPYCAM_BEHAVIOUR_SLIDE_CORRECTION;
+    if ((gCurrLevelNum == LEVEL_PSS) || ((gCurrLevelNum == LEVEL_TTM) && (gCurrAreaIndex >= 2)) || ((gCurrLevelNum == LEVEL_CCM) && (gCurrAreaIndex == 2))) gPuppyCam.intendedFlags |= PUPPYCAM_BEHAVIOUR_SLIDE_CORRECTION;
     gPuppyCam.flags                 = gPuppyCam.intendedFlags;
     gPuppyCam.zoom                  = gPuppyCam.zoomPoints[1];
     gPuppyCam.zoomSet               = 1;

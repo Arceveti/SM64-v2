@@ -125,9 +125,9 @@ index 25b27983..2ff11930 100644
      Angle oldAreaYaw = sAreaYaw;
 +    // Get the camera speed based on the user's setting
 +    f32 cameraSpeed = set_camera_speed();
- 
+
      radial_camera_input(c);
- 
+
 -    if (gPlayer1Controller->buttonPressed & R_CBUTTONS) {
 -        s8DirModeYawOffset += DEG(45);
 -        play_sound_cbutton_side();

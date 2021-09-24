@@ -858,7 +858,7 @@ void bowser_set_goal_invisible(void) {
 void bowser_act_jump_onto_stage(void) {
     struct Surface *floor = o->oFloor;
     // Set dynamic floor check (Object platforms)
-    s32 onDynamicFloor    = ((floor != NULL) && (floor->flags & SURFACE_FLAG_DYNAMIC));
+    Bool32 onDynamicFloor = ((floor != NULL) && (floor->flags & SURFACE_FLAG_DYNAMIC));
     // Set status Jump
     o->oBowserStatus     |= BOWSER_STATUS_BIG_JUMP;
     switch (o->oSubAction) {

@@ -28,6 +28,13 @@
 
 #define WARP_OP_TRIGGERS_LEVEL_SELECT       0x10
 
+#define WARP_SPECIAL_LEVEL_SELECT           -9
+#define WARP_SPECIAL_INTRO_SPLASH_SCREEN    -8
+#define WARP_SPECIAL_MARIO_HEAD_DIZZY       -3
+#define WARP_SPECIAL_MARIO_HEAD_REGULAR     -2
+#define WARP_SPECIAL_ENDING                 -1
+#define WARP_SPECIAL_NONE                    0
+
 #define WARP_FLAGS_NONE                     (0 << 0) // 0x00
 #define WARP_FLAG_DOOR_PULLED               (1 << 0) // 0x01
 #define WARP_FLAG_DOOR_FLIP_MARIO           (1 << 1) // 0x02

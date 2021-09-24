@@ -623,26 +623,24 @@ s32 level_trigger_warp(struct MarioState *m, s32 warpOp) {
  * If a delayed warp is ready, initiate it.
  */
 void initiate_delayed_warp(void) {
-    struct ObjectWarpNode *warpNode;
-    s32 destWarpNode;
     if ((sDelayedWarpOp != WARP_OP_NONE) && (--sDelayedWarpTimer == 0)) {
         reset_dialog_render_state();
         if (gDebugLevelSelect && (sDelayedWarpOp & WARP_OP_TRIGGERS_LEVEL_SELECT)) {
-            warp_special(-9);
+            warp_special(WARP_SPECIAL_LEVEL_SELECT);
         } else if (gCurrDemoInput != NULL) {
-            warp_special((sDelayedWarpOp == WARP_OP_DEMO_END) ? -8 : -2);
+            warp_special((sDelayedWarpOp == WARP_OP_DEMO_END) ? WARP_SPECIAL_INTRO_SPLASH_SCREEN : WARP_SPECIAL_MARIO_HEAD_REGULAR);
         } else {
             switch (sDelayedWarpOp) {
                 case WARP_OP_GAME_OVER:
                     save_file_reload();
-                    warp_special(-3);
+                    warp_special(WARP_SPECIAL_MARIO_HEAD_DIZZY);
                     break;
                 case WARP_OP_CREDITS_END:
-                    warp_special(-1);
+                    warp_special(WARP_SPECIAL_ENDING);
                     sound_banks_enable(SEQ_PLAYER_SFX, (SOUND_BANKS_ALL & ~SOUND_BANKS_DISABLED_AFTER_CREDITS));
                     break;
                 case WARP_OP_DEMO_NEXT:
-                    warp_special(-2);
+                    warp_special(WARP_SPECIAL_MARIO_HEAD_REGULAR);
                     break;
                 case WARP_OP_CREDITS_START:
                     gCurrCreditsEntry = &sCreditsSequence[0];
@@ -652,11 +650,11 @@ void initiate_delayed_warp(void) {
                     sound_banks_disable(SEQ_PLAYER_SFX, SOUND_BANKS_ALL);
                     gCurrCreditsEntry++;
                     gCurrActNum  = (gCurrCreditsEntry->actNum & 0x07);
-                    destWarpNode = (((gCurrCreditsEntry + 1)->levelNum == LEVEL_NONE) ? WARP_NODE_CREDITS_END : WARP_NODE_CREDITS_NEXT);
+                    s32 destWarpNode = (((gCurrCreditsEntry + 1)->levelNum == LEVEL_NONE) ? WARP_NODE_CREDITS_END : WARP_NODE_CREDITS_NEXT);
                     initiate_warp(gCurrCreditsEntry->levelNum, gCurrCreditsEntry->areaIndex, destWarpNode, 0x0);
                     break;
                 default:
-                    warpNode = area_get_warp_node(sSourceWarpNodeId);
+                    struct ObjectWarpNode *warpNode = area_get_warp_node(sSourceWarpNodeId);
                     initiate_warp((warpNode->node.destLevel & 0x7F), warpNode->node.destArea, warpNode->node.destNode, sDelayedWarpArg);
                     check_if_should_set_warp_checkpoint(&warpNode->node);
                     if (sWarpDest.type != WARP_TYPE_CHANGE_LEVEL) level_set_transition(2, NULL);
@@ -780,10 +778,10 @@ Bool32 play_mode_paused(void) {
         set_play_mode(PLAY_MODE_NORMAL);
     } else { // MENU_OPT_EXIT_COURSE
         if (gDebugLevelSelect) {
-            fade_into_special_warp(-9, 1);
+            fade_into_special_warp(WARP_SPECIAL_LEVEL_SELECT, 1);
         } else {
             initiate_warp(EXIT_COURSE_LEVEL, EXIT_COURSE_AREA, EXIT_COURSE_NODE, WARP_FLAGS_NONE);
-            fade_into_special_warp( 0, 0);
+            fade_into_special_warp(WARP_SPECIAL_NONE, 0);
             gSavedCourseNum = COURSE_NONE;
         }
         gCameraMovementFlags &= ~CAM_MOVE_PAUSE_SCREEN;
@@ -895,7 +893,7 @@ Bool32 init_level(void) {
     set_play_mode(PLAY_MODE_NORMAL);
     sDelayedWarpOp      = WARP_OP_NONE;
     sTransitionTimer    = 0;
-    sSpecialWarpDest    = 0;
+    sSpecialWarpDest    = WARP_SPECIAL_NONE;
     gHudDisplay.flags   = ((gCurrCreditsEntry == NULL) ? HUD_DISPLAY_DEFAULT : HUD_DISPLAY_NONE);
     sTimerRunning       = FALSE;
     if (sWarpDest.type != WARP_TYPE_NOT_WARPING) {

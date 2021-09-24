@@ -32,10 +32,11 @@ static char sLevelSelectStageNames[64][16] = {
 #undef STUB_LEVEL
 #undef DEFINE_LEVEL
 
+#ifdef KEEP_MARIO_HEAD
 #ifndef DISABLE_DEMO
 static u16 sDemoCountdown = 0;
 #endif
-#if !defined(VERSION_JP) && defined(KEEP_MARIO_HEAD)
+#ifndef VERSION_JP
 static s16 sPlayMarioGreeting = TRUE;
 static s16 sPlayMarioGameOver = TRUE;
 #endif
@@ -77,6 +78,7 @@ s32 run_level_id_or_demo(s32 level) {
     }
     return level;
 }
+#endif
 #endif
 
 /**
@@ -177,10 +179,10 @@ s32 intro_regular(void) {
         sPlayMarioGreeting = TRUE;
 #endif
     }
-#ifdef DISABLE_DEMO
-    return level;
-#else
+#if !defined(DISABLE_DEMO) && defined(KEEP_MARIO_HEAD)
     return run_level_id_or_demo(level);
+#else
+    return level;
 #endif
 }
 
@@ -208,10 +210,10 @@ s32 intro_game_over(void) {
         sPlayMarioGameOver = TRUE;
 #endif
     }
-#ifdef DISABLE_DEMO
-    return level;
-#else
+#if !defined(DISABLE_DEMO) && defined(KEEP_MARIO_HEAD)
     return run_level_id_or_demo(level);
+#else
+    return level;
 #endif
 }
 #endif
@@ -222,7 +224,7 @@ s32 intro_game_over(void) {
 s32 intro_play_its_a_me_mario(void) {
     set_background_music(0, SEQ_SOUND_PLAYER, 0);
     play_sound(SOUND_MENU_COIN_ITS_A_ME_MARIO, gGlobalSoundSource);
-    return 1;
+    return (LEVEL_NONE + 1);
 }
 
 /**
@@ -240,7 +242,7 @@ s32 lvl_intro_update(s16 arg, UNUSED s32 unusedArg) {
         case LVL_INTRO_REGULAR:             // fall through
         case LVL_INTRO_GAME_OVER:           level = (LEVEL_FILE_SELECT + gDebugLevelSelect);   break;
 #endif
-        case LVL_INTRO_LEVEL_SELECT:        level = intro_level_select();        break;
+        case LVL_INTRO_LEVEL_SELECT:        level = intro_level_select();        break; //! this runs on save and quit for some reason?
     }
     return level;
 }

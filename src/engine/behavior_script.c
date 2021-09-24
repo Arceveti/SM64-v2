@@ -579,15 +579,14 @@ static s32 bhv_cmd_scale(void) {
 // Command 0x30: Sets various parameters that the object uses for calculating physics.
 // Usage: SET_OBJ_PHYSICS(f32 wallHitboxRadius, f32 gravity, f32 bounciness, f32 dragStrength, f32 friction, f32 buoyancy, f32 unused1, f32 unused2)
 static s32 bhv_cmd_set_obj_physics(void) {
-    // UNUSED f32 unused1, unused2;
     o->oWallHitboxRadius =  BHV_CMD_GET_1ST_S16(1);
     o->oGravity          = (BHV_CMD_GET_2ND_S16(1) / 100.0f);
     o->oBounciness       = (BHV_CMD_GET_1ST_S16(2) / 100.0f);
     o->oDragStrength     = (BHV_CMD_GET_2ND_S16(2) / 100.0f);
     o->oFriction         = (BHV_CMD_GET_1ST_S16(3) / 100.0f);
     o->oBuoyancy         = (BHV_CMD_GET_2ND_S16(3) / 100.0f);
-    // unused1                           = BHV_CMD_GET_1ST_S16(4) / 100.0f;
-    // unused2                           = BHV_CMD_GET_2ND_S16(4) / 100.0f;
+    // UNUSED f32 unused1   = (BHV_CMD_GET_1ST_S16(4) / 100.0f);
+    // UNUSED f32 unused2   = (BHV_CMD_GET_2ND_S16(4) / 100.0f);
     gCurBhvCommand += 5;
     return BHV_PROC_CONTINUE;
 }

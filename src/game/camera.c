@@ -1359,7 +1359,6 @@ CameraTransitionAngle update_behind_mario_camera(struct Camera *c, Vec3f focus, 
     Angle goalPitch  = -sMarioCamState->faceAngle[0];
     Angle marioYaw   = (sMarioCamState->faceAngle[1] + DEG(180));
     Angle goalYawOff = 0x0;
-    Angle yawSpeed;
     Angle pitchInc   = 0x20;
     f32   maxDist    = 800.0f;
     f32   focYOff    = CAMERA_Y_OFFSET;
@@ -1378,7 +1377,7 @@ CameraTransitionAngle update_behind_mario_camera(struct Camera *c, Vec3f focus, 
     // Determine the yaw speed based on absPitch. A higher absPitch (further away from looking straight)
     // translates to a slower speed
     // Note: Pitch is always within +- 90 degrees or +-0x4000, and 0x4000 / 0x200 = 32
-    yawSpeed = (32 - (absPitch / 0x200));
+    Angle yawSpeed = (32 - (absPitch / 0x200));
     if (yawSpeed <  1) yawSpeed =  1;
     if (yawSpeed > 32) yawSpeed = 32;
     if (sCSideButtonYaw != 0x0) {
@@ -1483,7 +1482,6 @@ Angle update_slide_camera(struct Camera *c) {
     f32 floorHeight;
     Vec3f pos;
     f32   distCamToFocus;
-    f32   maxCamDist;
     f32   pitchScale;
     Angle camPitch, camYaw;
     Angle goalPitch = DEG(30);
@@ -1496,7 +1494,7 @@ Angle update_slide_camera(struct Camera *c) {
     vec3_copy(c->focus, sMarioCamState->pos);
     c->focus[1] += 50.0f;
     vec3f_get_dist_and_angle(c->focus, c->pos, &distCamToFocus, &camPitch, &camYaw);
-    maxCamDist = 800.0f;
+    f32 maxCamDist = 800.0f;
     // In hoot mode, zoom further out and rotate faster
     if (sMarioCamState->action == ACT_RIDING_HOOT) {
         maxCamDist = 1000.0f;
@@ -4682,8 +4680,6 @@ s32 camera_course_processing(struct Camera *c) {
 s32 rotate_camera_around_walls(UNUSED struct Camera *c, Vec3f cPos, Angle *avoidYaw, Angle yawRange) {
     struct WallCollisionData colData;
     struct Surface *wall;
-    f32 checkDist;
-    f32 coarseRadius, fineRadius;
     Angle wallYaw, horWallNorm;
     // The yaw of the vector from Mario to the camera.
     Angle yawFromMario = vec3_yaw(sMarioCamState->pos, cPos);
@@ -4691,13 +4687,13 @@ s32 rotate_camera_around_walls(UNUSED struct Camera *c, Vec3f cPos, Angle *avoid
     /// The current iteration. The algorithm takes 8 equal steps from Mario back to the camera.
     s32 step   = 0;
     sStatusFlags &= ~CAM_FLAG_CAM_NEAR_WALL;
-    colData.offsetY = 100.0f;
+    colData.offsetY  = 100.0f;
     // The distance from Mario to Lakitu
-    checkDist    =   0.0f;
+    f32 checkDist    =   0.0f;
     /// The radius used to find potential walls to avoid.
-    coarseRadius = 100.0f;
+    f32 coarseRadius = 100.0f;
     /// This only increases when there is a wall collision found in the coarse pass
-    fineRadius   = 100.0f;
+    f32 fineRadius   = 100.0f;
     for ((step = 0); (step < 8); (step++)) {
         // Start at Mario, move backwards to Lakitu's position
         colData.pos[0] = (sMarioCamState->pos[0] + ((cPos[0] - (sMarioCamState->pos[0]) * checkDist)));
@@ -6372,9 +6368,8 @@ void cutscene_suffocation_fly_away(UNUSED struct Camera *c) {
  * Keep Lakitu above the gas level.
  */
 void cutscene_suffocation_stay_above_gas(struct Camera *c) {
-    f32 gasLevel;
     cutscene_goto_cvar_pos(c, 400.0f, 0x2800, 0x200, 0);
-    gasLevel = find_poison_gas_level(sMarioCamState->pos[0], sMarioCamState->pos[2]);
+    f32 gasLevel = find_poison_gas_level(sMarioCamState->pos[0], sMarioCamState->pos[2]);
     if ((gasLevel != FLOOR_LOWER_LIMIT) && ((gasLevel += 130.0f) > c->pos[1])) c->pos[1] = gasLevel;
 }
 

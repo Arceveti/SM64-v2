@@ -9,7 +9,7 @@
 enum LevelNum
 {
     LEVEL_RESTART_GAME = -1,
-    LEVEL_NONE         = 0,
+    LEVEL_NONE         =  0,
 #include "levels/level_defines.h"
     LEVEL_COUNT,
     LEVEL_MAX          = (LEVEL_COUNT - 1),
