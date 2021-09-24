@@ -174,15 +174,15 @@ struct CreditsEntry sCreditsSequence[] = {
 
 struct MarioState gMarioStates[1];
 struct HudDisplay gHudDisplay;
-s16 sCurrPlayMode;
-s16 sTransitionTimer;
+s16   sCurrPlayMode;
+s16   sTransitionTimer;
 void (*sTransitionUpdate)(s16 *);
 struct WarpDest sWarpDest;
-s16 sSpecialWarpDest;
-s16 sDelayedWarpOp;
-s16 sDelayedWarpTimer;
-s16 sSourceWarpNodeId;
-s32 sDelayedWarpArg;
+s16   sSpecialWarpDest;
+s16   sDelayedWarpOp;
+s16   sDelayedWarpTimer;
+s16   sSourceWarpNodeId;
+s32   sDelayedWarpArg;
 Bool8 sTimerRunning;
 Bool8 gNeverEnteredCastle;
 
@@ -379,8 +379,6 @@ void warp_credits(void) {
 }
 
 void check_instant_warp(void) {
-    Angle cameraAngle;
-    Vec3f disp;
     struct Surface *floor;
     if ((gCurrLevelNum == LEVEL_CASTLE) && (save_file_get_total_star_count((gCurrSaveFileNum - 1), (COURSE_MIN - 1), (COURSE_MAX - 1)) >= 70)) return;
     if ((floor = gMarioState->floor) != NULL) {
@@ -388,13 +386,14 @@ void check_instant_warp(void) {
         if ((index >= INSTANT_WARP_INDEX_START) && (index < INSTANT_WARP_INDEX_STOP) && (gCurrentArea->instantWarps != NULL)) {
             struct InstantWarp *warp = &gCurrentArea->instantWarps[index];
             if (warp->id != 0) {
+                Vec3f disp;
                 vec3_copy(disp, warp->displacement);
                 vec3_add(gMarioState->pos, disp);
                 vec3_copy(&gMarioState->marioObj->oPosVec, gMarioState->pos);
 #ifdef INSTANT_WARP_OFFSET_FIX
                 vec3_copy(gMarioObject->header.gfx.pos, gMarioState->pos);
 #endif
-                cameraAngle = gMarioState->area->camera->yaw;
+                Angle cameraAngle = gMarioState->area->camera->yaw;
                 change_area(warp->area);
                 gMarioState->area = gCurrentArea;
                 warp_camera(disp);
@@ -486,13 +485,12 @@ struct WarpNode *get_painting_warp_node(void) {
  */
 void initiate_painting_warp(void) {
     if ((gCurrentArea->paintingWarpNodes != NULL) && (gMarioState->floor != NULL)) {
-        struct WarpNode warpNode;
         struct WarpNode *pWarpNode = get_painting_warp_node();
         if (pWarpNode != NULL) {
             if (gMarioState->action & ACT_FLAG_INTANGIBLE) {
                 play_painting_eject_sound();
             } else if (pWarpNode->id != 0) {
-                warpNode = *pWarpNode;
+                struct WarpNode warpNode = *pWarpNode;
                 if (!(warpNode.destLevel & 0x80)) sWarpCheckpointActive = check_warp_checkpoint(&warpNode);
                 initiate_warp((warpNode.destLevel & 0x7F), warpNode.destArea, warpNode.destNode, WARP_FLAGS_NONE);
                 check_if_should_set_warp_checkpoint(&warpNode);

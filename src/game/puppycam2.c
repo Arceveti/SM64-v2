@@ -1104,8 +1104,12 @@ static void puppycam_collision(void) {
     gCheckingSurfaceCollisionsForCamera = FALSE;
     resolve_and_return_wall_collision_data(hitpos[0], 0.0f, 25.0f, &wall0);
     resolve_and_return_wall_collision_data(hitpos[1], 0.0f, 25.0f, &wall1);
-    dist[0] = (sqr(target[0][0] - hitpos[0][0]) + sqr(target[0][1] - hitpos[0][1]) + sqr(target[0][2] - hitpos[0][2]));
-    dist[1] = (sqr(target[1][0] - hitpos[1][0]) + sqr(target[1][1] - hitpos[1][1]) + sqr(target[1][2] - hitpos[1][2]));
+    dist[0] = (sqr(target[0][0] - hitpos[0][0])
+             + sqr(target[0][1] - hitpos[0][1])
+             + sqr(target[0][2] - hitpos[0][2]));
+    dist[1] = (sqr(target[1][0] - hitpos[1][0])
+             + sqr(target[1][1] - hitpos[1][1])
+             + sqr(target[1][2] - hitpos[1][2]));
     gPuppyCam.collisionDistance = gPuppyCam.zoomTarget;
     if (surf[0] && surf[1]) {
         gPuppyCam.collisionDistance = sqrtf(MAX(dist[0], dist[1]));
