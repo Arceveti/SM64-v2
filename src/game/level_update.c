@@ -623,6 +623,7 @@ s32 level_trigger_warp(struct MarioState *m, s32 warpOp) {
  * If a delayed warp is ready, initiate it.
  */
 void initiate_delayed_warp(void) {
+    struct ObjectWarpNode *warpNode;
     if ((sDelayedWarpOp != WARP_OP_NONE) && (--sDelayedWarpTimer == 0)) {
         reset_dialog_render_state();
         if (gDebugLevelSelect && (sDelayedWarpOp & WARP_OP_TRIGGERS_LEVEL_SELECT)) {
@@ -654,7 +655,7 @@ void initiate_delayed_warp(void) {
                     initiate_warp(gCurrCreditsEntry->levelNum, gCurrCreditsEntry->areaIndex, destWarpNode, 0x0);
                     break;
                 default:
-                    struct ObjectWarpNode *warpNode = area_get_warp_node(sSourceWarpNodeId);
+                    warpNode = area_get_warp_node(sSourceWarpNodeId);
                     initiate_warp((warpNode->node.destLevel & 0x7F), warpNode->node.destArea, warpNode->node.destNode, sDelayedWarpArg);
                     check_if_should_set_warp_checkpoint(&warpNode->node);
                     if (sWarpDest.type != WARP_TYPE_CHANGE_LEVEL) level_set_transition(2, NULL);
