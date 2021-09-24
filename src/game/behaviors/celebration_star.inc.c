@@ -6,7 +6,6 @@ void bhv_celebration_star_init(void) {
     o->oHomeZ                       =  gMarioObject->header.gfx.pos[2];
     o->oMoveAngleYaw                = (gMarioObject->header.gfx.angle[1] + DEG(180));
     o->oCelebStarDiameterOfRotation = 100;
-#if BUGFIX_STAR_BOWSER_KEY
     if ((gCurrLevelNum == LEVEL_BOWSER_1) || (gCurrLevelNum == LEVEL_BOWSER_2)) {
         cur_obj_set_model(MODEL_BOWSER_KEY);
         o->oFaceAnglePitch = 0x0;
@@ -20,12 +19,6 @@ void bhv_celebration_star_init(void) {
         cur_obj_scale(0.4f);
         o->oCelebStarIsBowserKey = FALSE;
     }
-#else
-    cur_obj_set_model(MODEL_STAR);
-    cur_obj_scale(0.4f);
-    o->oFaceAnglePitch = 0x0;
-    o->oFaceAngleRoll  = 0x0;
-#endif
 #ifdef PUPPYLIGHTS
     cur_obj_set_light_properties_default(PUPPYLIGHTS_STAR_LIGHT, COLOR_RGBA32_STAR_LIGHT);
     cur_obj_enable_light();
@@ -49,11 +42,7 @@ void celeb_star_act_spin_around_mario(void) {
 
 void celeb_star_act_face_camera(void) {
     if (o->oTimer < 10) {
-#if BUGFIX_STAR_BOWSER_KEY
         cur_obj_scale((f32) o->oTimer / ((o->oCelebStarIsBowserKey == 0) ? 10.0f : 30.0f));
-#else
-        cur_obj_scale((f32) o->oTimer / 10.0f);
-#endif
         o->oFaceAngleYaw += DEG(22.5);
     } else {
         o->oFaceAngleYaw = gMarioObject->header.gfx.angle[1];

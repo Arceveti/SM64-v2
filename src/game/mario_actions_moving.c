@@ -340,8 +340,6 @@ void update_walking_speed(struct MarioState *m) {
         }
         approach_s16_symmetric_bool(&m->faceAngle[1], m->intendedYaw, turnRange);
     }
-#elif SUPER_RESPONSIVE_CONTROLS
-    m->faceAngle[1] =  m->intendedYaw;
 #else
     approach_s16_symmetric_bool(&m->faceAngle[1], m->intendedYaw, DEG(11.25));
 #endif

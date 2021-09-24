@@ -366,14 +366,14 @@ void puppyprint_render_profiler(void) {
         profiler_update(profilerTime, first);
         return;
     }
-    sprintf(textBytes, "RAM: %06X /%06X (%d_)", main_pool_available(), mempool, (s32)(((f32)main_pool_available()/(f32)mempool)*100));
+    sprintf(textBytes, "RAM: %06X /%06X (%d_)", main_pool_available(), mempool, (s32)(((f32)main_pool_available() / (f32)mempool) * 100));
     print_small_text(160, 224, textBytes, PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL);
     if (!ramViewer && !benchViewer && !logViewer) {
         print_fps(16,40);
 #ifdef USE_CYCLES
-        sprintf(textBytes, "CPU: %dc (%d_)#RSP: %dc (%d_)#RDP: %dc (%d_)", (s32)cpuCount, ((s32)(cpuTime) / 248), (s32)(rspTime), ((s32)(rspTime) / 333), (s32)(rdpTime), ((s32)(rdpTime) / 333));
+        sprintf(textBytes, "CPU: %dc (%d_)#RSP: %dus (%d_)#RDP: %dc (%d_)", (s32)cpuCount, (s32)(cpuCount/333), (s32)(rspTime), ((s32)(rspTime) / 333), (s32)(rdpTime), ((s32)(rdpTime) / 333));
 #else
-        sprintf(textBytes, "CPU: %dus (%d_)#RSP: %dus (%d_)#RDP: %dus (%d_)", (s32)cpuCount, ((s32)OS_CYCLES_TO_USEC(cpuTime) / 248), (s32)OS_CYCLES_TO_USEC(rspTime), ((s32)OS_CYCLES_TO_USEC(rspTime) / 333), (s32)OS_CYCLES_TO_USEC(rdpTime), ((s32)OS_CYCLES_TO_USEC(rdpTime) / 333));
+        sprintf(textBytes, "CPU: %dus (%d_)#RSP: %dus (%d_)#RDP: %dus (%d_)", (s32)cpuCount, (s32)(cpuCount/333), (s32)OS_CYCLES_TO_USEC(rspTime), (s32)OS_CYCLES_TO_USEC(rspTime)/333, (s32)OS_CYCLES_TO_USEC(rdpTime), (s32)OS_CYCLES_TO_USEC(rdpTime)/333);
 #endif
         print_small_text(16, 52, textBytes, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL);
         sprintf(textBytes, "OBJ: %d/%d", gObjectCounter, OBJECT_POOL_CAPACITY);

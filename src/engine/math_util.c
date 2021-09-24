@@ -449,13 +449,13 @@ void vec3f_get_dist_and_angle(Vec3f from, Vec3f to, f32 *dist, Angle *pitch, Ang
  * Construct the 'to' point which is distance 'dist' away from the 'from' position,
  * and has the angles pitch and yaw.
  */
-void vec3s_set_dist_and_angle(Vec3s from, Vec3s to, s16 dist, Angle pitch, Angle yaw) {
+void vec3s_set_dist_and_angle(Vec3s from, Vec3s to, s16 dist, Angle32 pitch, Angle32 yaw) {
     register f32 dc  = (dist * coss(pitch));
     to[0] = (from[0] + (  dc * sins(yaw  )));
     to[1] = (from[1] + (dist * sins(pitch)));
     to[2] = (from[2] + (  dc * coss(yaw  )));
 }
-void vec3f_set_dist_and_angle(Vec3f from, Vec3f to, f32 dist, Angle pitch, Angle yaw) {
+void vec3f_set_dist_and_angle(Vec3f from, Vec3f to, f32 dist, Angle32 pitch, Angle32 yaw) {
     register f32 dc  = (dist * coss(pitch) );
     to[0] = (from[0] + (  dc * sins(yaw  )));
     to[1] = (from[1] + (dist * sins(pitch)));
@@ -599,7 +599,7 @@ void mtxf_translate(Mat4 dest, Vec3f b) {
  * at the position 'to'. The up-vector is assumed to be (0, 1, 0), but the 'roll'
  * angle allows a bank rotation of the camera.
  */
-void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll) {
+void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle32 roll) {
     Vec3f colX, colY, colZ;
     register f32 dx = (to[0] - from[0]);
     register f32 dz = (to[2] - from[2]);
@@ -759,7 +759,7 @@ void mtxf_rotate_xyz_and_translate(Mat4 dest, Vec3f translate, Vec3a rotate) {
  * 'position' is the position of the object in the world
  * 'roll' rotates the object while still facing the camera.
  */
-void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, Angle roll, s32 zOffset) {
+void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, Angle32 roll, s32 zOffset) {
     if (roll == 0x0) {
         dest[0][0] = 1;
         dest[0][1] = 0;
@@ -794,7 +794,7 @@ void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, Angle roll, s32 zOffset
  * 'yaw' is the angle which it should face
  * 'pos' is the object's position in the world
  */
-void mtxf_align_terrain_normal(Mat4 dest, Vec3f upDir, Vec3f pos, Angle yaw) {
+void mtxf_align_terrain_normal(Mat4 dest, Vec3f upDir, Vec3f pos, Angle32 yaw) {
     Vec3f lateralDir, leftDir, forwardDir;
     vec3_set(lateralDir, sins(yaw), 0x0, coss(yaw));
     vec3_normalize(upDir);
@@ -817,7 +817,7 @@ void mtxf_align_terrain_normal(Mat4 dest, Vec3f upDir, Vec3f pos, Angle yaw) {
  * 'pos' is the object's position in the world
  * 'radius' is the distance from each triangle vertex to the center
  */
-void mtxf_align_terrain_triangle(Mat4 mtx, Vec3f pos, Angle yaw, f32 radius) {
+void mtxf_align_terrain_triangle(Mat4 mtx, Vec3f pos, Angle32 yaw, f32 radius) {
     struct Surface *floor;
     Vec3f point0, point1, point2;
     Vec3f forward;
@@ -940,8 +940,13 @@ void gd_mult_mat4f(Mat4 dst, const Mat4 mA, const Mat4 mB) {
  * integer. If this doesn't fit, the N64 and iQue consoles will throw an
  * exception. On Wii and Wii U Virtual Console the value will simply be clamped
  * and no crashes occur.
+
+ * Modified into a hybrid of the original function and the worldscale altered function.
+ * Will check if the worldscale is below what's considered safe in vanilla bounds and
+ * just run the faster vanilla function, otherwise it'll run the slower, but safer scale
+ * function, for extended boundaries.
  */
-void mtxf_to_mtx(Mtx *dest, Mat4 src) {
+void mtxf_to_mtx_scale(Mtx *dest, Mat4 src) {
 #if EXTENDED_BOUNDS_MODE > 1
     Mat4 temp;
     register s32 i;
@@ -956,10 +961,28 @@ void mtxf_to_mtx(Mtx *dest, Mat4 src) {
 #endif
 }
 
+void mtxf_to_mtx_constant(register s16 *dest, register f32 *src) {
+    s32 asFixedPoint;
+    s32 i;
+    for (i = 0; i < 16; i++) {
+        asFixedPoint = (src[i] * (1 << 16));
+        dest[i     ] = (asFixedPoint >> 16);
+        dest[i + 16] = (asFixedPoint & 0xFFFF);
+    }
+}
+
+void mtxf_to_mtx(void *dest, void *src) {
+    if (gWorldScale > 2.0f) {
+        mtxf_to_mtx_scale(dest, src);
+    } else {
+        mtxf_to_mtx_constant(dest, src);
+    }
+}
+
 /**
  * Set 'mtx' to a transformation matrix that rotates around the z axis.
  */
-void mtxf_rotate_xy(Mtx *mtx, Angle angle, Bool32 doScale) {
+void mtxf_rotate_xy(Mtx *mtx, Angle32 angle, Bool32 doScale) {
     Mat4 temp;
     mtxf_identity(temp);
     temp[0][0] = coss(angle);
@@ -1514,7 +1537,7 @@ int gSplineState;
  * [0, 0, 0, 0, 1, 2, ... n-1, n, n, n, n]
  * TODO: verify the classification of the spline / figure out how polynomials were computed
  */
-void spline_get_weights(Vec4f result, f32 t, UNUSED s32 c) {
+static void spline_get_weights(Vec4f result, f32 t, UNUSED s32 c) {
     register f32 tinv = (1 - t);
     register f32 tinv2 = (tinv  * tinv);
     register f32 tinv3 = (tinv2 * tinv);

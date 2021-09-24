@@ -2,37 +2,8 @@
 
 /**
  * @file config.h
- * A catch-all file for configuring various bugfixes and other settings (maybe eventually) in SM64
+ * A catch-all file for configuring various bugfixes and other settings in SM64
  */
-
-/********************************************************************************************************************************
- *                                                                                                                              *
- * -- Version-Specific Bug Fixes --                                                                                             *
- *                                                                                                                              *
- ********************************************************************************************************************************/
-// --| Post-JP Version Nintendo Bug Fixes
-/// Fixes bug where obtaining over 999 coins sets the number of lives to 999 (or -25)
-#define BUGFIX_MAX_LIVES (1 || VERSION_US || VERSION_EU || VERSION_SH)
-/// Fixes bug where the Boss music won't fade out after defeating King Bob-omb
-#define BUGFIX_KING_BOB_OMB_FADE_MUSIC (1 || VERSION_US || VERSION_EU || VERSION_SH)
-/// Fixes bug in Bob-Omb Battlefield where entering a warp stops the Koopa race music
-#define BUGFIX_KOOPA_RACE_MUSIC (1 || VERSION_US || VERSION_EU || VERSION_SH)
-/// Fixes bug where Piranha Plants do not reset their action state when the
-/// player exits their activation radius.
-#define BUGFIX_PIRANHA_PLANT_STATE_RESET (1 || VERSION_US || VERSION_EU || VERSION_SH)
-/// Fixes bug where sleeping Piranha Plants damage players that bump into them
-#define BUGFIX_PIRANHA_PLANT_SLEEP_DAMAGE (1 || VERSION_US || VERSION_SH)
-/// Fixes bug where it shows a star when you grab a key in bowser battle stages
-#define BUGFIX_STAR_BOWSER_KEY (1 || VERSION_US || VERSION_EU || VERSION_SH)
-/// Fixes bug that enables Mario in time stop even if is not ready to speak
-#define BUGFIX_DIALOG_TIME_STOP (1 || VERSION_US || VERSION_EU || VERSION_SH)
-/// Fixes bug that causes Mario to still collide with Bowser in BITS after his defeat
-#define BUGFIX_BOWSER_COLLIDE_BITS_DEAD (1 || VERSION_US || VERSION_EU || VERSION_SH)
-/// Fixes bug where Bowser wouldn't reset his speed when fallen off (and adds missing checks)
-#define BUGFIX_BOWSER_FALLEN_OFF_STAGE (1 || VERSION_US || VERSION_EU || VERSION_SH)
-/// Fixes bug where Bowser would look weird while fading out
-#define BUGFIX_BOWSER_FADING_OUT (1 || VERSION_US || VERSION_EU || VERSION_SH)
-
 
 /********************************************************************************************************************************
  *                                                                                                                              *
@@ -94,12 +65,12 @@
 #define SCREEN_HEIGHT 240
 
 // Border Height Define for NTSC Versions (UltraSM64)
-#ifdef TARGET_N64
+#ifdef TARGET_N64 // safeguard
 // Size of the black border at the top and bottom of the screen. You can set it to different values for console and emulator.
 // There is generally no reason to have a value other than 0 for emulator. As for console, it provides a (small) performance boost.
 #define BORDER_HEIGHT_CONSOLE  0
 #define BORDER_HEIGHT_EMULATOR 0
-#endif
+#endif // TARGET_N64
 
 // Enable widescreen (16:9) support (HackerSM64)
 #define WIDE
@@ -383,23 +354,26 @@
 
 // Disable exit course (HackerSM64)
 // #define DISABLE_EXIT_COURSE
-
+#ifndef DISABLE_EXIT_COURSE // safeguard
 // Decides which level "exit course" takes you to (has no effect if you disable exit course)
 #define EXIT_COURSE_LEVEL LEVEL_CASTLE
 // Decides the area node "exit course" takes you to (has no effect if you disable exit course)
 #define EXIT_COURSE_AREA 0x01
 // Decides the warp node "exit course" takes you to (has no effect if you disable exit course)
 #define EXIT_COURSE_NODE 0x1F
+#endif // DISABLE_EXIT_COURSE
 
 // Disable lives and hide the lives counter (HackerSM64)
 // #define DISABLE_LIVES
 
+#ifndef DISABLE_LIVES // safeguard
 // Save number of lives to the save file (Arceveti)
 #define SAVE_NUM_LIVES
 // The number of lives Mario starts with after a game over or starting the game for the first time.
 #define DEFAULT_NUM_LIVES 4
 // This can be 0..127
 #define MAX_NUM_LIVES   100
+#endif // DISABLE_LIVES
 // This can be 0..32767
 #define MAX_NUM_COINS   999
 
@@ -481,15 +455,6 @@
 // If you remove the define altogether, then there won't be a 100 coin star at all.
 // (HackerSM64)
 #define X_COIN_STAR 100
-
-// Fix instant warp offset not working when warping across different areas (HackerSM64)
-#define INSTANT_WARP_OFFSET_FIX
-
-// Whether a tree uses snow particles or not is decided via the model IDs instead of the course number (HackerSM64)
-#define TREE_PARTICLE_FIX
-
-// Increase the maximum pole length (it will treat bparam1 and bparam2 as a single value) (HackerSM64)
-#define LONGER_POLES
 
 // Makes signs and NPCs easier to talk to (Arceveti)
 #define EASIER_DIALOG_TRIGGER

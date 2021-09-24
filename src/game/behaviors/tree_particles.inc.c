@@ -29,14 +29,9 @@ void bhv_snow_leaf_particle_spawn_init(void) {
     struct Object *obj; // Either snow or leaf
     f32 scale;
     gMarioObject->oActiveParticleFlags &= ~ACTIVE_PARTICLE_LEAF;
-#ifdef TREE_PARTICLE_FIX
     struct Object *nearestTree = cur_obj_nearest_object_with_behavior(bhvTree);
     if (nearestTree == NULL) return;
-    Bool32 isSnow = (obj_has_model(nearestTree, MODEL_CCM_SNOW_TREE) || obj_has_model(nearestTree, MODEL_SL_SNOW_TREE));
-#else
-    Bool32 isSnow = ((gCurrLevelNum == LEVEL_CCM) || (gCurrLevelNum == LEVEL_SL));
-#endif
-    if (isSnow) {
+    if (obj_has_model(nearestTree, MODEL_CCM_SNOW_TREE) || obj_has_model(nearestTree, MODEL_SL_SNOW_TREE)) {
         if (random_float() < 0.5f) {
             obj                  = spawn_object(o, MODEL_WHITE_PARTICLE_DL, bhvTreeSnow);
             scale                = random_float();

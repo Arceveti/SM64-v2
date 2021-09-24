@@ -390,9 +390,8 @@ void check_instant_warp(void) {
                 vec3_copy(disp, warp->displacement);
                 vec3_add(gMarioState->pos, disp);
                 vec3_copy(&gMarioState->marioObj->oPosVec, gMarioState->pos);
-#ifdef INSTANT_WARP_OFFSET_FIX
+                // Fix instant warp offset not working when warping across different areas
                 vec3_copy(gMarioObject->header.gfx.pos, gMarioState->pos);
-#endif
                 Angle cameraAngle = gMarioState->area->camera->yaw;
                 change_area(warp->area);
                 gMarioState->area = gCurrentArea;
@@ -406,7 +405,6 @@ void check_instant_warp(void) {
 Bool32 music_unchanged_through_warp(s16 warpNodeId) {
     struct ObjectWarpNode *warpNode = area_get_warp_node(warpNodeId);
     s16 levelNum                    = (warpNode->node.destLevel & 0x7F);
-#if BUGFIX_KOOPA_RACE_MUSIC
     s16 destArea                    =  warpNode->node.destArea;
     Bool32 unchanged                = TRUE;
     s16 currBgMusic;
@@ -420,12 +418,6 @@ Bool32 music_unchanged_through_warp(s16 warpNodeId) {
         unchanged      = (levelNum == gCurrLevelNum) && (destParam1 == gCurrentArea->musicParam) && (destParam2 == gCurrentArea->musicParam2);
         if (get_current_background_music() != destParam2) unchanged = FALSE;
     }
-#else
-    u16 destParam1   = gAreas[warpNode->node.destArea].musicParam;
-    u16 destParam2   = gAreas[warpNode->node.destArea].musicParam2;
-    Bool32 unchanged = ((levelNum == gCurrLevelNum) && (destParam1 == gCurrentArea->musicParam) && (destParam2 == gCurrentArea->musicParam2));
-    if (get_current_background_music() != destParam2) unchanged = FALSE;
-#endif
     return unchanged;
 }
 
@@ -687,12 +679,8 @@ void update_hud_values(void) {
 #else
         if (gMarioState->numLives > MAX_NUM_LIVES) gMarioState->numLives = MAX_NUM_LIVES;
 #endif
-#if BUGFIX_MAX_LIVES
         if (gMarioState->numCoins > MAX_NUM_COINS) gMarioState->numCoins = MAX_NUM_COINS;
         if (gHudDisplay.coins     > MAX_NUM_COINS) gHudDisplay.coins     = MAX_NUM_COINS;
-#else
-        if (gMarioState->numCoins > MAX_NUM_COINS) gMarioState->numLives = (s8) MAX_NUM_COINS; // Wrong variable
-#endif
         gHudDisplay.stars = gMarioState->numStars;
         gHudDisplay.lives = gMarioState->numLives;
         gHudDisplay.keys  = gMarioState->numKeys;

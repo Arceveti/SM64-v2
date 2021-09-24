@@ -495,9 +495,8 @@ static void geo_process_switch(struct GraphNodeSwitchCase *node) {
     if (selectedChild != NULL) geo_process_node_and_siblings(selectedChild);
 }
 
-// static void make_roll_matrix(Mtx *mtx, s16 angle) {
+// static void make_roll_matrix(Mtx *mtx, Angle32 angle) {
 //     Mat4 temp;
-
 //     mtxf_identity(temp);
 //     temp[0][0] = coss(angle);
 //     temp[0][1] = sins(angle);
@@ -993,17 +992,7 @@ static void geo_process_shadow(struct GraphNodeShadow *node) {
             mtxf_mul(gMatStack[gMatStackIndex], mtxf, *gCurGraphNodeCamera->matrixPtr);
             mtxf_to_mtx(mtx, gMatStack[gMatStackIndex]);
             gMatStackFixed[gMatStackIndex] = mtx;
-#ifdef FIX_SHADOW_TRANSPARENCY
             geo_append_display_list((void *) VIRTUAL_TO_PHYSICAL(shadowList), ((gShadowAboveWaterOrLava || gShadowAboveCustomWater || gMarioOnIceOrCarpet) ? LAYER_TRANSPARENT : LAYER_TRANSPARENT_DECAL));
-#else
-            if (gShadowAboveWaterOrLava) {
-                geo_append_display_list((void *) VIRTUAL_TO_PHYSICAL(shadowList), LAYER_ALPHA);
-            } else if (gMarioOnIceOrCarpet || gShadowAboveCustomWater) {
-                geo_append_display_list((void *) VIRTUAL_TO_PHYSICAL(shadowList), LAYER_TRANSPARENT);
-            } else {
-                geo_append_display_list((void *) VIRTUAL_TO_PHYSICAL(shadowList), LAYER_TRANSPARENT_DECAL);
-            }
-#endif
             gMatStackIndex--;
         }
     }
@@ -1235,7 +1224,7 @@ void geo_try_process_children(struct GraphNode *node) {
  * be iterated over.
  */
 void geo_process_node_and_siblings(struct GraphNode *firstNode) {
-    Bool16 iterateChildren         = TRUE;
+    Bool32 iterateChildren         = TRUE;
     struct GraphNode *curGraphNode = firstNode;
     struct GraphNode *parent       = curGraphNode->parent;
     // In the case of a switch node, exactly one of the children of the node is

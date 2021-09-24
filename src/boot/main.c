@@ -221,11 +221,7 @@ void pretend_audio_sptask_done(void) {
 
 void handle_vblank(void) {
     gNumVblanks++;
-// #ifdef VERSION_SH
     if ((gResetTimer > 0) && (gResetTimer < 100)) gResetTimer++;
-// #else
-//     if (gResetTimer > 0) gResetTimer++;
-// #endif
     receive_new_tasks();
     // First try to kick off an audio task. If the gfx task is currently
     // running, we need to asynchronously interrupt it -- handle_sp_complete
