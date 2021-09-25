@@ -736,6 +736,15 @@ void cur_obj_update(void) {
     } else {
         gCurrentObject->header.gfx.node.flags &= ~GRAPH_RENDER_SILHOUETTE;
     }
+    if (objFlags & OBJ_FLAG_OPACITY_FROM_CAMERA_DIST) {
+        //! why doesn't this work?
+        Vec3f camPos;
+        vec3_copy(camPos, gCamera->pos);
+        f32 dist;
+        vec3f_get_dist(&o->oPosVec, camPos, &dist);
+#define OPACITY_DIST 512.0f
+        o->oOpacity = CLAMP(((dist / OPACITY_DIST) * 255.0f), 0x00, 0xFF);
+    }
 #ifdef VARIABLE_FRAMERATE
     if ((gCurrentObject != gMarioState->marioObj) || !gMarioLoadedAnim) {
         if (gCurrentObject->header.gfx.animInfo.curAnim != NULL)

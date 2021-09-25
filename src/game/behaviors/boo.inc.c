@@ -113,7 +113,6 @@ void bhv_courtyard_boo_triplet_init(void) {
 }
 
 static void boo_approach_target_opacity_and_update_scale(void) {
-    f32 scale;
     if (o->oBooTargetOpacity != o->oOpacity) {
         if (o->oBooTargetOpacity > o->oOpacity) {
             o->oOpacity += 20;
@@ -123,7 +122,7 @@ static void boo_approach_target_opacity_and_update_scale(void) {
             if (o->oBooTargetOpacity > o->oOpacity) o->oOpacity = o->oBooTargetOpacity;
         }
     }
-    scale = ((((o->oOpacity / 255.0f) * 0.4f) + 0.6f) * o->oBooBaseScale);
+    f32 scale = ((((o->oOpacity / 255.0f) * 0.4f) + 0.6f) * o->oBooBaseScale);
     cur_obj_scale(scale);
 }
 

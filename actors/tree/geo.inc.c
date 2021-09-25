@@ -2,7 +2,12 @@
 const GeoLayout bubbly_tree_geo[] = {
    GEO_CULLING_RADIUS(800),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_ALPHA, tree_seg3_dl_bubbly),
+      GEO_ASM(0, geo_update_layer_transparency), //! why doesn't this work?
+      GEO_SWITCH_CASE(2, geo_switch_anim_state),
+      GEO_OPEN_NODE(),
+         GEO_DISPLAY_LIST(LAYER_ALPHA, tree_seg3_dl_bubbly),
+         GEO_DISPLAY_LIST(LAYER_TRANSPARENT, tree_seg3_dl_bubbly),
+      GEO_CLOSE_NODE(),
    GEO_CLOSE_NODE(),
    GEO_END(),
 };
