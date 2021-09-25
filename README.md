@@ -18,6 +18,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - [64x64 quarter shadow textures](https://i.imgur.com/JwWg5VF.png) (Arceveti) *
 - [King Bob-omb blinks](https://i.imgur.com/Gnhu2CV.png)
 - [Reflective metal cap texture using the framebuffer](https://i.imgur.com/IixJWBy.png) (mks#2512, Rovert, Arceveti) *
+- Certain objects, like trees, reduce their opacity when close to the camera (Arceveti) *
 - FoV slider in Puppycam's menu (Arceveti) *
 - Lightweight directional lighting engine, intended for giving proximity and positional pointlights to small objects (Fazana) *
 

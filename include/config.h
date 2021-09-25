@@ -503,9 +503,11 @@
 // Reimplement the unused sad eye texture for the mother penguin
 #define PENGUIN_MOTHER_SAD_EYES
 
-// Makes bowser throws more lenient
-// (Arceveti)
+// Makes bowser throws more lenient (Arceveti)
 #define LENIENT_BOWSER_THROWS
+
+// Makes certain objects transparent when the camera gets close (Arceveti)
+#define OBJ_OPACITY_BY_CAM_DIST
 
 // The number of chain balls the Chain Chomp has
 // Vanilla is 5

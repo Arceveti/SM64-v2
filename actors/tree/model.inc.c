@@ -43,7 +43,11 @@ const Gfx tree_seg3_sub_dl_bubbly[] = {
 // 0x0302FEE8 - 0x0302FF60
 const Gfx tree_seg3_dl_bubbly[] = {
     gsDPPipeSync(),
+#ifdef OBJ_OPACITY_BY_CAM_DIST
+    gsDPSetCombineMode(G_CC_DECALFADEA, G_CC_DECALFADEA),
+#else
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
+#endif
     gsSPClearGeometryMode(G_LIGHTING),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
@@ -74,7 +78,11 @@ static const Vtx tree_seg3_vertex_spiky[] = {
 // 0x03030FA0 - 0x03031048
 const Gfx tree_seg3_dl_spiky[] = {
     gsDPPipeSync(),
+#ifdef OBJ_OPACITY_BY_CAM_DIST
+    gsDPSetCombineMode(G_CC_DECALFADEA, G_CC_DECALFADEA),
+#else
     gsDPSetCombineMode(G_CC_MODULATERGBA, G_CC_MODULATERGBA),
+#endif
     gsSPClearGeometryMode(G_SHADING_SMOOTH),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
@@ -103,7 +111,11 @@ ALIGNED8 static const Texture tree_seg3_texture_snowy_pine[] = {
 // 0x03032088 - 0x03032130
 const Gfx tree_seg3_dl_snowy_pine[] = {
     gsDPPipeSync(),
+#ifdef OBJ_OPACITY_BY_CAM_DIST
+    gsDPSetCombineMode(G_CC_DECALFADEA, G_CC_DECALFADEA),
+#else
     gsDPSetCombineMode(G_CC_MODULATERGBA, G_CC_MODULATERGBA),
+#endif
     gsSPClearGeometryMode(G_SHADING_SMOOTH),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
@@ -140,7 +152,11 @@ static const Vtx tree_seg3_vertex_palm[] = {
 // 0x03033258 - 0x03033300
 const Gfx tree_seg3_dl_palm[] = {
     gsDPPipeSync(),
+#ifdef OBJ_OPACITY_BY_CAM_DIST
+    gsDPSetCombineMode(G_CC_DECALFADEA, G_CC_DECALFADEA),
+#else
     gsDPSetCombineMode(G_CC_MODULATERGBA, G_CC_MODULATERGBA),
+#endif
     gsSPClearGeometryMode(G_SHADING_SMOOTH),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),

@@ -518,6 +518,8 @@
 #define	G_ACMUX_0				0x07
 
 /* typical CC cycle 1 modes */
+// (P * A + M - B) / (A + B)
+//										P color	     A color        M color      B color      P alpha   A alpha		   M alpha      B alpha
 #define	G_CC_PRIMITIVE                        0,           0,             0,   PRIMITIVE,           0,        0,             0,   PRIMITIVE
 #define	G_CC_SHADE                            0,           0,             0,       SHADE,           0,        0,             0,       SHADE
 
