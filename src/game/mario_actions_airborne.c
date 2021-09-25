@@ -150,7 +150,6 @@ Bool32 check_horizontal_wind(struct MarioState *m) {
 void update_air_with_turn(struct MarioState *m) {
 #ifdef AIR_TURN
     f32 sidewaysSpeed = 0.0f;
-    Angle turnRange;
     f32 absYVel = ABSF(m->vel[1]);
 #endif
     f32 dragThreshold;
@@ -167,8 +166,7 @@ void update_air_with_turn(struct MarioState *m) {
             sidewaysSpeed = (intendedMag * sins(intendedDYaw) * 10.0f);
             if ((m->forwardVel > 4.0f) || (absYVel > 36.0f)) {
                 absYVel = ((m->intendedMag - m->forwardVel) * absYVel); // Reuse absYVel var for turn range calculation
-                turnRange = CLAMP(absYVel, 0x100, DEG(90));
-                approach_s16_symmetric_bool(&m->faceAngle[1], m->intendedYaw, turnRange);
+                approach_angle_bool(&m->faceAngle[1], m->intendedYaw, CLAMP(absYVel, 0x100, DEG(90)));
             }
 #else
             m->faceAngle[1] += (512.0f * sins(intendedDYaw) * intendedMag);

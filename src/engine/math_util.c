@@ -1288,6 +1288,23 @@ Bool32 approach_s16_bool(s16 *current, s16 target, s16 inc, s16 dec) {
     return !(*current == target);
 }
 
+/// Similar to approach_s32, but converts to s16 and allows for overflow between 32767 and -32768
+s32 approach_angle(s32 current, s32 target, s32 inc) {
+    s32 dist = (s16)(target - current);
+    if (dist < 0) {
+        dist += inc;
+        if (dist > 0) dist = 0;
+    } else if (dist > 0) {
+        dist -= inc;
+        if (dist < 0) dist = 0;
+    }
+    return (target - dist);
+}
+
+Bool32 approach_angle_bool(s32 *current, s32 target, s32 inc) {
+    *current = approach_angle(*current, target, inc);
+    return !(*current == target);
+}
 
 // f32
 f32 approach_f32(f32 current, f32 target, f32 inc, f32 dec) {
@@ -1405,14 +1422,6 @@ void approach_vec3s_asymptotic(Vec3s current, Vec3s target, s16 xMul, s16 yMul, 
 /******************
  * Trig Functions *
  ******************/
-
-// // Uses radians
-// inline f64 sind(f64 x) { return sinf(x); }
-// inline f64 cosd(f64 x) { return cosf(x); }
-
-// // From Puppycam
-// inline s16 LENSIN(s16 length, Angle direction) { return (length * sins(direction)); }
-// inline s16 LENCOS(s16 length, Angle direction) { return (length * coss(direction)); }
 
 /**
  * Helper function for atan2s. Does a look up of the arctangent of y/x assuming

@@ -121,11 +121,11 @@ extern u8      _goddardSegmentEnd[];
 
 // Here is stored the rom addresses of the global code segments. If you get rid of any, it's best to just write them as NULL.
 s32 ramP[5][2] = {
-    {(s32)&_buffersSegmentBssStart,      (s32)&_buffersSegmentBssEnd     },
-    {(s32)&_mainSegmentStart,            (s32)&_mainSegmentEnd           },
-    {(s32)&_engineSegmentStart,          (s32)&_engineSegmentEnd         },
-    {(s32)&_framebuffersSegmentBssStart, (s32)&_framebuffersSegmentBssEnd},
-    {(s32)&_goddardSegmentStart,         (s32)&_goddardSegmentEnd        },
+    {(u32)&_buffersSegmentBssStart,      (u32)&_buffersSegmentBssEnd     },
+    {(u32)&_mainSegmentStart,            (u32)&_mainSegmentEnd           },
+    {(u32)&_engineSegmentStart,          (u32)&_engineSegmentEnd         },
+    {(u32)&_framebuffersSegmentBssStart, (u32)&_framebuffersSegmentBssEnd},
+    {(u32)&_goddardSegmentStart,         (u32)&_goddardSegmentEnd        },
 };
 
 void puppyprint_calculate_ram_usage(void) {

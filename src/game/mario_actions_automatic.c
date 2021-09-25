@@ -155,7 +155,7 @@ Bool32 act_climbing_pole(struct MarioState *m) {
     if (m->controller->stickY < 8.0f) return set_mario_action(m, ACT_HOLDING_POLE, 0);
     marioObj->oMarioPolePos   += (m->controller->stickY / 8.0f);
     m->angleVel[1] = 0x0;
-    approach_s16_symmetric_bool(&m->faceAngle[1], cameraAngle, DEG(5.625));
+    approach_angle_bool(&m->faceAngle[1], cameraAngle, DEG(5.625));
     if (set_pole_position(m, 0.0f) == POLE_NONE) {
         animSpeed = ((m->controller->stickY / 4.0f) * 0x10000);
         set_mario_anim_with_accel(m, MARIO_ANIM_CLIMB_UP_POLE, animSpeed);
@@ -284,7 +284,7 @@ MarioStep update_hang_moving(struct MarioState *m) {
 #ifdef TIGHTER_HANGING_CONTROLS
     m->faceAngle[1] = m->intendedYaw;
 #else
-    approach_s16_symmetric_bool(&m->faceAngle[1], m->intendedYaw, DEG(11.25));
+    approach_angle_bool(&m->faceAngle[1], m->intendedYaw, DEG(11.25));
 #endif
     m->slideYaw  =                       m->faceAngle[1];
     m->slideVelX = (m->forwardVel * sins(m->faceAngle[1]));

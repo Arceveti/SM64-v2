@@ -277,7 +277,7 @@ void update_shell_speed(struct MarioState *m) {
     }
     if (m->forwardVel >  64.0f) m->forwardVel =  64.0f;
     if (m->forwardVel < -64.0f) m->forwardVel = -64.0f;
-    approach_s16_symmetric_bool(&m->faceAngle[1], m->intendedYaw, DEG(11.25));
+    approach_angle_bool(&m->faceAngle[1], m->intendedYaw, DEG(11.25));
     apply_slope_accel(m);
 }
 
@@ -338,10 +338,10 @@ void update_walking_speed(struct MarioState *m) {
         } else if (turnRange > 0xFFF) {
             turnRange = 0xFFF;
         }
-        approach_s16_symmetric_bool(&m->faceAngle[1], m->intendedYaw, turnRange);
+        approach_angle_bool(&m->faceAngle[1], m->intendedYaw, turnRange);
     }
 #else
-    approach_s16_symmetric_bool(&m->faceAngle[1], m->intendedYaw, DEG(11.25));
+    approach_angle_bool(&m->faceAngle[1], m->intendedYaw, DEG(11.25));
 #endif
     apply_slope_accel(m);
 }
@@ -552,8 +552,8 @@ void tilt_body_walking(struct MarioState *m, Angle startYaw) {
         if (nextBodyRoll  < -DEG(30)) nextBodyRoll  = -DEG(30);
         if (nextBodyPitch >  DEG(30)) nextBodyPitch =  DEG(30);
         if (nextBodyPitch <     0x0) nextBodyPitch =     0x0;
-        approach_s16_symmetric_bool(&marioBodyState->torsoAngle[2], nextBodyRoll,  DEG(5.625));
-        approach_s16_symmetric_bool(&marioBodyState->torsoAngle[0], nextBodyPitch, DEG(5.625));
+        approach_angle_bool(&marioBodyState->torsoAngle[2], nextBodyRoll,  DEG(5.625));
+        approach_angle_bool(&marioBodyState->torsoAngle[0], nextBodyPitch, DEG(5.625));
     } else {
         marioBodyState->torsoAngle[2] = 0x0;
         marioBodyState->torsoAngle[0] = 0x0;
@@ -573,8 +573,8 @@ void tilt_body_ground_shell(struct MarioState *m, Angle startYaw) {
     if (nextBodyRoll  < -DEG(33.75)) nextBodyRoll  = -DEG(33.75);
     if (nextBodyPitch >  DEG(22.5 )) nextBodyPitch =  DEG(22.5 );
     if (nextBodyPitch <         0x0) nextBodyPitch =         0x0;
-    approach_s16_symmetric_bool(&marioBodyState->torsoAngle[2], nextBodyRoll,  0x200);
-    approach_s16_symmetric_bool(&marioBodyState->torsoAngle[0], nextBodyPitch, 0x200);
+    approach_angle_bool(&marioBodyState->torsoAngle[2], nextBodyRoll,  0x200);
+    approach_angle_bool(&marioBodyState->torsoAngle[0], nextBodyPitch, 0x200);
     marioBodyState->headAngle[2]  = -marioBodyState->torsoAngle[2];
     marioObj->header.gfx.angle[2] =  marioBodyState->torsoAngle[2];
     marioObj->header.gfx.pos[1]  += 45.0f;
@@ -897,7 +897,7 @@ Bool32 act_burning_ground(struct MarioState *m) {
     if (m->forwardVel <  8.0f) m->forwardVel =  8.0f;
     if (m->forwardVel > 48.0f) m->forwardVel = 48.0f;
     approach_f32_bool(&m->forwardVel, 32.0f, 4.0f, 1.0f);
-    if (m->input & INPUT_NONZERO_ANALOG) approach_s16_symmetric_bool(&m->faceAngle[1], m->intendedYaw, 0x600);
+    if (m->input & INPUT_NONZERO_ANALOG) approach_angle_bool(&m->faceAngle[1], m->intendedYaw, 0x600);
     apply_slope_accel(m);
     if (perform_ground_step(m) == GROUND_STEP_LEFT_GROUND) set_mario_action(m, ACT_BURNING_FALL, 0);
     set_mario_anim_with_accel(m, MARIO_ANIM_RUNNING, (s32)((m->forwardVel / 2.0f) * 0x10000));
