@@ -192,7 +192,7 @@ Bool32 update_sliding(struct MarioState *m, f32 stopSpeed) {
         case SURFACE_CLASS_NOT_SLIPPERY:  accel =  5.0f; lossFactor = (((m->intendedMag / 32.0f) * forward * 0.02f) + 0.92f); break;
     }
     f32 oldSpeed          = sqrtf(sqr(m->slideVelX) + sqr(m->slideVelZ));
-    f32 sideward              = ((m->intendedMag / 32.0f) * sins(intendedDYaw) * 0.05f);
+    f32 sideward          = ((m->intendedMag / 32.0f) * sins(intendedDYaw) * 0.05f);
     f32 slideVelXModifier = (m->slideVelZ * sideward);
     f32 slideVelZModifier = (m->slideVelX * sideward);
     m->slideVelX         += slideVelXModifier;

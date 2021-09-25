@@ -36,7 +36,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - PSS Painting uses painting data instead of being part of the level model (Arceveti) *
 
 **Optimizations:**
-- Uses -Ofast compiler flag
+- Uses -Os compiler flag
 - Most doubles are now floats where the extra percision isn't needed (Arceveti)
 - Almost all unused code/data from the Goddard folder is removed (Arceveti)
 - find_floor only checks static surfaces when checking for rooms (Arceveti)
