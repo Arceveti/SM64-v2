@@ -627,8 +627,8 @@ s32     approach_s16(                     s16  current,   s16 target,   s16 inc,
 Bool32  approach_s16_bool(                s16 *current,   s16 target,   s16 inc, s16 dec);
 #define approach_s16_symmetric(                current,       target,       inc) approach_s16(     (current), (target), (inc), (inc))
 #define approach_s16_symmetric_bool(           current,       target,       inc) approach_s16_bool((current), (target), (inc), (inc))
-s32     approach_angle(                   s32  current,   s32 target,   s32 inc);
-Bool32  approach_angle_bool(              s32 *current,   s32 target,   s32 inc);
+Angle32 approach_angle(               Angle32  current, Angle32 target, Angle32 inc);
+Bool32  approach_angle_bool(            Angle *current, Angle32 target, Angle32 inc);
 // Approach f32
 f32     approach_f32(                     f32  current,   f32 target,   f32 inc, f32 dec);
 Bool32  approach_f32_bool(                f32 *current,   f32 target,   f32 inc, f32 dec);

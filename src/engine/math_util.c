@@ -1289,8 +1289,8 @@ Bool32 approach_s16_bool(s16 *current, s16 target, s16 inc, s16 dec) {
 }
 
 /// Similar to approach_s32, but converts to s16 and allows for overflow between 32767 and -32768
-s32 approach_angle(s32 current, s32 target, s32 inc) {
-    s32 dist = (s16)(target - current);
+Angle32 approach_angle(Angle32 current, Angle32 target, Angle32 inc) {
+    Angle32 dist = (Angle)(target - current);
     if (dist < 0) {
         dist += inc;
         if (dist > 0) dist = 0;
@@ -1301,7 +1301,7 @@ s32 approach_angle(s32 current, s32 target, s32 inc) {
     return (target - dist);
 }
 
-Bool32 approach_angle_bool(s32 *current, s32 target, s32 inc) {
+Bool32 approach_angle_bool(Angle *current, Angle32 target, Angle32 inc) {
     *current = approach_angle(*current, target, inc);
     return !(*current == target);
 }
