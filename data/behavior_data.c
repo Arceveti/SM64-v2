@@ -961,11 +961,7 @@ const BehaviorScript bhvSingleCoinGetsSpawned[] = {
 };
 
 const BehaviorScript bhvCoinSparkles[] = {
-#ifdef UNIMPORTANT_OBJECTS
     BEGIN(OBJ_LIST_UNIMPORTANT),
-#else
-    BEGIN(OBJ_LIST_DEFAULT),
-#endif
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     BILLBOARD(),
     SET_FLOAT(oGraphYOffset, 25),
@@ -1883,11 +1879,7 @@ const BehaviorScript bhvBulletBill[] = {
 };
 
 const BehaviorScript bhvWhitePuffSmoke[] = {
-#ifdef UNIMPORTANT_OBJECTS
     BEGIN(OBJ_LIST_UNIMPORTANT),
-#else
-    BEGIN(OBJ_LIST_DEFAULT),
-#endif
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     BILLBOARD(),
     ADD_FLOAT(oPosY, -100),
@@ -3196,11 +3188,7 @@ const BehaviorScript bhvWaterDroplet[] = {
 
 // Small splashes that are seen when a water droplet lands back into the water.
 const BehaviorScript bhvWaterDropletSplash[] = {
-#ifdef UNIMPORTANT_OBJECTS
     BEGIN(OBJ_LIST_UNIMPORTANT),
-#else
-    BEGIN(OBJ_LIST_DEFAULT),
-#endif
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     SET_INT(oFaceAnglePitch, 0x0),
     SET_INT(oFaceAngleYaw,   0x0),
@@ -3216,11 +3204,7 @@ const BehaviorScript bhvWaterDropletSplash[] = {
 
 // The splash created when an air bubble hits the surface of the water.
 const BehaviorScript bhvBubbleSplash[] = {
-#ifdef UNIMPORTANT_OBJECTS
     BEGIN(OBJ_LIST_UNIMPORTANT),
-#else
-    BEGIN(OBJ_LIST_DEFAULT),
-#endif
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     SET_INT(oFaceAnglePitch, 0x0),
     SET_INT(oFaceAngleYaw,   0x0),
@@ -3251,7 +3235,6 @@ const BehaviorScript bhvIdleWaterWave[] = {
 };
 
 // Water splashes similar to the splashes created by water droplets, but are created by other objects.
-// Unlike water droplet splashes, they are unimportant objects.
 const BehaviorScript bhvObjectWaterSplash[] = {
     BEGIN(OBJ_LIST_UNIMPORTANT),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
@@ -3295,7 +3278,6 @@ const BehaviorScript bhvShallowWaterSplash[] = {
 };
 
 // Waves created by other objects along the water's surface, specifically the koopa shell and Sushi.
-// Unlike Mario's waves, they are unimportant objects.
 const BehaviorScript bhvObjectWaveTrail[] = {
     BEGIN(OBJ_LIST_UNIMPORTANT),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
@@ -3304,11 +3286,7 @@ const BehaviorScript bhvObjectWaveTrail[] = {
 
 // The waves created by Mario while he is swimming.
 const BehaviorScript bhvWaveTrail[] = {
-#ifdef UNIMPORTANT_OBJECTS
     BEGIN(OBJ_LIST_UNIMPORTANT),
-#else
-    BEGIN(OBJ_LIST_DEFAULT),
-#endif
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     PARENT_BIT_CLEAR(oActiveParticleFlags, ACTIVE_PARTICLE_WAVE_TRAIL),
     // Wave trail - common:
@@ -3620,11 +3598,7 @@ const BehaviorScript bhvBobomb[] = {
 };
 
 const BehaviorScript bhvBobombFuseSmoke[] = {
-#ifdef UNIMPORTANT_OBJECTS
     BEGIN(OBJ_LIST_UNIMPORTANT),
-#else
-    BEGIN(OBJ_LIST_DEFAULT),
-#endif
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     BILLBOARD(),
     SET_INT(oAnimState, OBJ_ANIM_STATE_INIT_ANIM),
@@ -4032,11 +4006,7 @@ const BehaviorScript bhvBowserBombExplosion[] = {
 };
 
 const BehaviorScript bhvBowserBombSmoke[] = {
-#ifdef UNIMPORTANT_OBJECTS
     BEGIN(OBJ_LIST_UNIMPORTANT),
-#else
-    BEGIN(OBJ_LIST_DEFAULT),
-#endif
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     BILLBOARD(),
     SET_FLOAT(oGraphYOffset, -288),

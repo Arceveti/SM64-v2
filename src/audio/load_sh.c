@@ -856,9 +856,6 @@ struct AudioBankSample *func_sh_802f4978(s32 bankId, s32 idx) {
     return ret;
 }
 
-void stub_sh_802f49dc(void) {
-}
-
 void func_sh_802f49e4(struct PendingDmaSample *arg0) {
     struct AudioBankSample *sample = func_sh_802f4978(arg0->bankId, arg0->idx);
     if (sample != NULL) {

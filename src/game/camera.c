@@ -1110,11 +1110,10 @@ CameraTransitionAngle update_parallel_tracking_camera(struct Camera *c, Vec3f fo
     // If zoom != 0.0, the camera will move zoom% closer to Mario
     marioOffset[0] = (-marioOffset[0] * zoom);
     marioOffset[1] = ( marioOffset[1] * zoom);
-    marioOffset[2] =    camOffset[2];
-    pathAngle[0]   = pathPitch;
     // make marioOffset[2] == distance from the start of the path
-    marioOffset[2] = ((pathLength / 2) - marioOffset[2]);
+    marioOffset[2] = ((pathLength / 2) - camOffset[2]);
     pathAngle[1]   = (pathYaw + DEG(180));
+    pathAngle[0]   = pathPitch;
     pathAngle[2]   = 0x0;
     // Rotate the offset in the direction of the path again
     offset_rotated(pos, path[0], marioOffset, pathAngle);
@@ -2172,12 +2171,10 @@ void set_camera_mode(struct Camera *c, s16 mode, s16 frames) {
  */
 void update_lakitu(struct Camera *c) {
     struct Surface *floor = NULL;
-    Vec3f newPos;
-    Vec3f newFoc;
+    Vec3f newPos, newFoc;
     f32 distToFloor;
-    Angle newYaw;
     if (!(gCameraMovementFlags & CAM_MOVE_PAUSE_SCREEN)) {
-        newYaw = next_lakitu_state(newPos, newFoc, c->pos, c->focus, sOldPosition, sOldFocus, c->nextYaw);
+        Angle newYaw = next_lakitu_state(newPos, newFoc, c->pos, c->focus, sOldPosition, sOldFocus, c->nextYaw);
         set_or_approach_s16_symmetric(&c->yaw, newYaw, sYawSpeed);
         sStatusFlags &= ~CAM_FLAG_UNUSED_CUTSCENE_ACTIVE;
         // Update old state
@@ -3513,7 +3510,6 @@ void approach_camera_height(struct Camera *c, f32 goal, f32 inc) {
         c->pos[1] = goal;
     }
 }
-
 
 /**
  * Set the camera's focus to Mario's position, and add several relative offsets.
@@ -6995,9 +6991,6 @@ void cutscene_unlock_key_door_focus_lock(UNUSED struct Camera *c) {
     approach_f32_asymptotic_bool(&sCutsceneVars[3].point[1], sMarioCamState->pos[1] + 140.0f, 0.07f);
 }
 
-void cutscene_unlock_key_door_stub(UNUSED struct Camera *c) {
-}
-
 /**
  * Move back to the previous pos and focus, stored in cvar0 and cvar1.
  */
@@ -7022,7 +7015,6 @@ void cutscene_unlock_key_door(UNUSED struct Camera *c) {
     cutscene_event(cutscene_unlock_key_door_fly_back,       c, 124,  -1);
     cutscene_event(cutscene_unlock_key_door_fov_shake,      c,  79,  79);
     cutscene_event(cutscene_unlock_key_door_focus_lock,     c,  70, 110);
-    cutscene_event(cutscene_unlock_key_door_stub,           c, 112, 112);
 }
 
 /**

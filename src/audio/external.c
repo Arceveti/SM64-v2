@@ -332,7 +332,6 @@ u8 D_EU_80300558                        = 0;
 
 u8 sBackgroundMusicQueueSize = 0;
 
-
 // bss
 #if defined(VERSION_JP) || defined(VERSION_US)
 s16 *gCurrAiBuffer;

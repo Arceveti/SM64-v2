@@ -356,7 +356,6 @@ Bool32 mario_check_object_grab(struct MarioState *m) {
 MarioAction bully_knock_back_mario(struct MarioState *m) {
     struct BullyCollisionData marioData;
     struct BullyCollisionData bullyData;
-    Angle  newMarioYaw, newBullyYaw, marioDYaw;
     struct Object *bully = m->interactObj;
     //! Conversion ratios multiply to more than 1 (could allow unbounded speed
     // with bonk cancel - but this isn't important for regular bully battery)
@@ -371,9 +370,9 @@ MarioAction bully_knock_back_mario(struct MarioState *m) {
     } else {
         transfer_bully_speed(&bullyData, &marioData);
     }
-    newMarioYaw          = atan2s(marioData.velZ, marioData.velX);
-    newBullyYaw          = atan2s(bullyData.velZ, bullyData.velX);
-    marioDYaw            = abs_angle_diff(newMarioYaw, m->faceAngle[1]);
+    Angle newMarioYaw    = atan2s(marioData.velZ, marioData.velX);
+    Angle newBullyYaw    = atan2s(bullyData.velZ, bullyData.velX);
+    Angle marioDYaw      = abs_angle_diff(newMarioYaw, m->faceAngle[1]);
     m->faceAngle[1]      = newMarioYaw;
     m->forwardVel        = sqrtf(sqr(marioData.velX) + sqr(marioData.velZ));
     m->pos[0]            = marioData.posX;

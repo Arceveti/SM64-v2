@@ -420,8 +420,7 @@ void seq_channel_layer_process_script(struct SequenceChannelLayer *layer) {
 #ifdef VERSION_EU
     u16 sp3A;
     s32 sameSound = TRUE;
-#endif
-#ifndef VERSION_EU
+#else
     u8 sameSound = TRUE;
 #endif
     u8 cmd;

@@ -1032,13 +1032,10 @@ static void geo_process_shadow(struct GraphNodeShadow *node) {
  */
 static s32 obj_is_in_view(struct GraphNodeObject *node, Mat4 matrix) {
     s16 cullingRadius;
-    Angle halfFov; // half of the fov in in-game angle units instead of degrees
-    struct GraphNode *geo;
-    f32 hScreenEdge;
     if (node->node.flags & GRAPH_RENDER_INVISIBLE) return FALSE;
-    geo         = node->sharedChild;
-    halfFov     = ((((((gCurGraphNodeCamFrustum->fov * aspect) / 2.0f) + 1.0f) * 32768.0f) / 180.0f) + 0.5f);
-    hScreenEdge = ((-matrix[3][2] * sins(halfFov)) / coss(halfFov));
+    struct GraphNode *geo = node->sharedChild;
+    Angle halfFov         = ((((((gCurGraphNodeCamFrustum->fov * aspect) / 2.0f) + 1.0f) * 32768.0f) / 180.0f) + 0.5f);  // half of the fov in in-game angle units instead of degrees
+    f32 hScreenEdge       = ((-matrix[3][2] * sins(halfFov)) / coss(halfFov));
     // -matrix[3][2] is the depth, which gets multiplied by tan(halfFov) to get
     // the amount of units between the center of the screen and the horizontal edge
     // given the distance from the object to the camera.

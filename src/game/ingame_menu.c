@@ -678,7 +678,6 @@ void handle_dialog_scroll_page_state(s8 lineNum, s8 totalLines, s8 *pageState, s
     xMatrix[0] = 1;
 }
 
-
 void render_star_count_dialog_text(s8 *xMatrix, s16 *linePos) {
     s8 tensDigit = (gDialogVariable / 10);
     s8 onesDigit = (gDialogVariable - (tensDigit * 10)); // remainder

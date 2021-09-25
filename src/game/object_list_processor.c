@@ -569,10 +569,8 @@ void update_objects(void) {
     // Update spawners and objects with surfaces
     // cycleCounts[2] = get_clock_difference(cycleCounts[0]);
     update_terrain_objects();
-    // If Mario was touching a moving platform at the end of last frame, apply
-    // displacement now
-    //! If the platform object unloaded and a different object took its place,
-    //  displacement could be applied incorrectly
+    // If Mario was touching a moving platform at the end of last frame, apply displacement now
+    //! If the platform object unloaded and a different object took its place, displacement could be applied incorrectly
     apply_mario_platform_displacement();
     // Detect which objects are intersecting
     // cycleCounts[3] = get_clock_difference(cycleCounts[0]);

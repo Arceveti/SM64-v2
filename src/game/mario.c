@@ -652,10 +652,21 @@ Angle find_floor_slope(struct MarioState *m, Angle yawOffset, f32 distFromMario)
     struct Surface *floor;
     f32 x                             = (sins(m->faceAngle[1] + yawOffset) * distFromMario);
     f32 z                             = (coss(m->faceAngle[1] + yawOffset) * distFromMario);
+#ifdef FAST_FLOOR_ALIGN
+    f32 forwardFloorY, backwardFloorY;
+    if (ABS(m->forwardVel) > FAST_FLOOR_ALIGN) {
+        forwardFloorY  = get_surface_height_at_location((m->pos[0] + x), (m->pos[2] + z), floor);
+        backwardFloorY = get_surface_height_at_location((m->pos[0] - x), (m->pos[2] - z), floor);
+    } else {
+        forwardFloorY  = find_floor((m->pos[0] + x), (m->pos[1] + 100.0f), (m->pos[2] + z), &floor);
+        backwardFloorY = find_floor((m->pos[0] - x), (m->pos[1] + 100.0f), (m->pos[2] - z), &floor);
+    }
+#else
     f32 forwardFloorY                 = find_floor((m->pos[0] + x), (m->pos[1] + 100.0f), (m->pos[2] + z), &floor);
     if (floor == NULL)  forwardFloorY = m->floorHeight; // handle OOB slopes
     f32 backwardFloorY                = find_floor((m->pos[0] - x), (m->pos[1] + 100.0f), (m->pos[2] - z), &floor);
     if (floor == NULL) backwardFloorY = m->floorHeight; // handle OOB slopes
+#endif
     //! If Mario is near OOB, these floorY's can sometimes be -11000.
     //  This will cause these to be off and give improper slopes.
     f32 forwardYDelta                 = (forwardFloorY - m->pos[1]);
@@ -807,7 +818,7 @@ static MarioAction set_mario_action_airborne(struct MarioState *m, MarioAction a
             if (actionArg == 0) m->forwardVel = 0.0f;
             break;
         case ACT_DIVE:
-            if ((forwardVel = m->forwardVel + 15.0f) > 48.0f) forwardVel = 48.0f;
+            if ((forwardVel = (m->forwardVel + 15.0f)) > 48.0f) forwardVel = 48.0f;
             mario_set_forward_vel(m, forwardVel);
             break;
         case ACT_LONG_JUMP:

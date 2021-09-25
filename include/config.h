@@ -284,16 +284,15 @@
  *                                                                                                                              *
  ********************************************************************************************************************************/
 
-// Set more object types to use "OBJ_LIST_UNIMPORTANT" so they can be unloaded when needed (Arceveti)
-#define UNIMPORTANT_OBJECTS
-
 // geo_switch_room always uses Mario's floor instead of looking for intangible floors.
 // when this is disabled, the game will still only try to find a new floor if there is
 // an intangible floor in the current cell
 // #define SWITCH_ROOM_ALWAYS_USES_MARIO_FLOOR
 
 // Use the floor's normal instead of a triangle of find_floor if the floor isn't steep (Arceveti)
-#define FAST_FLOOR_ALIGN
+// Reduces some find_floor calls, at the cost of some barely noticeable smoothness in Mario's visual movement in a few actions at higher speeds.
+// The defined number is the forward speed threshold before the change is active, since it's only noticeable at lower speeds.
+#define FAST_FLOOR_ALIGN 10
 
 
 /********************************************************************************************************************************
@@ -480,13 +479,10 @@
 // Collecting a Power Star will fully heal Mario (Arceveti)
 #define POWER_STARS_HEAL
 
-// Koopa Shell boxes respawn (Arceveti)
-#define KOOPA_SHELL_BOXES_RESPAWN
-
 // The speed of a platform on a track can be controlled by standing near the front or back of it (Arceveti)
 #define CONTROLLABLE_PLATFORM_SPEED
 
-// Allows for retries on collecting the remaining blue coins from a blue coin switch (Arceveti)
+// Allow for retries on collecting the remaining blue coins from a blue coin switch (Arceveti)
 #define BLUE_COIN_SWITCH_RETRY
 
 // Unagi's and Klepto's star becomes transparent after it's collected like other stars (SunlitSpace542)

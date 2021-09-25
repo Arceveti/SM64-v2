@@ -12,11 +12,9 @@ struct ObjectHitbox sKoopaShellHitbox = {
     /* hurtboxHeight:     */ 50,
 };
 
-#ifdef KOOPA_SHELL_BOXES_RESPAWN
 void shell_despawn(void) {
     if (o->oTimer > 300) obj_flicker_and_disappear(o, 300);
 }
-#endif
 
 void koopa_shell_spawn_water_drop(void) {
     struct Object *drop;
@@ -66,9 +64,7 @@ void bhv_koopa_shell_loop(void) {
             o->oFaceAngleYaw += DEG(22.5);
             cur_obj_move_standard(-20);
             koopa_shell_spawn_sparkles(10.0f);
-#ifdef KOOPA_SHELL_BOXES_RESPAWN
             shell_despawn();
-#endif
             break;
         case KOOPA_SHELL_ACT_MARIO_RIDING:
             obj_copy_pos(o, gMarioObject);

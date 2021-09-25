@@ -676,4 +676,3 @@ void update_view(struct ObjView *view) {
     gd_enddlsplist_parent();
     return;
 }
-

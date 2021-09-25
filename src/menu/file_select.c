@@ -41,14 +41,9 @@ extern void *languageTable[][3];
 // The current sound mode is automatically centered on US and Shindou.
 s16 sSoundTextX;
 
-// @Bug (UB Array Access) For EU, more buttons were added than the array was extended.
-// This causes no currently known issues on console (as the other variables are not changed
-// while this is used) but can cause issues with other compilers.
-#define NUM_BUTTONS MENU_BUTTON_OPTION_MAX
-
 // Amount of main menu buttons defined in the code called by spawn_object_rel_with_rot.
 // See file_select.h for the names in MenuButtonTypes.
-struct Object *sMainMenuButtons[NUM_BUTTONS];
+struct Object *sMainMenuButtons[MENU_BUTTON_OPTION_MAX];
 
 // Used to defined yes/no fade colors after a file is selected in the erase menu.
 // sYesNoColor[0]: YES | sYesNoColor[1]: NO

@@ -539,7 +539,7 @@ void move_animator(struct ObjAnimator *animObj) {
                 vec3_add(localMtx[3], triPtr->pos);
                 d_set_i_matrix(&localMtx);
                 break;
-            case GD_ANIM_STUB: //!?
+            case GD_ANIM_STUB:
                 break;
             default:
                 gd_exit(); // Unkown animation data type

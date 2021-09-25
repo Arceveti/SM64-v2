@@ -69,18 +69,23 @@ void play_step_sound(struct MarioState *m, AnimFrame16 frame1, AnimFrame16 frame
 #ifdef FAST_FLOOR_ALIGN
 void align_with_floor(struct MarioState *m, Bool32 smooth) {
     struct Surface *floor = m->floor;
-    if ((floor != NULL) && (m->pos[1] < (m->floorHeight + MARIO_STEP_HEIGHT))) {
+    if ((floor != NULL) && (m->pos[1] < (m->floorHeight + MAX(MARIO_STEP_HEIGHT, 80.0f)))) {
 // #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
 //         if ((m->steepness > COS45) && (mario_get_floor_class(m) == SURFACE_CLASS_NOT_SLIPPERY) && (m->forwardVel < GROUND_SPEED_THRESHOLD_2)) {
 // #else
 //         if ((floor->normal.y > COS45) && (mario_get_floor_class(m) == SURFACE_CLASS_NOT_SLIPPERY) && (m->forwardVel < GROUND_SPEED_THRESHOLD_2)) {
 // #endif
-        if (smooth) {
-            mtxf_align_terrain_triangle(sFloorAlignMatrix[m->playerID], m->pos, m->faceAngle[1], 40.0f);
-        } else {
+        m->pos[1] = m->floorHeight;
+// #ifdef FAST_FLOOR_ALIGN
+        if (!smooth || ABS(m->forwardVel) > FAST_FLOOR_ALIGN) {
             Vec3f floorNormal = { floor->normal.x, floor->normal.y, floor->normal.z };
             mtxf_align_terrain_normal(sFloorAlignMatrix[m->playerID], floorNormal, m->pos, m->faceAngle[1]);
+        } else {
+            mtxf_align_terrain_triangle(sFloorAlignMatrix[m->playerID], m->pos, m->faceAngle[1], 40.0f);
         }
+// #else
+//         mtxf_align_terrain_triangle(sFloorAlignMatrix[m->playerID], m->pos, m->faceAngle[1], 40.0f);
+// #endif
         m->marioObj->header.gfx.throwMatrix = &sFloorAlignMatrix[m->playerID];
     }
 #else
@@ -157,13 +162,13 @@ void update_sliding_angle(struct MarioState *m, f32 accel, f32 lossFactor) {
     m->slideYaw   = atan2s(m->slideVelZ, m->slideVelX);
     Angle facingDYaw  = (m->faceAngle[1] - m->slideYaw);
     s32 newFacingDYaw = facingDYaw; //! cast to s32 for some reason
-    if (newFacingDYaw > 0x0 && newFacingDYaw <= DEG(90)) {
+    if (newFacingDYaw > 0x0 && newFacingDYaw <= DEG(90)) { // (0..0x4000]
         if ((newFacingDYaw -= 0x200) <      0x0 ) newFacingDYaw =      0x0;
-    } else if (newFacingDYaw >= -DEG( 90) && newFacingDYaw <  0x0) {
+    } else if (newFacingDYaw >= -DEG( 90) && newFacingDYaw <  0x0) { // [-0x4000..0)
         if ((newFacingDYaw += 0x200) >      0x0 ) newFacingDYaw =      0x0;
-    } else if (newFacingDYaw >   DEG( 90) && newFacingDYaw <  DEG(180)) {
+    } else if (newFacingDYaw >   DEG( 90) && newFacingDYaw <  DEG(180)) { // (0x4000..0x8000)
         if ((newFacingDYaw += 0x200) >  DEG(180)) newFacingDYaw =  DEG(180);
-    } else if (newFacingDYaw >  -DEG(180) && newFacingDYaw < -DEG( 90)) {
+    } else if (newFacingDYaw >  -DEG(180) && newFacingDYaw < -DEG( 90)) { // (-0x8000..-0x4000)
         if ((newFacingDYaw -= 0x200) < -DEG(180)) newFacingDYaw = -DEG(180);
     }
     m->faceAngle[1] = (m->slideYaw + newFacingDYaw);
