@@ -654,7 +654,7 @@ Angle find_floor_slope(struct MarioState *m, Angle yawOffset, f32 distFromMario)
     f32 z                             = (coss(m->faceAngle[1] + yawOffset) * distFromMario);
 #ifdef FAST_FLOOR_ALIGN
     f32 forwardFloorY, backwardFloorY;
-    if (ABS(m->forwardVel) > FAST_FLOOR_ALIGN) {
+    if (ABSF(m->forwardVel) > FAST_FLOOR_ALIGN) {
         forwardFloorY  = get_surface_height_at_location((m->pos[0] + x), (m->pos[2] + z), floor);
         backwardFloorY = get_surface_height_at_location((m->pos[0] - x), (m->pos[2] - z), floor);
     } else {
