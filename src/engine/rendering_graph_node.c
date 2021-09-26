@@ -877,12 +877,7 @@ static void geo_process_bone(struct GraphNodeBone *node) {
  */
 #ifdef VARIABLE_FRAMERATE
 void geo_set_animation_globals(struct AnimInfo *node, s32 marioCheck) {
-    struct Animation *anim;
-    if (marioCheck && gMarioLoadedAnim) {
-        anim = gMarioState->prevAnim.curAnim;
-    } else {
-        anim = node->curAnim;
-    }
+    struct Animation *anim = ((marioCheck && gMarioLoadedAnim) ? gMarioState->prevAnim.curAnim : node->curAnim);
     if (marioCheck && gMarioLoadedAnim) {
         gMarioState->prevAnim.animTimer = gAreaUpdateCounter;
     } else {
@@ -936,14 +931,10 @@ void geo_set_animation_globals(struct AnimInfo *node, Bool32 hasAnimation) {
  * the floor below it.
  */
 static void geo_process_shadow(struct GraphNodeShadow *node) {
-    Gfx *shadowList;
     Mat4 mtxf;
     Vec3f shadowPos;
     Vec3f animOffset;
-    f32 objScale;
     f32 shadowScale;
-    f32 sinAng, cosAng;
-    struct GraphNode *geo;
     Mtx *mtx;
     if ((gCurGraphNodeCamera != NULL) && (gCurGraphNodeObject != NULL)) {
         if (gCurGraphNodeHeldObject != NULL) {
@@ -958,10 +949,10 @@ static void geo_process_shadow(struct GraphNodeShadow *node) {
             shadowScale = (node->shadowScale * gCurGraphNodeObject->scale[0]);
 #endif
         }
-        objScale = 1.0f;
+        f32 objScale = 1.0f;
         if (gCurAnimEnabled) {
             if ((gCurAnimType == ANIM_TYPE_TRANSLATION) || (gCurAnimType == ANIM_TYPE_LATERAL_TRANSLATION)) {
-                geo = node->node.children;
+                struct GraphNode *geo = node->node.children;
 #ifdef VARIABLE_FRAMERATE
                 if ((geo != NULL) && (geo->type == GRAPH_NODE_TYPE_SCALE)) objScale = ((struct GraphNodeScale *) geo)->lerpScale[0];
 #else
@@ -974,17 +965,17 @@ static void geo_process_shadow(struct GraphNodeShadow *node) {
                 gCurrAnimAttribute -= 6;
                 // simple matrix rotation so the shadow offset rotates along with the object
 #ifdef VARIABLE_FRAMERATE
-                sinAng              = sins(gCurGraphNodeObject->lerpAngle[0][1]);
-                cosAng              = coss(gCurGraphNodeObject->lerpAngle[0][1]);
+                f32 sinAng          = sins(gCurGraphNodeObject->lerpAngle[0][1]);
+                f32 cosAng          = coss(gCurGraphNodeObject->lerpAngle[0][1]);
 #else
-                sinAng              = sins(gCurGraphNodeObject->angle[1]);
-                cosAng              = coss(gCurGraphNodeObject->angle[1]);
+                f32 sinAng          = sins(gCurGraphNodeObject->angle[1]);
+                f32 cosAng          = coss(gCurGraphNodeObject->angle[1]);
 #endif
                 shadowPos[0]       += (( animOffset[0] * cosAng) + (animOffset[2] * sinAng));
                 shadowPos[2]       += ((-animOffset[0] * sinAng) + (animOffset[2] * cosAng));
             }
         }
-        shadowList = create_shadow_below_xyz(shadowPos, shadowScale, node->shadowSolidity, node->shadowType);
+        Gfx *shadowList = create_shadow_below_xyz(shadowPos, shadowScale, node->shadowSolidity, node->shadowType);
         if (shadowList != NULL) {
             mtx = alloc_display_list(sizeof(*mtx));
             gMatStackIndex++;
