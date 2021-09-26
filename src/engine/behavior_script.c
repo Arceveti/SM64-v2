@@ -11,9 +11,9 @@
 #include "game/obj_behaviors_2.h"
 #include "game/object_helpers.h"
 #include "game/object_list_processor.h"
+#include "math_util.h"
 #include "graph_node.h"
 #include "surface_collision.h"
-#include "math_util.h"
 #ifdef PUPPYLIGHTS
 #include "game/puppylights.h"
 #endif
@@ -738,16 +738,23 @@ void cur_obj_update(void) {
     }
 #ifdef OBJ_OPACITY_BY_CAM_DIST
     if (objFlags & OBJ_FLAG_OPACITY_FROM_CAMERA_DIST) {
-        Vec3f camPos;
-        vec3_copy(camPos, gCamera->pos);
         f32 dist;
-        vec3f_get_dist(&o->oPosVec, camPos, &dist);
+        Vec3f d;
+        if (gCurrentObject->header.gfx.node.flags & GRAPH_RENDER_BILLBOARD) {
+            d[0] = (gCurrentObject->oPosX - gCamera->pos[0]);
+            d[2] = (gCurrentObject->oPosZ - gCamera->pos[2]);
+            dist = (sqr(d[0]) + sqr(d[2]));
+        } else {
+            vec3_diff(d, &gCurrentObject->oPosVec, gCamera->pos);
+            dist = vec3_sumsq(d);
+        }
+        if (dist > 0.0f) gCurrentObject->header.gfx.node.flags &= ~GRAPH_RENDER_UCODE_REJ;
 #ifdef PUPPYCAM
-        s32 opacityDist = ((gPuppyCam.zoom > 0) ? ((dist / gPuppyCam.zoom) * 255.0f) : 255);
+        s32 opacityDist = ((gPuppyCam.zoom > 0) ? ((dist / sqr(gPuppyCam.zoom)) * 255.0f) : 255);
 #else
-        s32 opacityDist = (dist * (255.0f / 1024.0f));
+        s32 opacityDist = (dist * (255.0f / sqr(1024.0f)));
 #endif
-        o->oOpacity = CLAMP(opacityDist, 0x00, 0xFF);
+        gCurrentObject->oOpacity = CLAMP(opacityDist, 0x00, 0xFF);
     }
 #endif
 #ifdef VARIABLE_FRAMERATE

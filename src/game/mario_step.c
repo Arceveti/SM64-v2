@@ -500,7 +500,7 @@ MarioStep bonk_or_hit_lava_wall(struct MarioState *m, struct WallCollisionData *
                     if (wallDYaw > DEG(180 - WALL_KICK_DEGREES)) {
 #endif
                         m->flags |= MARIO_AIR_HIT_WALL;
-                        result = AIR_STEP_HIT_WALL;
+                        result    =  AIR_STEP_HIT_WALL;
                     }
                 }
             }

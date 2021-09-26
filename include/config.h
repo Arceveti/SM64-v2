@@ -506,7 +506,7 @@
 // Makes bowser throws more lenient (Arceveti)
 #define LENIENT_BOWSER_THROWS
 
-// Makes certain objects transparent when the camera gets close (Arceveti)
+// Makes certain objects (mainly trees) transparent when the camera gets close (Arceveti)
 #define OBJ_OPACITY_BY_CAM_DIST
 
 // The number of chain balls the Chain Chomp has
@@ -671,7 +671,12 @@
 #define JUMP_KICK_FIX
 
 // Fixes Mario's turn radius by making it dependent on forward speed. (Arceveti)
-#define FIX_GROUND_TURN_RADIUS
+// Modes:
+// 0 is vanilla behavior.
+// 1 is similar to vanilla, but prevents Mario from moving in the wrong direction, and allows finer control with the analog stick.
+// 2 is similar to mode 1, but a bit further from vanilla, and allows instant turnaround if Mario is moving slower than a certain threshold.
+// 3 is instant turning to the intended direction regardless of speed and angle.
+#define GROUND_TURN_MODE    0
 
 // Prevent bonks when walking into a wall (Arceveti)
 #define LESS_GROUND_BONKS

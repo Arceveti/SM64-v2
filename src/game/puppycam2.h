@@ -185,7 +185,7 @@ extern void puppycam_default_config(void);
 extern void puppycam_display_options(void);
 extern void puppycam_set_save(void);
 extern void puppycam_check_pause_buttons(void);
-UNUSED extern void puppycam_activate_cutscene(s32 (*scene)(), s32 lockinput);
+extern void puppycam_activate_cutscene(s32 (*scene)(), s32 lockinput);
 extern void puppycam_render_option_text();
 extern void puppycam_warp(f32 displacementX, f32 displacementY, f32 displacementZ);
 extern Bool32 puppycam_move_spline(struct sPuppySpline splinePos[], struct sPuppySpline splineFocus[], s32 mode, s32 index);

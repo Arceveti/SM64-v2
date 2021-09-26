@@ -327,26 +327,44 @@ void update_walking_speed(struct MarioState *m) {
         m->forwardVel -= 1.0f;
     }
     if (m->forwardVel > 48.0f) m->forwardVel = 48.0f;
-#ifdef FIX_GROUND_TURN_RADIUS
+#if GROUND_TURN_MODE == 0 // Vanilla behavior.
+    approach_angle_bool(&m->faceAngle[1], m->intendedYaw, DEG(11.25));
+#elif GROUND_TURN_MODE == 1 // Similar to vanilla, but prevents Mario from moving in the wrong direction when turning around, and allows finer control with the analog stick.
+    s16 turnRange = DEG(11.25);
+    s16 dYaw = abs_angle_diff(m->faceAngle[1], m->intendedYaw); // 0x0 is turning forwards, 0x8000 is turning backwards
+    if (m->forwardVel < 0.0f) { // Don't modify Mario's speed and turn radius if Mario is moving backwards
+        // Flip controls when moving backwards so Mario still moves towards intendedYaw
+        m->intendedYaw += DEG(180);
+    } else if (dYaw > DEG(90)) { // Only modify Mario's speed and turn radius if Mario is turning around
+        // Reduce Mario's forward speed by the turn amount, so Mario won't move off sideward from the intended angle when turning around.
+        m->forwardVel *= ((coss(dYaw) + 1.0f) / 2.0f); // 1.0f is turning forwards, 0.0f is turning backwards
+        // Increase turn speed if forwardVel is lower and intendedMag is higher
+        turnRange     *= (2.0f - (ABSF(m->forwardVel) / MAX(m->intendedMag, __FLT_EPSILON__))); // 1.0f front, 2.0f back
+    }
+    approach_angle_bool(&m->faceAngle[1], m->intendedYaw, turnRange);
+#elif GROUND_TURN_MODE == 2 // similar to mode 1, but a bit further from vanilla, and allows instant turnaround if Mario is moving slower than a certain threshold.
     if ((m->forwardVel < 0.0f) && (m->heldObj == NULL) && !(m->action & ACT_FLAG_SHORT_HITBOX)) {
+        // Flip Mario if he is moving backwards
         m->faceAngle[1] += DEG(180);
         m->forwardVel   *= -1.0f;
     }
     if (analog_stick_held_back(m, DEG(100)) && (m->heldObj == NULL) && !(m->action & ACT_FLAG_SHORT_HITBOX)) {
+        // Turn around instantly
         set_mario_action(m, ACT_TURNING_AROUND, 0);
         if (m->forwardVel < GROUND_SPEED_THRESHOLD) m->faceAngle[1] = m->intendedYaw;
     } else {
-        Angle turnRange = (0xFFF - (m->forwardVel * 0x20));
+        // Scale the turn radius by forwardVel
+        Angle turnRange = (DEG(22.5) - (m->forwardVel * 0x20));
         if (turnRange < DEG(11.25)) {
-            turnRange = DEG(11.25);
+            turnRange = DEG(11.25); // Clamp the minimum radius (vanilla radius, 0x800)
             set_mario_action(m, ACT_TURNING_AROUND, 0);
-        } else if (turnRange > 0xFFF) {
-            turnRange = 0xFFF;
+        } else if (turnRange > DEG(22.5)) {
+            turnRange = DEG(22.5); // Clamp the maximum radius (0x1000)
         }
         approach_angle_bool(&m->faceAngle[1], m->intendedYaw, turnRange);
     }
-#else
-    approach_angle_bool(&m->faceAngle[1], m->intendedYaw, DEG(11.25));
+#elif GROUND_TURN_MODE == 3 // Instant turn.
+    m->faceAngle[1] = m->intendedYaw;
 #endif
     apply_slope_accel(m);
 }
